@@ -25,7 +25,7 @@
     "resend": "^6.9.1",
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7",
-    "tedious": "^19.2.0"
+    "tedious": "18.3.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
