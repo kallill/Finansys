@@ -22,13 +22,41 @@ if (dbDialect === 'sqlite') {
   sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
     dialect: 'mssql',
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 60000,
+      idle: 10000
+    },
     dialectOptions: {
       options: {
         encrypt: true,
-        trustServerCertificate: false
+        trustServerCertificate: false,
+        requestTimeout: 60000,
+        connectTimeout: 60000
       }
     },
-    logging: false
+    logging: false,
+    retry: {
+      match: [
+        /ETIMEOUT/,
+        /EHOSTUNREACH/,
+        /ECONNRESET/,
+        /ECONNREFUSED/,
+        /ETIMEDOUT/,
+        /ESOCKETTIMEDOUT/,
+        /EHOSTDOWN/,
+        /EPIPE/,
+        /EAI_AGAIN/,
+        /SequelizeConnectionError/,
+        /SequelizeConnectionRefusedError/,
+        /SequelizeHostNotFoundError/,
+        /SequelizeHostNotReachableError/,
+        /SequelizeInvalidConnectionError/,
+        /SequelizeConnectionTimedOutError/
+      ],
+      max: 3
+    }
   });
 }
 
