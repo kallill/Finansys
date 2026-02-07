@@ -31,7 +31,7 @@ if (dbDialect === 'sqlite') {
     dialectOptions: {
       options: {
         encrypt: true,
-        trustServerCertificate: false,
+        trustServerCertificate: true, // Allow self-signed/Azure certs on VPS
         requestTimeout: 60000,
         connectTimeout: 60000
       }
