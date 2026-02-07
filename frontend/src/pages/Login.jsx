@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, ShieldCheck, ArrowRight, X } from 'lucide-react';
 import Button from '../components/ui/Button';
@@ -11,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const passwordRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ const Login = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError('Falha ao autenticar. Verifique suas credenciais.');
+      setError(err?.message || 'Falha ao autenticar. Verifique suas credenciais.');
     } finally {
       setLoading(false);
     }
@@ -57,6 +58,12 @@ const Login = () => {
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    passwordRef.current?.focus();
+                  }
+                }}
                 className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                 placeholder="seu@email.com"
                 required
@@ -72,6 +79,7 @@ const Login = () => {
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                ref={passwordRef}
                 className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                 placeholder="••••••••"
                 required
@@ -84,10 +92,10 @@ const Login = () => {
               <input type="checkbox" className="rounded border-slate-700 bg-slate-800 text-emerald-500 focus:ring-emerald-500/50" />
               Lembrar de mim
             </label>
-            <a href="#" className="text-emerald-400 hover:text-emerald-300">Esqueceu a senha?</a>
+            <button onClick={() => navigate('/forgot-password')} className="text-emerald-400 hover:text-emerald-300">Esqueceu a senha?</button>
           </div>
 
-          <Button variant="primary" className="w-full py-3.5" disabled={loading}>
+          <Button variant="primary" type="submit" className="w-full py-3.5" disabled={loading}>
             {loading ? (
               <span className="animate-pulse">Autenticando...</span>
             ) : (

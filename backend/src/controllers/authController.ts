@@ -2,12 +2,15 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
-import { sendVerificationEmail } from '../services/emailService';
+import { sendVerificationEmail, sendResetPasswordEmail } from '../services/emailService';
 import crypto from 'crypto';
+import { Op } from 'sequelize';
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
+    if (typeof email === 'string') email = email.trim().toLowerCase();
+    if (typeof name === 'string') name = name.trim();
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
@@ -74,15 +77,18 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+    if (typeof email === 'string') email = email.trim().toLowerCase();
 
     const user = await User.findOne({ where: { email } });
     if (!user) {
+      console.warn('Login failed: user not found', { email });
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
+      console.warn('Login failed: bad password', { email, userId: user.id });
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
@@ -99,6 +105,48 @@ export const login = async (req: Request, res: Response) => {
       },
       token,
     });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 60 * 60 * 1000);
+    if (user) {
+      user.resetPasswordToken = token;
+      user.resetPasswordExpires = expires;
+      await user.save();
+      await sendResetPasswordEmail(email, token);
+    }
+    res.json({ message: 'If the email exists, a reset link has been sent' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { token, password } = req.body;
+    const user = await User.findOne({
+      where: {
+        resetPasswordToken: token,
+        resetPasswordExpires: { [Op.gt]: new Date() }
+      }
+    });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const password_hash = await bcrypt.hash(password, salt);
+    user.password_hash = password_hash;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
+    await user.save();
+    res.json({ message: 'Password reset successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }

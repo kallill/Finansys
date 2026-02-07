@@ -6,8 +6,9 @@ import {
 } from 'lucide-react';
 import Logo from '../components/ui/Logo';
 import StatCard from '../components/dashboard/StatCard';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import TransactionRow from '../components/dashboard/TransactionRow';
-import { getTransactions, getDashboardStats } from '../services/api';
+import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries } from '../services/api';
 import useTheme from '../hooks/useTheme';
 
 const Dashboard = () => {
@@ -18,6 +19,10 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({ name: 'Usuário', email: '' });
+  const [series, setSeries] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [newTx, setNewTx] = useState({ type: 'expense', description: '', amount: '', category: '', date: new Date().toISOString().slice(0,10) });
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -44,16 +49,14 @@ const Dashboard = () => {
     const fetchData = async () => {
         try {
             const data = await getTransactions();
-            const sample = [
-              { id: 1, description: "Design Freelance", date: "Hoje, 14:00", amount: "2.400,00", type: "income", category: "Serviços" },
-              { id: 2, description: "Netflix Premium", date: "Ontem, 09:30", amount: "55,90", type: "expense", category: "Assinatura" },
-              { id: 3, description: "Supermercado", date: "12 Mar, 18:15", amount: "432,10", type: "expense", category: "Alimentação" },
-              { id: 4, description: "Venda Produto X", date: "10 Mar, 11:20", amount: "150,00", type: "income", category: "Vendas" }
-            ];
+            const s = await getDashboardSeries();
+            const st = await getDashboardStats();
             const arr = Array.isArray(data) ? data 
               : Array.isArray(data?.transactions) ? data.transactions 
               : [];
-            setTransactions(arr.length > 0 ? arr : sample);
+            setTransactions(arr);
+            setSeries(Array.isArray(s?.series) ? s.series : []);
+            setStats(st);
         } catch (error) {
             console.error("Erro ao carregar dados", error);
         } finally {
@@ -72,12 +75,10 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white overflow-hidden transition-colors duration-300">
-      {/* Sidebar Overlay Mobile */}
       {!sidebarOpen && (
         <div className="md:hidden fixed inset-0 bg-black/50 z-20 backdrop-blur-sm" onClick={() => setSidebarOpen(true)} style={{display: 'none'}} />
       )}
 
-      {/* Sidebar */}
       <aside 
         className={`${sidebarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full md:w-20 md:translate-x-0'} 
         fixed md:relative z-30 h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-all duration-300 flex flex-col shadow-xl md:shadow-none`}
@@ -90,7 +91,12 @@ const Dashboard = () => {
           {menuItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => {
+                if (item.id === 'transactions') navigate('/transactions');
+                else if (item.id === 'wallet') navigate('/wallet');
+                else if (item.id === 'analytics') navigate('/reports');
+                else setActiveTab(item.id);
+              }}
               className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group
                 ${activeTab === item.id 
                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
@@ -107,7 +113,7 @@ const Dashboard = () => {
 
         <div className="p-4 border-t border-slate-200 dark:border-slate-800">
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('user'); navigate('/'); }}
             className="w-full flex items-center gap-3 p-3 rounded-xl text-rose-500 dark:text-rose-400 hover:bg-rose-500/10 transition-colors"
           >
             <LogOut size={20} />
@@ -116,9 +122,7 @@ const Dashboard = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-        {/* Header */}
         <header className="h-20 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md flex items-center justify-between px-6 md:px-8 transition-colors duration-300">
           <div className="flex items-center gap-4">
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg md:hidden">
@@ -128,7 +132,6 @@ const Dashboard = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Theme Toggle */}
             <button 
               onClick={toggleTheme}
               className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
@@ -152,47 +155,51 @@ const Dashboard = () => {
                 <p className="text-sm font-medium text-slate-900 dark:text-white">{user.name}</p>
                 <p className="text-xs text-slate-500 dark:text-slate-400">Plano Grátis</p>
               </div>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-blue-500 p-0.5">
+              <button onClick={() => navigate('/profile')} className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-blue-500 p-0.5">
                 <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 flex items-center justify-center overflow-hidden">
                   <User size={20} className="text-slate-400 dark:text-slate-300" />
                 </div>
-              </div>
+              </button>
             </div>
           </div>
         </header>
 
-        {/* Content Scrollable Area */}
         <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
           
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <StatCard 
               title="Saldo Total" 
-              value="R$ 42.500,00" 
-              change="+12.5%" 
-              isPositive={true} 
+              value={stats ? `R$ ${Number(stats.totals.balance).toFixed(2)}` : "R$ 0,00"} 
+              change=""
+              isPositive={(stats?.totals.balance ?? 0) >= 0} 
               icon={DollarSign} 
             />
             <StatCard 
               title="Receitas (Mês)" 
-              value="R$ 8.250,00" 
-              change="+5.2%" 
+              value={stats ? `R$ ${Number(stats.totals.income).toFixed(2)}` : "R$ 0,00"} 
+              change=""
               isPositive={true} 
               icon={TrendingUp} 
             />
             <StatCard 
               title="Despesas (Mês)" 
-              value="R$ 3.100,00" 
-              change="-2.4%" 
+              value={stats ? `R$ ${Number(stats.totals.expense).toFixed(2)}` : "R$ 0,00"} 
+              change=""
               isPositive={false} 
               icon={TrendingDown} 
             />
           </div>
 
+          <div className="flex gap-3">
+            <button onClick={() => { setNewTx({ ...newTx, type: 'income' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-emerald-500 text-white">Lançar Receita</button>
+            <button onClick={() => { setNewTx({ ...newTx, type: 'expense' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-rose-500 text-white">Lançar Despesa</button>
+          </div>
+
           {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            {/* Chart Area (Simulated) */}
+            {/* Chart Area */}
             <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-none transition-colors">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">Fluxo de Caixa</h3>
@@ -201,27 +208,17 @@ const Dashboard = () => {
                   <option>Este ano</option>
                 </select>
               </div>
-              
-              {/* CSS Only Bar Chart */}
-              <div className="h-64 flex items-end justify-between gap-4 mt-8">
-                {[65, 40, 75, 55, 80, 95].map((h, i) => (
-                  <div key={i} className="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
-                    <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-t-sm relative h-full flex items-end overflow-hidden">
-                      <div 
-                        style={{ height: `${h}%` }} 
-                        className="w-full bg-gradient-to-t from-emerald-600 to-emerald-400 opacity-80 group-hover:opacity-100 transition-all duration-300 relative"
-                      >
-                         {/* Tooltip on hover */}
-                         <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                            R$ {h * 100}
-                         </div>
-                      </div>
-                    </div>
-                    <span className="text-xs text-slate-500 dark:text-slate-500 text-center font-medium">
-                      {['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'][i]}
-                    </span>
-                  </div>
-                ))}
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={series}>
+                    <XAxis dataKey="label" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="income" name="Receitas" fill="#10b981" />
+                    <Bar dataKey="expense" name="Despesas" fill="#ef4444" />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
@@ -229,7 +226,7 @@ const Dashboard = () => {
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-none transition-colors">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recentes</h3>
-                <button className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300">Ver todas</button>
+                <button onClick={() => navigate('/transactions')} className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300">Ver todas</button>
               </div>
               <div className="space-y-1">
                 {Array.isArray(transactions) && transactions.map((tx) => (
@@ -256,6 +253,33 @@ const Dashboard = () => {
             </div>
 
           </div>
+
+          {showModal && (
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-md border border-slate-200 dark:border-slate-800">
+                <h3 className="text-lg font-bold mb-4">{newTx.type === 'income' ? 'Nova Receita' : 'Nova Despesa'}</h3>
+                <div className="space-y-3">
+                  <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Descrição" value={newTx.description} onChange={e => setNewTx({ ...newTx, description: e.target.value })} />
+                  <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Categoria" value={newTx.category} onChange={e => setNewTx({ ...newTx, category: e.target.value })} />
+                  <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" type="number" step="0.01" placeholder="Valor" value={newTx.amount} onChange={e => setNewTx({ ...newTx, amount: e.target.value })} />
+                  <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" type="date" value={newTx.date} onChange={e => setNewTx({ ...newTx, date: e.target.value })} />
+                </div>
+                <div className="flex justify-end gap-3 mt-4">
+                  <button className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800" onClick={() => setShowModal(false)}>Cancelar</button>
+                  <button className="px-4 py-2 rounded-xl bg-emerald-600 text-white" onClick={async () => {
+                    const payload = { ...newTx, amount: parseFloat(newTx.amount) };
+                    await createTransaction(payload);
+                    const data = await getTransactions();
+                    const arr = Array.isArray(data) ? data : Array.isArray(data?.transactions) ? data.transactions : [];
+                    setTransactions(arr);
+                    const st = await getDashboardStats();
+                    setStats(st);
+                    setShowModal(false);
+                  }}>Salvar</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

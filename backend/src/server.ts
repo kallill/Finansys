@@ -4,8 +4,15 @@ import dotenv from 'dotenv';
 import path from 'path';
 import sequelize from './config/database';
 import authRoutes from './routes/authRoutes';
+import transactionRoutes from './routes/transactionRoutes';
+import dashboardRoutes from './routes/dashboardRoutes';
+import userRoutes from './routes/userRoutes';
+import rateLimit from 'express-rate-limit';
+import healthRoutes from './routes/healthRoutes';
+import walletRoutes from './routes/walletRoutes';
+import reportsRoutes from './routes/reportsRoutes';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), 'backend/.env') });
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,8 +20,29 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+app.use('/auth', limiter);
+
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const ms = Date.now() - start;
+    console.log(`${req.method} ${req.originalUrl} ${res.statusCode} - ${ms}ms`);
+  });
+  next();
+});
+
 // Routes
 app.use('/auth', authRoutes);
+app.use('/transactions', transactionRoutes);
+app.use('/dashboard', dashboardRoutes);
+app.use('/user', userRoutes);
+app.use('/health', healthRoutes);
+app.use('/wallet', walletRoutes);
+app.use('/reports', reportsRoutes);
 
 // Serve static files from the React frontend app
 const frontendPath = path.join(__dirname, '../../frontend/dist');

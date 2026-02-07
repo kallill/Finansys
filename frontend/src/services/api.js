@@ -23,14 +23,10 @@ export const login = async (email, password) => {
     }
     return response.data;
   } catch (error) {
-    if (!error.response || (error.response && error.response.status >= 500)) {
-         console.warn("Backend indisponível. Usando modo offline/demo.");
-         const mockUser = { name: 'Usuário Demo', email };
-         localStorage.setItem('token', 'demo-token');
-         localStorage.setItem('user', JSON.stringify(mockUser));
-         return { user: mockUser, token: 'demo-token' };
-    }
-    throw error;
+    const message = error?.response?.data?.message || 'Falha ao autenticar';
+    const e = new Error(message);
+    e.response = error?.response;
+    throw e;
   }
 };
 
@@ -44,6 +40,31 @@ export const verifyEmailToken = async (token) => {
     return response.data;
 };
 
+export const forgotPassword = async (email) => {
+    const response = await api.post('/auth/forgot-password', { email });
+    return response.data;
+};
+
+export const resetPassword = async (token, password) => {
+    const response = await api.post('/auth/reset-password', { token, password });
+    return response.data;
+};
+
+export const getProfile = async () => {
+    const response = await api.get('/user/profile');
+    return response.data;
+};
+
+export const updateProfile = async (payload) => {
+    const response = await api.put('/user/profile', payload);
+    return response.data;
+};
+
+export const changePassword = async (currentPassword, newPassword) => {
+    const response = await api.post('/user/change-password', { currentPassword, newPassword });
+    return response.data;
+};
+
 export const getTransactions = async () => {
     try {
         const response = await api.get('/transactions');
@@ -54,6 +75,21 @@ export const getTransactions = async () => {
     }
 };
 
+export const createTransaction = async (payload) => {
+    const response = await api.post('/transactions', payload);
+    return response.data;
+};
+
+export const updateTransaction = async (id, payload) => {
+    const response = await api.put(`/transactions/${id}`, payload);
+    return response.data;
+};
+
+export const deleteTransaction = async (id) => {
+    const response = await api.delete(`/transactions/${id}`);
+    return response.data;
+};
+
 export const getDashboardStats = async () => {
     try {
         const response = await api.get('/dashboard/stats');
@@ -62,6 +98,26 @@ export const getDashboardStats = async () => {
         console.error("Erro ao buscar estatísticas:", error);
         return null;
     }
+};
+
+export const getDashboardSeries = async () => {
+    try {
+        const response = await api.get('/dashboard/series');
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao buscar séries:", error);
+        return { series: [] };
+    }
+};
+
+export const getWalletSummary = async () => {
+    const response = await api.get('/wallet/summary');
+    return response.data;
+};
+
+export const getReportTransactions = async (params) => {
+    const response = await api.get('/reports/transactions', { params });
+    return response.data;
 };
 
 export default api;

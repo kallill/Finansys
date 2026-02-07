@@ -8,6 +8,8 @@ class User extends Model {
   public password_hash!: string;
   public isVerified!: boolean;
   public verificationToken!: string | null;
+  public resetPasswordToken!: string | null;
+  public resetPasswordExpires!: Date | null;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -37,6 +39,14 @@ User.init({
   },
   verificationToken: {
     type: DataTypes.STRING,
+    allowNull: true,
+  },
+  resetPasswordToken: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  resetPasswordExpires: {
+    type: DataTypes.DATE,
     allowNull: true,
   }
 }, {

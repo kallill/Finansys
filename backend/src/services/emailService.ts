@@ -1,7 +1,8 @@
 import { Resend } from 'resend';
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), 'backend/.env') });
 
 const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
@@ -24,6 +25,31 @@ export const sendVerificationEmail = async (email: string, token: string) => {
         <p>Por favor, verifique seu email clicando no link abaixo:</p>
         <a href="${verificationLink}" style="padding: 10px 20px; background-color: #10b981; color: white; text-decoration: none; border-radius: 5px;">Verificar Email</a>
         <p>Se você não criou esta conta, ignore este email.</p>
+      `
+    });
+    return data;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return null;
+  }
+};
+
+export const sendResetPasswordEmail = async (email: string, token: string) => {
+  const resetLink = `https://finansys.site/reset-password?token=${token}`;
+  if (!resend) {
+    console.warn('Resend API key ausente. Email de reset não será enviado.');
+    return null;
+  }
+  try {
+    const data = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject: 'Redefinição de senha - Finansys',
+      html: `
+        <h1>Redefinição de senha</h1>
+        <p>Clique no botão abaixo para redefinir sua senha:</p>
+        <a href="${resetLink}" style="padding: 10px 20px; background-color: #10b981; color: white; text-decoration: none; border-radius: 5px;">Redefinir Senha</a>
+        <p>Se você não solicitou esta ação, ignore este email.</p>
       `
     });
     return data;

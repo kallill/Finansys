@@ -2,6 +2,7 @@ node_modules/
 dist/
 frontend/dist/
 backend/dist/
+backend/*.sqlite
 
 # Env files
 *.env
