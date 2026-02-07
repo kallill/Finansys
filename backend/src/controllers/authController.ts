@@ -105,8 +105,12 @@ export const login = async (req: Request, res: Response) => {
       },
       token,
     });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+  } catch (error: any) {
+    console.error("Login error:", error);
+    res.status(500).json({ 
+      message: 'Server error', 
+      error: error?.message || 'Unknown error' 
+    });
   }
 };
 
