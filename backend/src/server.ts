@@ -1,7 +1,11 @@
-import express from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+
+// Load env vars immediately
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+import express from 'express';
+import cors from 'cors';
 import sequelize from './config/database';
 import authRoutes from './routes/authRoutes';
 import transactionRoutes from './routes/transactionRoutes';
@@ -12,7 +16,7 @@ import healthRoutes from './routes/healthRoutes';
 import walletRoutes from './routes/walletRoutes';
 import reportsRoutes from './routes/reportsRoutes';
 
-dotenv.config({ path: path.resolve(process.cwd(), 'backend/.env') });
+// dotenv config removed from here (moved to top)
 
 const app = express();
 const port = process.env.PORT || 3000;

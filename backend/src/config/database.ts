@@ -2,7 +2,8 @@ import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(process.cwd(), 'backend/.env') });
+// Fix path to find .env in root of backend folder (../../ from src/config)
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const dbDialect = process.env.DB_DIALECT || 'mssql';
 const dbName = process.env.DB_NAME || 'FinansysDB';
