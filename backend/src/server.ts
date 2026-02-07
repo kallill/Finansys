@@ -17,6 +17,9 @@ dotenv.config({ path: path.resolve(process.cwd(), 'backend/.env') });
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Trust proxy for rate limiting behind Nginx
+app.set('trust proxy', 1);
+
 app.use(cors());
 app.use(express.json());
 
@@ -73,10 +76,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('Unable to connect to the database:', error);
-    // Start server anyway to avoid Connection Refused on frontend
-    app.listen(port, () => {
-      console.log(`Server started on port ${port} (Offline Mode - DB Failed)`);
-    });
+    process.exit(1); // Fail hard so PM2 restarts
   }
 };
 
