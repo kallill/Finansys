@@ -17,7 +17,7 @@ services:
     build: .
     restart: always
     ports:
-      - "3006:3000"  # Acesso direto via http://IP:3006 (fallback sem Traefik)
+      - "3006:3000"  # Acesso direto via http://IP:3006
     environment:
       - PORT=3000
       - DB_DIALECT=postgres
@@ -29,21 +29,27 @@ services:
     depends_on:
       - db
     networks:
-      - proxy-network  # Rede externa do Traefik na VPS
-      - app_network    # Rede interna para comunicar com o Postgres
+      - proxy-network
+      - app_network
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy-network"
+      # Router HTTPS
       - "traefik.http.routers.finansys.rule=Host(`finansys.dksystem.online`)"
       - "traefik.http.routers.finansys.entrypoints=websecure"
-      - "traefik.http.routers.finansys.tls.certresolver=myresolver"
+      - "traefik.http.routers.finansys.tls.certresolver=letsencrypt"
       - "traefik.http.services.finansys.loadbalancer.server.port=3000"
-      - "traefik.docker.network=proxy-network"
+      # Router HTTP -> redireciona para HTTPS
+      - "traefik.http.routers.finansys-http.rule=Host(`finansys.dksystem.online`)"
+      - "traefik.http.routers.finansys-http.entrypoints=web"
+      - "traefik.http.routers.finansys-http.middlewares=redirect-https"
+      - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
 
   n8n:
     image: docker.n8n.io/n8nio/n8n
     restart: always
     ports:
-      - "3008:5678"  # Acesso direto via http://IP:3008 (fallback sem Traefik)
+      - "3008:5678"  # Acesso direto via http://IP:3008
     environment:
       - N8N_HOST=n8n.dksystem.online
       - N8N_PORT=5678
@@ -54,20 +60,25 @@ services:
     volumes:
       - ./n8n_data:/home/node/.n8n
     networks:
-      - proxy-network  # Rede externa do Traefik na VPS
+      - proxy-network
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy-network"
+      # Router HTTPS
       - "traefik.http.routers.n8n.rule=Host(`n8n.dksystem.online`)"
       - "traefik.http.routers.n8n.entrypoints=websecure"
-      - "traefik.http.routers.n8n.tls.certresolver=myresolver"
+      - "traefik.http.routers.n8n.tls.certresolver=letsencrypt"
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
-      - "traefik.docker.network=proxy-network"
+      # Router HTTP -> redireciona para HTTPS
+      - "traefik.http.routers.n8n-http.rule=Host(`n8n.dksystem.online`)"
+      - "traefik.http.routers.n8n-http.entrypoints=web"
+      - "traefik.http.routers.n8n-http.middlewares=redirect-https"
 
   evolution:
     image: evoapicloud/evolution-api:latest
     restart: always
     ports:
-      - "3009:8080"  # Acesso direto via http://IP:3009 (fallback sem Traefik)
+      - "3009:8080"  # Acesso direto via http://IP:3009
     environment:
       - SERVER_URL=https://evolution.dksystem.online
       - CORS_ORIGIN=*
@@ -80,17 +91,23 @@ services:
       - ./evolution_instances:/evolution/instances
       - ./evolution_store:/evolution/store
     networks:
-      - proxy-network  # Rede externa do Traefik na VPS
+      - proxy-network
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy-network"
+      # Router HTTPS
       - "traefik.http.routers.evolution.rule=Host(`evolution.dksystem.online`)"
       - "traefik.http.routers.evolution.entrypoints=websecure"
-      - "traefik.http.routers.evolution.tls.certresolver=myresolver"
+      - "traefik.http.routers.evolution.tls.certresolver=letsencrypt"
       - "traefik.http.services.evolution.loadbalancer.server.port=8080"
-      - "traefik.docker.network=proxy-network"
+      # Router HTTP -> redireciona para HTTPS
+      - "traefik.http.routers.evolution-http.rule=Host(`evolution.dksystem.online`)"
+      - "traefik.http.routers.evolution-http.entrypoints=web"
+      - "traefik.http.routers.evolution-http.middlewares=redirect-https"
 
 networks:
   proxy-network:
-    external: true  # Rede já criada pelo Traefik na VPS (proxy-network)
+    external: true  # Rede do Traefik na VPS
   app_network:
-    driver: bridge  # Rede interna isolada para Finansys <-> Postgres
+    driver: bridge  # Rede interna: Finansys <-> Postgres
+
