@@ -31,8 +31,12 @@ export const register = async (req: Request, res: Response) => {
       verificationToken
     });
 
-    // Send verification email
-    await sendVerificationEmail(email, verificationToken);
+    // Tenta enviar email de verificação (não-bloqueante: se falhar, conta é criada assim mesmo)
+    try {
+      await sendVerificationEmail(email, verificationToken);
+    } catch (emailError) {
+      console.warn('Aviso: falha ao enviar email de verificação (conta criada mesmo assim):', emailError);
+    }
 
     // We can choose to login immediately or ask for verification first
     // Here we return token but user is not verified yet
