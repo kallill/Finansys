@@ -101,7 +101,7 @@ const ResetPassword = () => {
             </div>
           </div>
 
-        <Button variant="primary" className="w-full py-3.5" disabled={loading || !token}>
+        <Button type="submit" variant="primary" className="w-full py-3.5" disabled={loading || !token}>
           {loading ? (
             <span className="animate-pulse">Salvando...</span>
           ) : (

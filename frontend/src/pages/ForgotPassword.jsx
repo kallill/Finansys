@@ -68,7 +68,7 @@ const ForgotPassword = () => {
             </div>
           </div>
 
-          <Button variant="primary" className="w-full py-3.5" disabled={loading}>
+          <Button type="submit" variant="primary" className="w-full py-3.5" disabled={loading}>
             {loading ? (
               <span className="animate-pulse">Enviando...</span>
             ) : (
