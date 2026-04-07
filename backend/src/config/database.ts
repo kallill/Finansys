@@ -6,57 +6,67 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const dbDialect = process.env.DB_DIALECT || 'mssql';
-const dbName = process.env.DB_NAME || 'FinansysDB';
-const dbUser = process.env.DB_USER || 'user';
-const dbHost = process.env.DB_HOST || 'dksystem.database.windows.net';
-const dbPassword = process.env.DB_PASS || 'password';
+const dbName    = process.env.DB_NAME     || 'FinansysDB';
+const dbUser    = process.env.DB_USER     || 'user';
+const dbHost    = process.env.DB_HOST     || 'localhost';
+const dbPassword = process.env.DB_PASS   || 'password';
+
+const retryMatch = [
+  /ETIMEOUT/,
+  /EHOSTUNREACH/,
+  /ECONNRESET/,
+  /ECONNREFUSED/,
+  /ETIMEDOUT/,
+  /ESOCKETTIMEDOUT/,
+  /EHOSTDOWN/,
+  /EPIPE/,
+  /EAI_AGAIN/,
+  /SequelizeConnectionError/,
+  /SequelizeConnectionRefusedError/,
+  /SequelizeHostNotFoundError/,
+  /SequelizeHostNotReachableError/,
+  /SequelizeInvalidConnectionError/,
+  /SequelizeConnectionTimedOutError/
+];
 
 let sequelize: Sequelize;
+
 if (dbDialect === 'sqlite') {
+  // Modo desenvolvimento local com SQLite
   sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: path.resolve(process.cwd(), 'backend/dev.sqlite'),
     logging: false
   });
-} else {
+
+} else if (dbDialect === 'postgres') {
+  // Modo produção com PostgreSQL (Docker/VPS)
   sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
-    dialect: dbDialect as any, // Adicionado Any para permitir o cast do dialect dinâmico
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 60000,
-      idle: 10000
-    },
+    dialect: 'postgres',
+    port: Number(process.env.DB_PORT) || 5432,
+    pool: { max: 5, min: 0, acquire: 60000, idle: 10000 },
+    dialectOptions: {},  // Sem opções MSSQL — pg não aceita o objeto "options"
+    logging: false,
+    retry: { match: retryMatch, max: 3 }
+  });
+
+} else {
+  // Modo MSSQL / Azure SQL
+  sequelize = new Sequelize(dbName, dbUser, dbPassword, {
+    host: dbHost,
+    dialect: 'mssql',
+    pool: { max: 5, min: 0, acquire: 60000, idle: 10000 },
     dialectOptions: {
       options: {
         encrypt: true,
-        trustServerCertificate: true, // Allow self-signed/Azure certs on VPS
+        trustServerCertificate: true, // Permite certs auto-assinados no Azure/VPS
         requestTimeout: 60000,
         connectTimeout: 60000
       }
     },
     logging: false,
-    retry: {
-      match: [
-        /ETIMEOUT/,
-        /EHOSTUNREACH/,
-        /ECONNRESET/,
-        /ECONNREFUSED/,
-        /ETIMEDOUT/,
-        /ESOCKETTIMEDOUT/,
-        /EHOSTDOWN/,
-        /EPIPE/,
-        /EAI_AGAIN/,
-        /SequelizeConnectionError/,
-        /SequelizeConnectionRefusedError/,
-        /SequelizeHostNotFoundError/,
-        /SequelizeHostNotReachableError/,
-        /SequelizeInvalidConnectionError/,
-        /SequelizeConnectionTimedOutError/
-      ],
-      max: 3
-    }
+    retry: { match: retryMatch, max: 3 }
   });
 }
 
