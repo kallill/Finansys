@@ -38,6 +38,7 @@ services:
   n8n:
     image: docker.n8n.io/n8nio/n8n
     restart: always
+    user: "root"
     ports:
       - "3008:5678"
     environment:
@@ -48,7 +49,7 @@ services:
       - WEBHOOK_URL=https://n8n.dksystem.online/
       - GENERIC_TIMEZONE=America/Sao_Paulo
     volumes:
-      - ./n8n_data:/home/node/.n8n
+      - n8n_data:/home/node/.n8n
     networks:
       - tunnel_net
 
@@ -62,12 +63,12 @@ services:
       - "CORS_ORIGIN=*"
       - CORS_METHODS=GET,POST,PUT,DELETE,PATCH
       - CORS_CREDENTIALS=true
-      - DBASE_URL=sqlite://./db.sqlite
+      - DATABASE_PROVIDER=sqlite
+      - DATABASE_ENABLED=true
       - AUTHENTICATION_TYPE=apikey
       - AUTHENTICATION_API_KEY=B39CA8B62C05DA3CD778A9C1DE4DAB37
     volumes:
-      - ./evolution_instances:/evolution/instances
-      - ./evolution_store:/evolution/store
+      - evolution_data:/evolution/store
     networks:
       - tunnel_net
 
@@ -85,3 +86,7 @@ networks:
     driver: bridge
   tunnel_net:
     driver: bridge
+
+volumes:
+  n8n_data:
+  evolution_data:
