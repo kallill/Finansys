@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+.env
+dist
+build
+pgdata
+n8n_data
+evolution_store
+evolution_instances

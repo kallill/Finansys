@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: finansys_user
+      POSTGRES_PASSWORD: finansys_password
+      POSTGRES_DB: finansys_db
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  finansys:
+    build: .
+    restart: always
+    environment:
+      - PORT=3000
+      - DB_DIALECT=postgres
+      - DB_NAME=finansys_db
+      - DB_USER=finansys_user
+      - DB_PASS=finansys_password
+      - DB_HOST=db
+      - JWT_SECRET=super_secret_finansys_key_change_me
+    depends_on:
+      - db
+    networks:
+      - public_web
+      - app_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.finansys.rule=Host(`finansys.dksystem.online`)"
+      - "traefik.http.routers.finansys.entrypoints=websecure"
+      - "traefik.http.routers.finansys.tls.certresolver=letsencrypt"
+      - "traefik.http.services.finansys.loadbalancer.server.port=3000"
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    environment:
+      - N8N_HOST=n8n.dksystem.online
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://n8n.dksystem.online/
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    networks:
+      - public_web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`n8n.dksystem.online`)"
+      - "traefik.http.routers.n8n.entrypoints=websecure"
+      - "traefik.http.routers.n8n.tls.certresolver=letsencrypt"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+
+  evolution:
+    image: atendimentoo/evolution-api:latest
+    restart: always
+    environment:
+      - SERVER_URL=https://evolution.dksystem.online
+      - CORS_ORIGIN=*
+      - CORS_METHODS=GET,POST,PUT,DELETE,PATCH
+      - CORS_CREDENTIALS=true
+      - DBASE_URL=sqlite://./db.sqlite
+      - AUTHENTICATION_TYPE=apikey
+      - AUTHENTICATION_API_KEY=B39CA8B62C05DA3CD778A9C1DE4DAB37 # Mude esta API Key para sua seguranca
+    volumes:
+      - ./evolution_instances:/evolution/instances
+      - ./evolution_store:/evolution/store
+    networks:
+      - public_web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.evolution.rule=Host(`evolution.dksystem.online`)"
+      - "traefik.http.routers.evolution.entrypoints=websecure"
+      - "traefik.http.routers.evolution.tls.certresolver=letsencrypt"
+      - "traefik.http.services.evolution.loadbalancer.server.port=8080"
+
+networks:
+  public_web:
+    external: true
+  app_network:
+    driver: bridge

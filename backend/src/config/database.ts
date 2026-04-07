@@ -21,7 +21,7 @@ if (dbDialect === 'sqlite') {
 } else {
   sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
-    dialect: 'mssql',
+    dialect: dbDialect as any, // Adicionado Any para permitir o cast do dialect dinâmico
     pool: {
       max: 5,
       min: 0,
