@@ -60,7 +60,7 @@ services:
       - "traefik.docker.network=proxy-network"
 
   evolution:
-    image: atendimentoo/evolution-api:latest
+    image: evoapicloud/evolution-api:latest
     restart: always
     environment:
       - SERVER_URL=https://evolution.dksystem.online
