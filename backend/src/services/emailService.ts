@@ -8,7 +8,9 @@ const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
 
 export const sendVerificationEmail = async (email: string, token: string) => {
-  const verificationLink = `https://finansys.site/verify-email?token=${token}`;
+  const appUrl = process.env.APP_URL || 'https://finansys.dksystem.online';
+  const verificationLink = `${appUrl}/verify-email?token=${token}`;
+  const fromEmail = process.env.RESEND_FROM || 'onboarding@resend.dev';
 
   if (!resend) {
     console.warn('Resend API key ausente. Email de verificação não será enviado.');
@@ -17,7 +19,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 
   try {
     const data = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: fromEmail,
       to: email,
       subject: 'Verifique seu email - Finansys',
       html: `
@@ -35,14 +37,16 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 };
 
 export const sendResetPasswordEmail = async (email: string, token: string) => {
-  const resetLink = `https://finansys.site/reset-password?token=${token}`;
+  const appUrl = process.env.APP_URL || 'https://finansys.dksystem.online';
+  const resetLink = `${appUrl}/reset-password?token=${token}`;
+  const fromEmail = process.env.RESEND_FROM || 'onboarding@resend.dev';
   if (!resend) {
     console.warn('Resend API key ausente. Email de reset não será enviado.');
     return null;
   }
   try {
     const data = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: fromEmail,
       to: email,
       subject: 'Redefinição de senha - Finansys',
       html: `

@@ -26,6 +26,9 @@ services:
       - DB_PASS=finansys_password
       - DB_HOST=db
       - JWT_SECRET=super_secret_finansys_key_change_me
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - RESEND_FROM=${RESEND_FROM:-onboarding@resend.dev}
+      - APP_URL=https://finansys.dksystem.online
     depends_on:
       - db
     networks:
