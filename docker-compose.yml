@@ -79,9 +79,12 @@ services:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
       - tunnel_net
+      - loja_default
 
 networks:
   app_network:
     driver: bridge
   tunnel_net:
     driver: bridge
+  loja_default:
+    external: true
