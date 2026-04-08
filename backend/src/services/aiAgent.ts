@@ -6,7 +6,7 @@ import { Op } from 'sequelize';
 const tool_registrar_lancamento: FunctionDeclaration = {
   name: 'registrar_lancamento',
   description: 'Registra uma nova transação financeira (receita ou despesa) no banco de dados.',
-<!-- slide -->  parameters: {
+  parameters: {
     type: SchemaType.OBJECT,
     properties: {
       description: {
