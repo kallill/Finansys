@@ -13,6 +13,12 @@ services:
     networks:
       - app_network
 
+  redis:
+    image: redis:7-alpine
+    restart: always
+    networks:
+      - app_network
+
   finansys:
     build: .
     restart: always
@@ -67,12 +73,16 @@ services:
       - DATABASE_PROVIDER=postgresql
       - DATABASE_CONNECTION_URI=postgresql://finansys_user:finansys_password@db:5432/evolution_db
       - DATABASE_CONNECTION_CLIENT_NAME=evolution_api
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379
+      - CACHE_REDIS_PREFIX_KEY=evolution
       - AUTHENTICATION_TYPE=apikey
       - AUTHENTICATION_API_KEY=B39CA8B62C05DA3CD778A9C1DE4DAB37
     volumes:
       - evolution_data:/evolution/store
     depends_on:
       - db
+      - redis
     networks:
       - tunnel_net
       - app_network
