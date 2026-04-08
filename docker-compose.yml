@@ -36,6 +36,7 @@ services:
       - RESEND_FROM=${RESEND_FROM:-onboarding@resend.dev}
       - APP_URL=https://finansys.dksystem.online
       - BOT_API_KEY=${BOT_API_KEY:-n8n_secret_bot_key_123}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
       - db
     networks:

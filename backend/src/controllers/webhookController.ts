@@ -78,7 +78,7 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
       userId: (user as any).id
     });
 
-    // Resposta amigável para o n8n retornar ao WhatsApp
+    // Resposta amigável para o n8n retornar ao WhatsApp (Legacy)
     const emoji = type === 'income' ? '💰' : '💸';
     const typeLabel = type === 'income' ? 'receita' : 'despesa';
     const amountFormatted = parseFloat(amount).toLocaleString('pt-BR', {
@@ -93,5 +93,65 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('[WebhookController] Erro ao criar transação:', error);
     return res.status(500).json({ message: 'Erro interno ao registrar transação.' });
+  }
+};
+
+import { processAIRequest } from '../services/aiAgent';
+
+/**
+ * POST /webhook/agent
+ * O "Cérebro" de IA - Processa o texto puro do N8N via Gemini Function Calling
+ *
+ * Body: { phone, message }
+ * Header: x-api-key: <BOT_API_KEY>
+ */
+export const webhookAgent = async (req: Request, res: Response) => {
+  try {
+    const apiKey = req.headers['x-api-key'];
+    const validKey = process.env.BOT_API_KEY;
+
+    if (!validKey || apiKey !== validKey) {
+      return res.status(401).json({ message: 'API Key inválida.' });
+    }
+
+    const { phone, message } = req.body;
+
+    if (!phone || !message) {
+      return res.status(400).json({ message: 'Campos obrigatórios: phone, message.' });
+    }
+
+    // Sanitiza e descobre o usuário pelo telefone igual ao legado
+    const cleanPhone = phone.replace(/\D/g, '');
+    let user;
+
+    if (cleanPhone) {
+      user = await User.findOne({ where: { phone: cleanPhone } });
+      if (!user && cleanPhone.startsWith('55')) {
+        if (cleanPhone.length === 12) {
+          user = await User.findOne({ where: { phone: `55${cleanPhone.substring(2, 4)}9${cleanPhone.substring(4)}` } });
+        } else if (cleanPhone.length === 13) {
+          user = await User.findOne({ where: { phone: `55${cleanPhone.substring(2, 4)}${cleanPhone.substring(5)}` } });
+        }
+      }
+    }
+
+    if (!user) {
+      return res.status(200).json({
+        reply: `⚠️ O Google Gemini Assistant informa: Não encontrei seu número cadastrado no banco do Finansys. Entre no site e salve o telefone no seu Perfil!`
+      });
+    }
+
+    // Passa a bola pro NodeJS Gemini SDK
+    try {
+      const responseText = await processAIRequest(message, (user as any).id);
+      return res.status(200).json({ reply: responseText });
+    } catch (aiError: any) {
+      console.error("[Gemini API Error]", aiError);
+      return res.status(200).json({ reply: `Desculpe, o servidor do Google Gemini retornou um erro agora: ${aiError.message}` });
+    }
+
+  } catch (error) {
+    console.error('[WebhookController] Erro no Webhook Agent:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
