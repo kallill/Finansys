@@ -7,7 +7,7 @@ import { getProfile, updateProfile, changePassword } from '../services/api';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState({ name: '', email: '' });
+  const [profile, setProfile] = useState({ name: '', email: '', phone: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -17,7 +17,7 @@ const Profile = () => {
   const load = async () => {
     try {
       const data = await getProfile();
-      setProfile({ name: data.name, email: data.email });
+      setProfile({ name: data.name, email: data.email, phone: data.phone || '' });
     } catch (e) {
       setError('Falha ao carregar perfil');
     } finally {
@@ -33,7 +33,7 @@ const Profile = () => {
     setMessage('');
     try {
       const data = await updateProfile(profile);
-      setProfile({ name: data.name, email: data.email });
+      setProfile({ name: data.name, email: data.email, phone: data.phone || '' });
       setMessage('Perfil atualizado');
     } catch {
       setError('Erro ao atualizar perfil');
@@ -74,6 +74,7 @@ const Profile = () => {
               <form className="space-y-4" onSubmit={saveProfile}>
                 <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Nome" value={profile.name} onChange={e => setProfile({ ...profile, name: e.target.value })} required />
                 <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Email" type="email" value={profile.email} onChange={e => setProfile({ ...profile, email: e.target.value })} required />
+                <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Telefone (WhatsApp ex: 5511999999999)" type="text" value={profile.phone} onChange={e => setProfile({ ...profile, phone: e.target.value })} />
                 <Button variant="primary" type="submit">Salvar</Button>
               </form>
             )}

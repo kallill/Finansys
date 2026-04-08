@@ -19,12 +19,12 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'API Key inválida.' });
     }
 
-    const { userEmail, description, amount, type, category, date } = req.body;
+    const { userEmail, phone, description, amount, type, category, date } = req.body;
 
     // Validações básicas
-    if (!userEmail || !description || !amount || !type) {
+    if ((!userEmail && !phone) || !description || !amount || !type) {
       return res.status(400).json({
-        message: 'Campos obrigatórios: userEmail, description, amount, type.'
+        message: 'Campos obrigatórios: (userEmail ou phone), description, amount, type.'
       });
     }
 
@@ -34,11 +34,18 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
       });
     }
 
-    // Busca o usuário pelo email
-    const user = await User.findOne({ where: { email: userEmail } });
+    // Busca o usuário pelo email ou telefone
+    let user;
+    if (phone) {
+      user = await User.findOne({ where: { phone: phone } });
+    }
+    if (!user && userEmail) {
+      user = await User.findOne({ where: { email: userEmail } });
+    }
+
     if (!user) {
       return res.status(404).json({
-        message: `Usuário não encontrado: ${userEmail}`
+        message: `Usuário não encontrado com o contato fornecido (${phone || userEmail}). Cadastre seu telefone no App.`
       });
     }
 

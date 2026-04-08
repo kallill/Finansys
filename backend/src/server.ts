@@ -71,7 +71,7 @@ const startServer = async () => {
     
     // Sync models with database
     try {
-      await sequelize.sync(); 
+      await sequelize.sync({ alter: true }); 
       console.log('All models were synchronized successfully.');
     } catch (syncError) {
       console.error('Schema sync error (server will still start):', syncError);

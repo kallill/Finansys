@@ -10,6 +10,7 @@ class User extends Model {
   public verificationToken!: string | null;
   public resetPasswordToken!: string | null;
   public resetPasswordExpires!: Date | null;
+  public phone!: string | null;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -48,6 +49,11 @@ User.init({
   resetPasswordExpires: {
     type: DataTypes.DATE,
     allowNull: true,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,
   }
 }, {
   sequelize,

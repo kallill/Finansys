@@ -12,7 +12,7 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
     if (!id) return res.status(401).json({ message: 'Unauthorized' });
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json({ id: user.id, name: user.name, email: user.email, isVerified: user.isVerified });
+    res.json({ id: user.id, name: user.name, email: user.email, phone: user.phone, isVerified: user.isVerified });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
@@ -24,11 +24,12 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
     if (!id) return res.status(401).json({ message: 'Unauthorized' });
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ message: 'User not found' });
-    const { name, email } = req.body;
+    const { name, email, phone } = req.body;
     user.name = name ?? user.name;
     user.email = email ?? user.email;
+    user.phone = phone !== undefined ? phone : user.phone;
     await user.save();
-    res.json({ id: user.id, name: user.name, email: user.email, isVerified: user.isVerified });
+    res.json({ id: user.id, name: user.name, email: user.email, phone: user.phone, isVerified: user.isVerified });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
