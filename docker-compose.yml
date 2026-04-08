@@ -44,7 +44,7 @@ services:
     environment:
       - N8N_HOST=n8n.dksystem.online
       - N8N_PORT=5678
-      - N8N_PROTOCOL=https
+      - N8N_PROTOCOL=http
       - NODE_ENV=production
       - WEBHOOK_URL=https://n8n.dksystem.online/
       - GENERIC_TIMEZONE=America/Sao_Paulo
