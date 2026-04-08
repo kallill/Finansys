@@ -11,6 +11,7 @@ class User extends Model {
   public resetPasswordToken!: string | null;
   public resetPasswordExpires!: Date | null;
   public phone!: string | null;
+  public pluggyItemId!: string | null;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -54,6 +55,10 @@ User.init({
     type: DataTypes.STRING,
     allowNull: true,
     unique: true,
+  },
+  pluggyItemId: {
+    type: DataTypes.STRING,
+    allowNull: true,
   }
 }, {
   sequelize,

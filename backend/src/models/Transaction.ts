@@ -14,6 +14,7 @@ class Transaction extends Model {
   public status!: 'paid' | 'pending';
   public dueDate!: Date;
   public creditCardId!: number | null;
+  public pluggyTransactionId!: string | null;
 }
 
 Transaction.init({
@@ -67,6 +68,11 @@ Transaction.init({
       key: 'id',
     },
   },
+  pluggyTransactionId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true
+  }
 }, {
   sequelize,
   tableName: 'Transactions',

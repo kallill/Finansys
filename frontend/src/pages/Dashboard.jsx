@@ -9,7 +9,7 @@ import StatCard from '../components/dashboard/StatCard';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import TransactionRow from '../components/dashboard/TransactionRow';
 import { PluggyConnect } from 'react-pluggy-connect';
-import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getPluggyConnectToken } from '../services/api';
+import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getPluggyConnectToken, savePluggyItemId } from '../services/api';
 import useTheme from '../hooks/useTheme';
 
 const Dashboard = () => {
@@ -296,9 +296,17 @@ const Dashboard = () => {
           {pluggyToken && (
             <PluggyConnect
               connectToken={pluggyToken}
-              onSuccess={(itemData) => {
-                setPluggyToken(null);
-                alert('Banco conectado com sucesso! O Finansys iniciará a sincronização bancária em plano de fundo de forma invisível.');
+              includeSandbox={true}
+              onSuccess={async (itemData) => {
+                try {
+                  setPluggyToken(null);
+                  await savePluggyItemId(itemData.item.id);
+                  alert('Banco conectado com sucesso! O Finansys iniciará a sincronização bancária em plano de fundo de forma invisível.');
+                  // Opcional: recarregar dados do dashboard
+                  window.location.reload();
+                } catch (err) {
+                  alert('Conectado no banco, mas houve um erro ao salvar o vínculo no Finansys.');
+                }
               }}
               onError={(error) => {
                 setPluggyToken(null);

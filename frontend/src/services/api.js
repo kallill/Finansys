@@ -130,4 +130,14 @@ export const getPluggyConnectToken = async () => {
     }
 };
 
+export const savePluggyItemId = async (itemId) => {
+    try {
+        const response = await api.post('/pluggy/item', { itemId });
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao salvar ID da conexão Pluggy", error);
+        throw error;
+    }
+};
+
 export default api;

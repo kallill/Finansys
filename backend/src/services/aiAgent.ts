@@ -296,3 +296,29 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
 
   return response.text();
 };
+
+/**
+ * Mágica do Gemini para categorizar transações bancárias do Open Finance
+ */
+export const categorizeDescription = async (description: string): Promise<{ category: string, type: 'income' | 'expense' }> => {
+  try {
+     const apiKey = process.env.GEMINI_API_KEY;
+     if (!apiKey) return { category: 'Outros', type: 'expense' };
+
+     const genAI = new GoogleGenerativeAI(apiKey);
+     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+     const prompt = `Analise a seguinte descrição de transação bancária: "${description}". 
+     Responda APENAS um JSON no formato: {"category": "NomeDaCategoria", "type": "income" ou "expense"}.
+     Exemplo: "UBER TRIP" -> {"category": "Transporte", "type": "expense"}.
+     "SALARIO" -> {"category": "Salário", "type": "income"}.`;
+
+     const result = await model.generateContent(prompt);
+     const text = result.response.text();
+     const cleanJson = text.replace(/```json|```/g, '').trim();
+     return JSON.parse(cleanJson);
+  } catch (error) {
+     console.error("Erro na categorização inteligente:", error);
+     return { category: 'Outros', type: 'expense' };
+  }
+};

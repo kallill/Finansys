@@ -1,5 +1,65 @@
 import { Request, Response } from 'express';
 import { Transaction, User } from '../models';
+import pluggyService from '../services/pluggyService';
+import { categorizeDescription } from '../services/aiAgent';
+
+/**
+ * ... existent code ...
+ */
+
+export const pluggyWebhook = async (req: Request, res: Response) => {
+  try {
+    const { event, itemId } = req.body;
+    console.log(`[Pluggy Webhook] Evento: ${event}, ItemId: ${itemId}`);
+
+    // Só nos interessa quando o item (banco) foi atualizado com novos dados
+    if (event !== 'item/updated' && event !== 'item/created') {
+       return res.status(200).json({ status: 'ignored' });
+    }
+
+    // Busca o usuário dono dessa conexão
+    const user = await User.findOne({ where: { pluggyItemId: itemId } });
+    if (!user) {
+       console.warn(`[Pluggy Webhook] Recebi evento para itemId ${itemId} mas não encontrei usuário vinculado.`);
+       return res.status(200).json({ status: 'not_found' });
+    }
+
+    // 1. Puxa as transações da Pluggy (últimos dias para garantir)
+    // Nota: Em um app real, salvaríamos a data da última sync. Aqui vamos simplificar.
+    const pluggyTransactions = await pluggyService.getClient().fetchTransactions(itemId);
+    
+    let syncedCount = 0;
+
+    for (const pTx of pluggyTransactions.results) {
+       // Anti-duplicidade: Verifica se já importamos esse ID único da Pluggy
+       const exists = await Transaction.findOne({ where: { pluggyTransactionId: pTx.id } });
+       if (exists) continue;
+
+       // 2. Mágica do Gemini: Categorização sob demanda
+       const classification = await categorizeDescription(pTx.description);
+
+       // 3. Salva no banco de dados do Finansys
+       await Transaction.create({
+          description: pTx.description,
+          amount: Math.abs(pTx.amount),
+          type: classification.type,
+          category: classification.category,
+          date: pTx.date,
+          status: 'paid', // Transações bancárias reais já são pagas
+          userId: user.id,
+          pluggyTransactionId: pTx.id
+       });
+       syncedCount++;
+    }
+
+    console.log(`[Pluggy Webhook] Sincronização concluída para ${user.name}: ${syncedCount} novas transações.`);
+    return res.status(200).json({ status: 'success', synced: syncedCount });
+
+  } catch (error: any) {
+    console.error('[Pluggy Webhook Error]', error);
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 /**
  * POST /webhook/transaction
