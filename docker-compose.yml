@@ -37,6 +37,8 @@ services:
       - APP_URL=https://finansys.dksystem.online
       - BOT_API_KEY=${BOT_API_KEY:-n8n_secret_bot_key_123}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - PLUGGY_CLIENT_ID=${PLUGGY_CLIENT_ID}
+      - PLUGGY_CLIENT_SECRET=${PLUGGY_CLIENT_SECRET}
     depends_on:
       - db
     networks:
