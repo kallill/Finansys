@@ -15,6 +15,7 @@ import rateLimit from 'express-rate-limit';
 import healthRoutes from './routes/healthRoutes';
 import walletRoutes from './routes/walletRoutes';
 import reportsRoutes from './routes/reportsRoutes';
+import webhookRoutes from './routes/webhookRoutes';
 
 // dotenv config removed from here (moved to top)
 
@@ -50,6 +51,7 @@ app.use('/user', userRoutes);
 app.use('/health', healthRoutes);
 app.use('/wallet', walletRoutes);
 app.use('/reports', reportsRoutes);
+app.use('/webhook', webhookRoutes);
 
 // Serve static files from the React frontend app
 const frontendPath = path.join(__dirname, '../../frontend/dist');
