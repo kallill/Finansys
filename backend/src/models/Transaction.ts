@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 import User from './User';
+import CreditCard from './CreditCard';
 
 class Transaction extends Model {
   public id!: number;
@@ -10,6 +11,9 @@ class Transaction extends Model {
   public category!: string;
   public date!: Date;
   public userId!: number;
+  public status!: 'paid' | 'pending';
+  public dueDate!: Date;
+  public creditCardId!: number | null;
 }
 
 Transaction.init({
@@ -38,6 +42,15 @@ Transaction.init({
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+  status: {
+    type: DataTypes.ENUM('paid', 'pending'),
+    allowNull: false,
+    defaultValue: 'paid', // Retro-compatibilidade com dados antigos
+  },
+  dueDate: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
   userId: {
     type: DataTypes.INTEGER,
     references: {
@@ -45,6 +58,14 @@ Transaction.init({
       key: 'id',
     },
     allowNull: false,
+  },
+  creditCardId: {
+    type: DataTypes.INTEGER,
+    allowNull: true, // Vazio = Pago ou A pagar no Dinheiro/Conta Corrente
+    references: {
+      model: CreditCard,
+      key: 'id',
+    },
   },
 }, {
   sequelize,
@@ -54,5 +75,8 @@ Transaction.init({
 // Relationships
 User.hasMany(Transaction, { foreignKey: 'userId', as: 'transactions' });
 Transaction.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+CreditCard.hasMany(Transaction, { foreignKey: 'creditCardId', as: 'transactions' });
+Transaction.belongsTo(CreditCard, { foreignKey: 'creditCardId', as: 'creditCard' });
 
 export default Transaction;

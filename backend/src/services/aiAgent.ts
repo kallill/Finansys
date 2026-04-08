@@ -1,8 +1,20 @@
 import { GoogleGenerativeAI, FunctionDeclaration, SchemaType } from '@google/generative-ai';
-import { Transaction, LearnedPattern } from '../models';
+import { Transaction, LearnedPattern, CreditCard } from '../models';
 import { Op } from 'sequelize';
 
 // Declarando as funções (Ferramentas) para o Gemini
+const tool_consultar_fatura: FunctionDeclaration = {
+  name: 'consultar_fatura',
+  description: 'Lista o saldo e os gastos consolidados da fatura de um determinado cartão de crédito.',
+  parameters: {
+    type: SchemaType.OBJECT,
+    properties: {
+      cardName: { type: SchemaType.STRING, description: 'O nome do cartão de crédito (ex: Nubank)' }
+    },
+    required: ['cardName']
+  },
+};
+
 const tool_registrar_lancamento: FunctionDeclaration = {
   name: 'registrar_lancamento',
   description: 'Registra uma nova transação financeira (receita ou despesa) no banco de dados.',
@@ -25,6 +37,18 @@ const tool_registrar_lancamento: FunctionDeclaration = {
         type: SchemaType.STRING,
         description: 'A categoria do lançamento.',
       },
+      status: {
+        type: SchemaType.STRING,
+        description: 'Status do pagamento. Use "pending" para contas a pagar/receber no futuro, e "paid" para contas já resolvidas de forma imediata.',
+      },
+      dueDate: {
+        type: SchemaType.STRING,
+        description: 'Data de vencimento ou do gasto no formato YYYY-MM-DD. Apenas útil se for uma data futura.',
+      },
+      creditCardName: {
+        type: SchemaType.STRING,
+        description: 'Nome do Cartão de Crédito (ex: Nubank, Itau), apenas se o usuário explicitar que pagou no cartão de crédito.',
+      }
     },
     required: ['description', 'amount', 'type', 'category'],
   },
@@ -92,22 +116,55 @@ const tool_editar_transacao: FunctionDeclaration = {
 const tools = [{
   functionDeclarations: [
     tool_registrar_lancamento, tool_consultar_saldo, tool_consultar_resumo_categoria,
-    tool_consultar_extrato, tool_apagar_transacao, tool_editar_transacao
+    tool_consultar_extrato, tool_apagar_transacao, tool_editar_transacao, tool_consultar_fatura
   ],
 }];
 
 const executeTools = async (callName: string, callArgs: any, userId: number) => {
   try {
     if (callName === 'registrar_lancamento') {
-      const tx = await Transaction.create({ ...callArgs, userId, date: new Date() });
-      return { status: "success", message: "Transação salva.", transactionId: tx.id };
+      let creditCardId = null;
+      let finalStatus = callArgs.status || 'paid';
+      let finalDate = callArgs.dueDate ? new Date(callArgs.dueDate) : new Date();
+
+      if (callArgs.creditCardName) {
+         // Tenta associar
+         const card = await CreditCard.findOne({ where: { userId, name: { [Op.iLike]: `%${callArgs.creditCardName}%` } } });
+         if (card) {
+            creditCardId = card.id;
+            finalStatus = 'pending'; // Gastos no crédito rodam pra conta futura (Fatura)
+         }
+      }
+
+      const tx = await Transaction.create({ 
+         ...callArgs, 
+         userId, 
+         date: finalDate, 
+         dueDate: callArgs.dueDate ? new Date(callArgs.dueDate) : null,
+         status: finalStatus,
+         creditCardId
+      });
+      return { status: "success", message: "Transação salva.", transactionId: tx.id, statusFinal: finalStatus, usadoCartaoCredito: !!creditCardId };
     }
+
     if (callName === 'consultar_saldo') {
-      const transactions = await Transaction.findAll({ where: { userId } });
+      // Ignora pendentes e cartões de crédito na conta principal! Dinheiro Real apenas.
+      const transactions = await Transaction.findAll({ 
+         where: { userId, status: 'paid', creditCardId: null } 
+      });
       const totalReceitas = transactions.filter((tx: any) => tx.type === 'income').reduce((acc, tx: any) => acc + Number(tx.amount), 0);
       const totalDespesas = transactions.filter((tx: any) => tx.type === 'expense').reduce((acc, tx: any) => acc + Number(tx.amount), 0);
       const saldoAtual = totalReceitas - totalDespesas;
-      return { status: "success", saldoAtual, totalReceitas, totalDespesas };
+      return { status: "success", saldoAtualContaReal: saldoAtual, totalReceitas, totalDespesas };
+    }
+
+    if (callName === 'consultar_fatura') {
+       const card = await CreditCard.findOne({ where: { userId, name: { [Op.iLike]: `%${callArgs.cardName}%` } } });
+       if (!card) return { error: `Cartão de crédito da operadora ${callArgs.cardName} não foi encontrado no sistema do usuário.` };
+
+       const transactions = await Transaction.findAll({ where: { userId, creditCardId: card.id, status: 'pending' } });
+       const totalFatura = transactions.reduce((acc, tx:any) => acc + Number(tx.amount), 0);
+       return { status: "success", cardName: card.name, totalFatura, comprasPendentes: transactions.length };
     }
     if (callName === 'consultar_resumo_categoria') {
       const txType = callArgs.type === 'income' ? 'income' : 'expense';
@@ -186,8 +243,8 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
   // Tier 1: Regex Burro Mas Rápido (Economiza Gemini em perguntas de saldo simples)
   if (['saldo', 'meu saldo', 'qual meu saldo', 'ver saldo'].includes(cleanMessage)) {
     const data = await executeTools('consultar_saldo', {}, userId);
-    const money = Number(data.saldoAtual).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    return `⚡ *Cálculo do Roteador Local:* Seu saldo geral neste exato momento é de **${money}**!`;
+    const money = Number(data.saldoAtualContaReal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return `⚡ *Cálculo do Roteador Local:* Seu saldo geral (Conta Corrente) neste exato momento é de **${money}**!`;
   }
 
   // Tier 1.5: Busca Aprendida! O Node procura no banco se ele "aprendeu" essa frase exata com o Gemini antes
@@ -195,8 +252,8 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
   if (learned) {
     if (learned.intent === 'consultar_saldo') {
       const data = await executeTools('consultar_saldo', {}, userId);
-      const money = Number(data.saldoAtual).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-      return `🤖 *Cálculo Automático Aprendido:* Seu saldo geral é de **${money}**!`;
+      const money = Number(data.saldoAtualContaReal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      return `🤖 *Cálculo Automático Aprendido:* Seu saldo geral (Conta Corrente) é de **${money}**!`;
     }
     // Para registrar_lancamento, precismos dos arguments, o que inviabiliza match exato local sem os regex, 
     // então enviamos os que não forem puramente informativos para o Gemini.
