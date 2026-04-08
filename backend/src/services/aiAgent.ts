@@ -32,7 +32,7 @@ const tool_registrar_lancamento: FunctionDeclaration = {
 
 const tool_consultar_saldo: FunctionDeclaration = {
   name: 'consultar_saldo',
-  description: 'Consulta o saldo total atual do usuário.',
+  description: 'Consulta o panorama financeiro do usuário: saldo atual, soma total de ganhos (receitas) e soma total gasta (despesas). Use para perguntas de totais gerais.',
   parameters: { type: SchemaType.OBJECT, properties: {} },
 };
 
@@ -63,8 +63,10 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
     }
     if (callName === 'consultar_saldo') {
       const transactions = await Transaction.findAll({ where: { userId } });
-      const total = transactions.reduce((acc, tx: any) => tx.type === 'income' ? acc + Number(tx.amount) : acc - Number(tx.amount), 0);
-      return { status: "success", saldoAtual: total };
+      const totalReceitas = transactions.filter((tx: any) => tx.type === 'income').reduce((acc, tx: any) => acc + Number(tx.amount), 0);
+      const totalDespesas = transactions.filter((tx: any) => tx.type === 'expense').reduce((acc, tx: any) => acc + Number(tx.amount), 0);
+      const saldoAtual = totalReceitas - totalDespesas;
+      return { status: "success", saldoAtual, totalReceitas, totalDespesas };
     }
     if (callName === 'consultar_resumo_categoria') {
       const txType = callArgs.type === 'income' ? 'income' : 'expense';
