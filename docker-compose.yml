@@ -55,6 +55,7 @@ services:
       - NODE_ENV=production
       - WEBHOOK_URL=https://n8n.dksystem.online/
       - GENERIC_TIMEZONE=America/Sao_Paulo
+      - N8N_SSH_LEGACY_CIPHERS=true
     volumes:
       - n8n_data:/home/node/.n8n
     networks:
