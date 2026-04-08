@@ -49,9 +49,50 @@ const tool_consultar_resumo_categoria: FunctionDeclaration = {
   },
 };
 
+const tool_consultar_extrato: FunctionDeclaration = {
+  name: 'consultar_extrato',
+  description: 'Lista as transações detalhadas (extrato) recentes do usuário.',
+  parameters: {
+    type: SchemaType.OBJECT,
+    properties: {
+      limit: { type: SchemaType.NUMBER, description: 'Número de transações para listar. Padrão 5.' },
+      type: { type: SchemaType.STRING, description: 'Filtro opcional. "income" para ver só receitas, "expense" para só despesas.' }
+    }
+  },
+};
+
+const tool_apagar_transacao: FunctionDeclaration = {
+  name: 'apagar_transacao',
+  description: 'Procura a transação mais recente que bate com a descrição e/ou valor fornecidos e a deleta, servindo como função de DESFAZER ou corrigir erro.',
+  parameters: {
+    type: SchemaType.OBJECT,
+    properties: {
+      descriptionContains: { type: SchemaType.STRING, description: 'Parte da descrição da transação que o usuário quer apagar (ex: "Mercado")' },
+      amountApprox: { type: SchemaType.NUMBER, description: 'Valor em formato de número inteiro ou float da transação a ser apagada (ex: 50.50)' }
+    }
+  },
+};
+
+const tool_editar_transacao: FunctionDeclaration = {
+  name: 'editar_transacao',
+  description: 'Procura a transação mais recente pela descrição e/ou valor, e altera seus dados pelos novos valores informados.',
+  parameters: {
+    type: SchemaType.OBJECT,
+    properties: {
+      searchDescription: { type: SchemaType.STRING, description: 'Palavra-chave da transação que deseja procurar para editar' },
+      searchAmount: { type: SchemaType.NUMBER, description: 'Valor da transação antiga que se deseja procurar' },
+      newDescription: { type: SchemaType.STRING, description: 'A nova descrição a ser aplicada' },
+      newAmount: { type: SchemaType.NUMBER, description: 'O novo valor a ser aplicado' },
+      newCategory: { type: SchemaType.STRING, description: 'A nova categoria a ser aplicada' },
+      newType: { type: SchemaType.STRING, description: '"income" ou "expense" (apenas se for trocar o tipo)' }
+    }
+  },
+};
+
 const tools = [{
   functionDeclarations: [
-    tool_registrar_lancamento, tool_consultar_saldo, tool_consultar_resumo_categoria
+    tool_registrar_lancamento, tool_consultar_saldo, tool_consultar_resumo_categoria,
+    tool_consultar_extrato, tool_apagar_transacao, tool_editar_transacao
   ],
 }];
 
@@ -77,6 +118,62 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
       const total = transactions.reduce((acc, tx: any) => acc + Number(tx.amount), 0);
       return { status: "success", categoria: callArgs.category, totalGasto: total };
     }
+    if (callName === 'consultar_extrato') {
+      const limit = callArgs.limit || 5;
+      const whereClause: any = { userId };
+      if (callArgs.type) whereClause.type = callArgs.type;
+      
+      const transactions = await Transaction.findAll({
+        where: whereClause,
+        order: [['date', 'DESC'], ['createdAt', 'DESC']],
+        limit
+      });
+      return { status: "success", transacoes: transactions };
+    }
+
+    if (callName === 'apagar_transacao') {
+      const whereClause: any = { userId };
+      if (callArgs.amountApprox) whereClause.amount = callArgs.amountApprox;
+      
+      const transactions = await Transaction.findAll({ where: whereClause, order: [['createdAt', 'DESC']], limit: 10 });
+      let txToDelele = transactions[0];
+
+      if (callArgs.descriptionContains && transactions.length > 0) {
+        const found = transactions.find((t:any) => t.description.toLowerCase().includes(callArgs.descriptionContains.toLowerCase()));
+        if (found) txToDelele = found;
+      }
+
+      if (txToDelele) {
+        await txToDelele.destroy();
+        return { status: "success", message: `A transação '${txToDelele.description}' de valor ${txToDelele.amount} foi excluída definitivamente.` };
+      }
+      return { status: "error", message: "Não encontrei nenhuma transação recente parecida com essas características para apagar." };
+    }
+
+    if (callName === 'editar_transacao') {
+      const whereClause: any = { userId };
+      if (callArgs.searchAmount) whereClause.amount = callArgs.searchAmount;
+
+      const transactions = await Transaction.findAll({ where: whereClause, order: [['createdAt', 'DESC']], limit: 10 });
+      let txToEdit = transactions[0];
+
+      if (callArgs.searchDescription && transactions.length > 0) {
+        const found = transactions.find((t:any) => t.description.toLowerCase().includes(callArgs.searchDescription.toLowerCase()));
+        if (found) txToEdit = found;
+      }
+
+      if (txToEdit) {
+        if (callArgs.newDescription) txToEdit.description = callArgs.newDescription;
+        if (callArgs.newAmount) txToEdit.amount = callArgs.newAmount;
+        if (callArgs.newCategory) txToEdit.category = callArgs.newCategory;
+        if (callArgs.newType) txToEdit.type = callArgs.newType;
+        
+        await txToEdit.save();
+        return { status: "success", message: `Transação atualizada com sucesso para: ${txToEdit.description} - R$ ${txToEdit.amount} (${txToEdit.category})` };
+      }
+      return { status: "error", message: "Não encontrei nenhuma transação recente parecida para editar." };
+    }
+
     return { error: "Ferramenta não reconhecida." };
   } catch (error: any) {
     return { error: error.message };
