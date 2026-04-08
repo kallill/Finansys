@@ -120,4 +120,14 @@ export const getReportTransactions = async (params) => {
     return response.data;
 };
 
+export const getPluggyConnectToken = async () => {
+    try {
+        const response = await api.get('/pluggy/token');
+        return response.data.accessToken;
+    } catch (error) {
+        console.error("Erro ao gerar token do Open Finance", error);
+        return null;
+    }
+};
+
 export default api;

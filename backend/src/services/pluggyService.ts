@@ -21,11 +21,11 @@ class PluggyService {
    * Gera um Connect Token descartável, usado no Frontend para abrir o Widget de forma segura.
    * Ele expira rápido pela segurança do Banco Central.
    */
-  public async getConnectToken(): Promise<string> {
+  public async getConnectToken(userId: number): Promise<string> {
     try {
-      // O itemId vazio significa que queremos criar uma Nova Conexão no Widget.
-      // Se tivéssemos já uma conexão (itemId), passaríamos aqui para o widget em modo de "Update".
-      const tokenResponse = await this.client.createConnectToken();
+      const tokenResponse = await this.client.createConnectToken(undefined, {
+        clientUserId: `finansys_user_${userId}`
+      });
       return tokenResponse.accessToken;
     } catch (error: any) {
       console.error('Falha ao gerar Token de Conexão Pluggy:', error?.message);

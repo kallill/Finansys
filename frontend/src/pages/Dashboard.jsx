@@ -8,7 +8,8 @@ import Logo from '../components/ui/Logo';
 import StatCard from '../components/dashboard/StatCard';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import TransactionRow from '../components/dashboard/TransactionRow';
-import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries } from '../services/api';
+import { PluggyConnect } from 'react-pluggy-connect';
+import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getPluggyConnectToken } from '../services/api';
 import useTheme from '../hooks/useTheme';
 
 const Dashboard = () => {
@@ -22,6 +23,7 @@ const Dashboard = () => {
   const [series, setSeries] = useState([]);
   const [stats, setStats] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [pluggyToken, setPluggyToken] = useState(null);
   const [newTx, setNewTx] = useState({ type: 'expense', description: '', amount: '', category: '', date: new Date().toISOString().slice(0,10) });
 
   useEffect(() => {
@@ -194,6 +196,13 @@ const Dashboard = () => {
           <div className="flex gap-3">
             <button onClick={() => { setNewTx({ ...newTx, type: 'income' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-emerald-500 text-white">Lançar Receita</button>
             <button onClick={() => { setNewTx({ ...newTx, type: 'expense' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-rose-500 text-white">Lançar Despesa</button>
+            <button onClick={async () => {
+              const token = await getPluggyConnectToken();
+              if (token) setPluggyToken(token);
+              else alert('Erro. Verifique as credenciais PLUGGY_CLIENT_ID e SECRET no docker-compose.');
+            }} className="px-4 py-2 rounded-xl bg-indigo-600 text-white ml-auto flex items-center gap-2">
+              <CreditCard size={18} /> Conectar Conta Bancária
+            </button>
           </div>
 
           {/* Main Content Grid */}
@@ -243,10 +252,13 @@ const Dashboard = () => {
 
                <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
                   <div className="bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl p-4 text-center shadow-lg shadow-emerald-500/20">
-                    <p className="text-white font-medium mb-2">Upgrade para Pro</p>
-                    <p className="text-emerald-100 text-sm mb-3">Desbloqueie IA e relatórios ilimitados.</p>
-                    <button className="bg-white text-emerald-600 text-sm font-bold px-4 py-2 rounded-lg w-full hover:bg-slate-50 transition-colors shadow-sm">
-                      Ver Planos
+                    <p className="text-white font-medium mb-2">Conexão Open Finance</p>
+                    <p className="text-emerald-100 text-sm mb-3">Conecte seu banco e deixe a IA cuidar do resto.</p>
+                    <button onClick={async () => {
+                      const token = await getPluggyConnectToken();
+                      if (token) setPluggyToken(token);
+                    }} className="bg-white text-emerald-600 text-sm font-bold px-4 py-2 rounded-lg w-full hover:bg-slate-50 transition-colors shadow-sm">
+                      Conectar Agora
                     </button>
                   </div>
                </div>
@@ -280,6 +292,23 @@ const Dashboard = () => {
               </div>
             </div>
           )}
+
+          {pluggyToken && (
+            <PluggyConnect
+              connectToken={pluggyToken}
+              onSuccess={(itemData) => {
+                setPluggyToken(null);
+                alert('Banco conectado com sucesso! O Finansys iniciará a sincronização bancária em plano de fundo de forma invisível.');
+              }}
+              onError={(error) => {
+                setPluggyToken(null);
+                console.error(error);
+                alert('Erro na conexão com o Banco: ' + error.message);
+              }}
+              onClose={() => setPluggyToken(null)}
+            />
+          )}
+
         </div>
       </main>
     </div>
