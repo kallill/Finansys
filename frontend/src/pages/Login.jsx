@@ -92,7 +92,7 @@ const Login = () => {
               <input type="checkbox" className="rounded border-slate-700 bg-slate-800 text-emerald-500 focus:ring-emerald-500/50" />
               Lembrar de mim
             </label>
-            <button onClick={() => navigate('/forgot-password')} className="text-emerald-400 hover:text-emerald-300">Esqueceu a senha?</button>
+            <button type="button" onClick={() => navigate('/forgot-password')} className="text-emerald-400 hover:text-emerald-300">Esqueceu a senha?</button>
           </div>
 
           <Button variant="primary" type="submit" className="w-full py-3.5" disabled={loading}>

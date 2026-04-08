@@ -1,0 +1,23 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDVWtyszc8fy6mYe74cIPAFuhzqwU77ncw",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"systemInstruction\": {\n    \"parts\": [\n      {\n        \"text\": \"Você é um assistente financeiro do Finansys. Retorne APENAS um JSON puro sem crases. Regras do JSON: description, amount (apenas numero), type (expense ou income), category. Se for gasto, expense. Recebimento, income.\"\n      }\n    ]\n  },\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"{{ $json.body.data.message.conversation || $json.body.data.message.extendedTextMessage.text || 'Gastei 10 na padaria' }}\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"response_mime_type\": \"application/json\"\n  }\n}",
+        "options": {}
+      },
+      "id": "e0b9b3e1-0bfc-44c1-84de-c8242db74028",
+      "name": "Gemini 2.5 Flash",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        800,
+        300
+      ]
+    }
+  ],
+  "connections": {}
+}

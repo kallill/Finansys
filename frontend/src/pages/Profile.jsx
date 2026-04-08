@@ -74,7 +74,7 @@ const Profile = () => {
               <form className="space-y-4" onSubmit={saveProfile}>
                 <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Nome" value={profile.name} onChange={e => setProfile({ ...profile, name: e.target.value })} required />
                 <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Email" type="email" value={profile.email} onChange={e => setProfile({ ...profile, email: e.target.value })} required />
-                <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Telefone (WhatsApp ex: 5511999999999)" type="text" value={profile.phone} onChange={e => setProfile({ ...profile, phone: e.target.value })} />
+                <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Telefone (Só números com DDD, ex: 5511999999999)" type="text" value={profile.phone} onChange={e => setProfile({ ...profile, phone: e.target.value.replace(/\D/g, '') })} />
                 <Button variant="primary" type="submit">Salvar</Button>
               </form>
             )}

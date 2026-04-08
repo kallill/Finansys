@@ -1,0 +1,95 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "try {\n  const geminiData = JSON.parse($input.item.json.candidates[0].content.parts[0].text);\n  \n  let phone = \"\";\n  try {\n    phone = $('Webhook').item.json.body.data.key.remoteJid.split('@')[0];\n  } catch(e){ phone = \"5511999999999\"; }\n\n  return {\n    json: {\n      description: geminiData.description,\n      amount: geminiData.amount,\n      type: geminiData.type,\n      category: geminiData.category,\n      phone: phone\n    }\n  };\n} catch(e) {\n  return { json: { erro: \"Falha ao interpretar dados do Gemini\" } };\n}"
+      },
+      "id": "e4a3b8d6-7c92-4f1b-ab5e-e2c7a4d5b6c3",
+      "name": "Parse Dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://finansys.dksystem.online/webhook/transaction",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "n8n_secret_bot_key_123"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"userEmail\": \"kallil@example.com\",\n  \"description\": \"{{ $json.description }}\",\n  \"amount\": {{ $json.amount }},\n  \"type\": \"{{ $json.type }}\",\n  \"category\": \"{{ $json.category }}\"\n}",
+        "options": {}
+      },
+      "id": "b1a2c3d4-e5f6-4a1b-c2d3-e4f5a6b7c8d9",
+      "name": "Salvar no Finansys",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://evolution.dksystem.online/message/sendText/Finansys-Bot",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "B39CA8B62C05DA3CD778A9C1DE4DAB37"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Parse Dados').item.json.phone }}\",\n  \"text\": \"✅ *Registrado com sucesso!*\n\n🛒 {{ $('Parse Dados').item.json.description }}\n💰 R$ {{ $('Parse Dados').item.json.amount }}\n🏷️ {{ $('Parse Dados').item.json.category }}\"\n}",
+        "options": {}
+      },
+      "id": "f8e7d6c5-b4a3-4921-a1b2-c3d4e5f6a7b8",
+      "name": "Avisar WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1400,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Parse Dados": {
+      "main": [
+        [
+          {
+            "node": "Salvar no Finansys",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar no Finansys": {
+      "main": [
+        [
+          {
+            "node": "Avisar WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -34,11 +34,30 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
       });
     }
 
+    // Sanitiza o telefone removendo caracteres não-numéricos
+    const cleanPhone = phone ? phone.replace(/\D/g, '') : undefined;
+
     // Busca o usuário pelo email ou telefone
     let user;
-    if (phone) {
-      user = await User.findOne({ where: { phone: phone } });
+    if (cleanPhone) {
+      // 1. Tenta busca exata
+      user = await User.findOne({ where: { phone: cleanPhone } });
+      
+      // 2. Se não achou e é um número brasileiro (+55)
+      if (!user && cleanPhone.startsWith('55')) {
+        if (cleanPhone.length === 12) {
+          // Cliente mandou SEM o 9, vamos pesquisar adicionando o 9
+          const phoneWith9 = `55${cleanPhone.substring(2, 4)}9${cleanPhone.substring(4)}`;
+          user = await User.findOne({ where: { phone: phoneWith9 } });
+        } else if (cleanPhone.length === 13) {
+          // Cliente mandou COM o 9, vamos pesquisar tirando o 9
+          const phoneWithout9 = `55${cleanPhone.substring(2, 4)}${cleanPhone.substring(5)}`;
+          user = await User.findOne({ where: { phone: phoneWithout9 } });
+        }
+      }
     }
+    
+    // Fallback para e-mail
     if (!user && userEmail) {
       user = await User.findOne({ where: { email: userEmail } });
     }
