@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, Plus, Edit2, Trash2, ArrowLeft, Filter, Calendar, CheckCircle, Clock } from 'lucide-react';
+import { CreditCard, Plus, Edit2, Trash2, ArrowLeft, Filter, Calendar, CheckCircle, Clock, Wallet as WalletIcon } from 'lucide-react';
 import Button from '../components/ui/Button';
 import { getTransactions, createTransaction, updateTransaction, deleteTransaction, getCreditCards } from '../services/api';
 
@@ -175,7 +175,7 @@ const Transactions = () => {
                           </div>
                         ) : (
                           <div className="flex items-center gap-1.5 text-emerald-500 text-[10px] font-bold">
-                             <Wallet size={12} /> Dinheiro/Pix
+                             <WalletIcon size={12} /> Dinheiro/Pix
                           </div>
                         )}
                       </td>
