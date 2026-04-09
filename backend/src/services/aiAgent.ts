@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI, FunctionDeclaration, SchemaType } from '@google/generative-ai';
 import { Transaction, LearnedPattern, CreditCard } from '../models';
-import { Op } from 'sequelize';
+import { Sequelize, Op } from 'sequelize';
+import sequelize from '../config/database';
 
 // Declarando as funções (Ferramentas) para o Gemini
 const tool_consultar_fatura: FunctionDeclaration = {
@@ -134,9 +135,31 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
       let finalStatus = callArgs.status || 'paid';
       let finalDate = callArgs.dueDate ? new Date(callArgs.dueDate) : new Date();
 
-      if (callArgs.creditCardName) {
-         // Tenta associar
-         const card = await CreditCard.findOne({ where: { userId, name: { [Op.iLike]: `%${callArgs.creditCardName}%` } } });
+      // Lógica de Detecção de Cartão
+      const possibleCardContext = (callArgs.creditCardName || (callArgs.description || "").toLowerCase().includes('cartão'));
+
+      if (possibleCardContext) {
+         const searchName = callArgs.creditCardName;
+         let card = null;
+
+         if (searchName && searchName.trim().length > 0) {
+            card = await CreditCard.findOne({ where: { userId, name: { [Op.iLike]: `%${searchName}%` } } });
+         }
+
+         if (!card) {
+            // Se não encontrou pelo nome ou o nome veio vazio (ex: "no cartão")
+            const allCards = await CreditCard.findAll({ where: { userId } });
+            if (allCards.length === 1) {
+               card = allCards[0];
+            } else if (allCards.length > 1) {
+               const names = allCards.map(c => c.name).join(' ou ');
+               return { 
+                 status: "error", 
+                 message: `O usuário possui múltiplos cartões: ${names}. Por favor, pergunte em qual deles ele deseja realizar o lançamento.` 
+               };
+            }
+         }
+
          if (card) {
             creditCardId = card.id;
             finalStatus = 'pending'; // Gastos no crédito rodam pra conta futura (Fatura)
@@ -151,7 +174,7 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
          status: finalStatus,
          creditCardId
       });
-      return { status: "success", message: "Transação salva.", transactionId: tx.id, statusFinal: finalStatus, usadoCartaoCredito: !!creditCardId };
+      return { status: "success", message: creditCardId ? `Transação salva no cartão.` : "Transação salva.", transactionId: tx.id, statusFinal: finalStatus, usadoCartaoCredito: !!creditCardId };
     }
 
     if (callName === 'consultar_saldo') {
@@ -250,7 +273,7 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
         },
         attributes: [
            'category',
-           [sequelize.fn('SUM', sequelize.col('amount')), 'total']
+           [Sequelize.fn('SUM', Sequelize.col('amount')), 'total']
         ],
         group: ['category'],
         raw: true

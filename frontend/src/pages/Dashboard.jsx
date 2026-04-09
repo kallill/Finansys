@@ -9,7 +9,7 @@ import StatCard from '../components/dashboard/StatCard';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import TransactionRow from '../components/dashboard/TransactionRow';
 import { PluggyConnect } from 'react-pluggy-connect';
-import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getPluggyConnectToken, savePluggyItemId } from '../services/api';
+import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getPluggyConnectToken, savePluggyItemId, getCreditCards } from '../services/api';
 import useTheme from '../hooks/useTheme';
 import WhatsAppCard from '../components/dashboard/WhatsAppCard';
 
@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [transactions, setTransactions] = useState([]);
+  const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({ name: 'Usuário', email: '' });
   const [series, setSeries] = useState([]);
@@ -51,15 +52,20 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const data = await getTransactions();
-            const s = await getDashboardSeries();
-            const st = await getDashboardStats();
+            const [data, s, st, cData] = await Promise.all([
+              getTransactions(),
+              getDashboardSeries(),
+              getDashboardStats(),
+              getCreditCards().catch(() => []) // Fallback se falhar
+            ]);
+            
             const arr = Array.isArray(data) ? data 
               : Array.isArray(data?.transactions) ? data.transactions 
               : [];
             setTransactions(arr);
-            setSeries(Array.isArray(s?.series) ? s.series : []);
+            setSeries(s?.series || []);
             setStats(st);
+            setCards(cData || []);
         } catch (error) {
             console.error("Erro ao carregar dados", error);
         } finally {
@@ -199,14 +205,14 @@ const Dashboard = () => {
             />
             <StatCard 
               title="Receitas (Mês)" 
-              value={stats ? `R$ ${Number(stats.totals.income).toFixed(2)}` : "R$ 0,00"} 
+              value={stats?.totals?.income ? `R$ ${Number(stats.totals.income).toFixed(2)}` : "R$ 0,00"} 
               change=""
               isPositive={true} 
               icon={TrendingUp} 
             />
             <StatCard 
               title="Despesas (Mês)" 
-              value={stats ? `R$ ${Number(stats.totals.expense).toFixed(2)}` : "R$ 0,00"} 
+              value={stats?.totals?.expense ? `R$ ${Number(stats.totals.expense).toFixed(2)}` : "R$ 0,00"} 
               change=""
               isPositive={false} 
               icon={TrendingDown} 
@@ -261,14 +267,16 @@ const Dashboard = () => {
                 <button onClick={() => navigate('/transactions')} className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300">Ver todas</button>
               </div>
               <div className="space-y-1">
-                {Array.isArray(transactions) && transactions.map((tx) => (
+                {Array.isArray(transactions) && transactions.slice(0, 5).map((tx) => (
                     <TransactionRow 
                         key={tx.id}
                         name={tx.description} 
                         date={tx.date} 
-                        amount={tx.amount} 
+                        amount={Number(tx.amount).toFixed(2)} 
                         type={tx.type} 
                         category={tx.category}
+                        isCredit={!!tx.creditCardId}
+                        cardName={cards.find(c => c.id === tx.creditCardId)?.name}
                     />
                 ))}
               </div>

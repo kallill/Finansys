@@ -171,7 +171,7 @@ const Transactions = () => {
                       <td className="p-4">
                         {tx.creditCardId ? (
                           <div className="flex items-center gap-1.5 text-indigo-500 text-[10px] font-bold">
-                             <CreditCard size={12} /> Cartão
+                             <CreditCard size={12} /> {cards.find(c => c.id === tx.creditCardId)?.name || 'Cartão'}
                           </div>
                         ) : (
                           <div className="flex items-center gap-1.5 text-emerald-500 text-[10px] font-bold">
