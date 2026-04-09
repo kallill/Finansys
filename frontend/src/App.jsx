@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Wallet from './pages/Wallet';
 import Reports from './pages/Reports';
 import Cards from './pages/Cards';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
   return (
@@ -23,12 +24,14 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/transactions" element={<Transactions />} />
-        <Route path="/cards" element={<Cards />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/wallet" element={<Wallet />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        
+        {/* Rotas Protegidas */}
+        <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
+        <Route path="/cards" element={<ProtectedRoute><Cards /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
+        <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
