@@ -17,6 +17,7 @@ import walletRoutes from './routes/walletRoutes';
 import reportsRoutes from './routes/reportsRoutes';
 import webhookRoutes from './routes/webhookRoutes';
 import pluggyRoutes from './routes/pluggyRoutes';
+import creditCardRoutes from './routes/creditCardRoutes';
 
 // dotenv config removed from here (moved to top)
 
@@ -54,6 +55,7 @@ app.use('/wallet', walletRoutes);
 app.use('/reports', reportsRoutes);
 app.use('/webhook', webhookRoutes);
 app.use('/pluggy', pluggyRoutes);
+app.use('/credit-cards', creditCardRoutes);
 
 // Serve static files from the React frontend app
 const frontendPath = path.join(__dirname, '../../frontend/dist');

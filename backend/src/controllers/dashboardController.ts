@@ -19,7 +19,9 @@ export const getStats = async (req: AuthRequest, res: Response) => {
     const transactions = await Transaction.findAll({
       where: {
         userId,
-        date: { [Op.between]: [monthStart, monthEnd] }
+        date: { [Op.between]: [monthStart, monthEnd] },
+        status: 'paid',
+        creditCardId: null
       }
     });
 
@@ -53,7 +55,9 @@ export const getSeries = async (req: AuthRequest, res: Response) => {
     const transactions = await Transaction.findAll({
       where: {
         userId,
-        date: { [Op.gte]: start }
+        date: { [Op.gte]: start },
+        status: 'paid',
+        creditCardId: null
       }
     });
     const bucket: Record<string, { income: number; expense: number }> = {};

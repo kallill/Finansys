@@ -28,13 +28,16 @@ export const createTransaction = async (req: AuthRequest, res: Response) => {
     if (!userId) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
-    const { description, amount, type, category, date } = req.body;
+    const { description, amount, type, category, date, status, dueDate, creditCardId } = req.body;
     const tx = await Transaction.create({
       description,
       amount,
       type,
       category,
       date: date ? new Date(date) : new Date(),
+      status: status || 'paid',
+      dueDate: dueDate ? new Date(dueDate) : (date ? new Date(date) : new Date()),
+      creditCardId: creditCardId || null,
       userId
     });
     res.status(201).json({ transaction: tx });
@@ -54,12 +57,15 @@ export const updateTransaction = async (req: AuthRequest, res: Response) => {
     if (!tx) {
       return res.status(404).json({ message: 'Transaction not found' });
     }
-    const { description, amount, type, category, date } = req.body;
+    const { description, amount, type, category, date, status, dueDate, creditCardId } = req.body;
     tx.description = description ?? tx.description;
     tx.amount = amount ?? tx.amount;
     tx.type = type ?? tx.type;
     tx.category = category ?? tx.category;
     tx.date = date ? new Date(date) : tx.date;
+    tx.status = status ?? tx.status;
+    tx.dueDate = dueDate ? new Date(dueDate) : tx.dueDate;
+    tx.creditCardId = creditCardId !== undefined ? creditCardId : tx.creditCardId;
     await tx.save();
     res.json({ transaction: tx });
   } catch (error) {

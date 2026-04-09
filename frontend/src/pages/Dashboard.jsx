@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  LayoutDashboard, Wallet, PieChart, CreditCard, LogOut, Menu, 
+  LayoutDashboard, Wallet, PieChart, CreditCard, LogOut, Menu, X, 
   Search, Bell, TrendingUp, TrendingDown, DollarSign, User, Sun, Moon 
 } from 'lucide-react';
 import Logo from '../components/ui/Logo';
@@ -71,22 +71,37 @@ const Dashboard = () => {
   const menuItems = [
     { id: 'dashboard', label: 'Visão Geral', icon: LayoutDashboard },
     { id: 'wallet', label: 'Minha Carteira', icon: Wallet },
+    { id: 'cards', label: 'Meus Cartões', icon: CreditCard },
     { id: 'analytics', label: 'Relatórios', icon: PieChart },
-    { id: 'transactions', label: 'Transações', icon: CreditCard },
+    { id: 'transactions', label: 'Transações', icon: Menu },
   ];
 
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white overflow-hidden transition-colors duration-300">
-      {!sidebarOpen && (
-        <div className="md:hidden fixed inset-0 bg-black/50 z-20 backdrop-blur-sm" onClick={() => setSidebarOpen(true)} style={{display: 'none'}} />
+      {/* Overlay para fechar sidebar no celular */}
+      {sidebarOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/60 z-20 backdrop-blur-sm" 
+          onClick={() => setSidebarOpen(false)} 
+        />
       )}
 
       <aside 
         className={`${sidebarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full md:w-20 md:translate-x-0'} 
-        fixed md:relative z-30 h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-all duration-300 flex flex-col shadow-xl md:shadow-none`}
+        fixed md:relative z-30 h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-all duration-300 flex flex-col shadow-2xl md:shadow-none`}
       >
-        <div className="h-20 flex items-center justify-center border-b border-slate-200 dark:border-slate-800">
-          {sidebarOpen ? <Logo /> : <div className="w-8 h-8 bg-gradient-to-tr from-emerald-400 to-blue-500 rounded-lg flex items-center justify-center font-bold text-white">F</div>}
+        <div className="h-20 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex-1 flex justify-center">
+            {sidebarOpen ? <Logo /> : <div className="w-8 h-8 bg-gradient-to-tr from-emerald-400 to-blue-500 rounded-lg flex items-center justify-center font-bold text-white">F</div>}
+          </div>
+          {sidebarOpen && (
+            <button 
+              onClick={() => setSidebarOpen(false)}
+              className="md:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+            >
+              <X size={20} />
+            </button>
+          )}
         </div>
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -96,6 +111,7 @@ const Dashboard = () => {
               onClick={() => {
                 if (item.id === 'transactions') navigate('/transactions');
                 else if (item.id === 'wallet') navigate('/wallet');
+                else if (item.id === 'cards') navigate('/cards');
                 else if (item.id === 'analytics') navigate('/reports');
                 else setActiveTab(item.id);
               }}

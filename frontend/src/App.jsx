@@ -11,6 +11,7 @@ import Transactions from './pages/Transactions';
 import Profile from './pages/Profile';
 import Wallet from './pages/Wallet';
 import Reports from './pages/Reports';
+import Cards from './pages/Cards';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/transactions" element={<Transactions />} />
+        <Route path="/cards" element={<Cards />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/wallet" element={<Wallet />} />
         <Route path="/reports" element={<Reports />} />

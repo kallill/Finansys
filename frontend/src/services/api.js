@@ -140,4 +140,25 @@ export const savePluggyItemId = async (itemId) => {
     }
 };
 
+// --- Credit Cards ---
+export const getCreditCards = async () => {
+    const response = await api.get('/credit-cards');
+    return response.data.creditCards || [];
+};
+
+export const createCreditCard = async (payload) => {
+    const response = await api.post('/credit-cards', payload);
+    return response.data.creditCard;
+};
+
+export const updateCreditCard = async (id, payload) => {
+    const response = await api.put(`/credit-cards/${id}`, payload);
+    return response.data.creditCard;
+};
+
+export const deleteCreditCard = async (id) => {
+    const response = await api.delete(`/credit-cards/${id}`);
+    return response.data;
+};
+
 export default api;
