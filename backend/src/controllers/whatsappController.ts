@@ -39,8 +39,12 @@ export const connect = async (req: AuthRequest, res: Response) => {
 
     res.json(qrData);
   } catch (error: any) {
-    console.error('Erro ao conectar WhatsApp:', error);
-    res.status(500).json({ message: 'Erro ao gerar QR Code', error: error.message });
+    const errorData = error.response?.data || error.message;
+    console.error('Erro ao conectar WhatsApp:', errorData);
+    res.status(500).json({ 
+      message: 'Erro ao gerar QR Code', 
+      error: typeof errorData === 'string' ? errorData : JSON.stringify(errorData) 
+    });
   }
 };
 
