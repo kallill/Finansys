@@ -32,6 +32,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     
     if (data.error) {
        console.error('Resend API returned error:', data.error);
+       throw new Error(`Resend Error: ${data.error.message}`);
     } else {
        console.log('Verification email sent successfully to:', email);
     }
@@ -68,6 +69,7 @@ export const sendResetPasswordEmail = async (email: string, token: string) => {
 
     if (data.error) {
        console.error('Resend API returned error (reset):', data.error);
+       throw new Error(`Resend Error (Reset): ${data.error.message}`);
     } else {
        console.log('Reset password email sent successfully to:', email);
     }

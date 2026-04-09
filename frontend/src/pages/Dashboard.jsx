@@ -11,6 +11,7 @@ import TransactionRow from '../components/dashboard/TransactionRow';
 import { PluggyConnect } from 'react-pluggy-connect';
 import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getPluggyConnectToken, savePluggyItemId } from '../services/api';
 import useTheme from '../hooks/useTheme';
+import WhatsAppCard from '../components/dashboard/WhatsAppCard';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -247,8 +248,11 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Recent Transactions */}
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-none transition-colors">
+            {/* Recent Transactions & Actions */}
+            <div className="space-y-8">
+              <WhatsAppCard />
+              
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-none transition-colors">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recentes</h3>
                 <button onClick={() => navigate('/transactions')} className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300">Ver todas</button>
@@ -279,6 +283,7 @@ const Dashboard = () => {
                   </div>
                </div>
             </div>
+          </div>
 
           </div>
 

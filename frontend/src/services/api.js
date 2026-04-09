@@ -161,4 +161,20 @@ export const deleteCreditCard = async (id) => {
     return response.data;
 };
 
+// --- WhatsApp ---
+export const getWhatsAppStatus = async () => {
+    const response = await api.get('/whatsapp/status');
+    return response.data;
+};
+
+export const getWhatsAppQRCode = async () => {
+    const response = await api.get('/whatsapp/connect');
+    return response.data;
+};
+
+export const logoutWhatsApp = async () => {
+    const response = await api.post('/whatsapp/logout');
+    return response.data;
+};
+
 export default api;

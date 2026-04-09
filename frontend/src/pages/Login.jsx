@@ -106,7 +106,7 @@ const Login = () => {
 
         <div className="mt-8 text-center">
           <p className="text-slate-400 text-sm">
-            Não tem uma conta? <button onClick={() => {}} className="text-emerald-400 hover:underline">Cadastre-se</button>
+            Não tem uma conta? <button onClick={() => navigate('/register')} className="text-emerald-400 hover:underline">Cadastre-se</button>
           </p>
         </div>
         
