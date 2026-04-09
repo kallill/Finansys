@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  LayoutDashboard, Wallet, PieChart, CreditCard, LogOut, Menu, X, 
+  LayoutDashboard, Wallet as WalletIcon, PieChart, CreditCard, LogOut, Menu, X, 
   Search, Bell, TrendingUp, TrendingDown, DollarSign, User, Sun, Moon 
 } from 'lucide-react';
 import Logo from '../components/ui/Logo';
@@ -70,7 +70,7 @@ const Dashboard = () => {
 
   const menuItems = [
     { id: 'dashboard', label: 'Visão Geral', icon: LayoutDashboard },
-    { id: 'wallet', label: 'Minha Carteira', icon: Wallet },
+    { id: 'wallet', label: 'Minha Carteira', icon: WalletIcon },
     { id: 'cards', label: 'Meus Cartões', icon: CreditCard },
     { id: 'analytics', label: 'Relatórios', icon: PieChart },
     { id: 'transactions', label: 'Transações', icon: Menu },

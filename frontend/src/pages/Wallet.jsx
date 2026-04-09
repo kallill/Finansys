@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Wallet, DollarSign } from 'lucide-react';
+import { Wallet as WalletIcon, DollarSign } from 'lucide-react';
 import Button from '../components/ui/Button';
 import { getWalletSummary, getDashboardSeries, getDashboardStats } from '../services/api';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, Legend } from 'recharts';
@@ -29,7 +29,7 @@ const WalletPage = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white p-6 md:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold flex items-center gap-2"><Wallet /> Minha Carteira</h1>
+          <h1 className="text-2xl font-bold flex items-center gap-2"><WalletIcon /> Minha Carteira</h1>
           <div className="flex gap-3">
             <Button variant="secondary" onClick={() => navigate('/dashboard')}>Voltar</Button>
             <Button variant="primary" onClick={() => navigate('/transactions')}><DollarSign /> Nova Transação</Button>
