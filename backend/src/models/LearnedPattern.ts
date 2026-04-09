@@ -24,6 +24,10 @@ LearnedPattern.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    params: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
   },
   {
     sequelize,

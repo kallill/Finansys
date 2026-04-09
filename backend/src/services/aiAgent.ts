@@ -288,6 +288,27 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
   }
 };
 
+/**
+ * Helper para extrair dados financeiros (valor e descrição) de uma frase localmente.
+ * Útil para economizar chamadas de IA em frases com padrões aprendidos.
+ */
+const extractFinancialData = (phrase: string) => {
+  const amountRegex = /(\d+[,.]\d+|\d+)/;
+  const match = phrase.match(amountRegex);
+  const amount = match ? parseFloat(match[0].replace(',', '.')) : null;
+
+  // Descrição: Retira o valor e palavras de ligação comuns
+  let description = phrase
+    .replace(amountRegex, '')
+    .replace(/gastei|paguei|recebi|lançar|fui|no|na|de|do|da|com|por|reais|valor/gi, '')
+    .trim();
+
+  // Capitaliza a primeira letra
+  description = description.charAt(0).toUpperCase() + description.slice(1);
+
+  return { amount, description };
+};
+
 export const processAIRequest = async (userMessage: string, userId: number) => {
   const cleanMessage = userMessage.toLowerCase().trim();
 
@@ -298,16 +319,32 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
     return `⚡ *Cálculo do Roteador Local:* Seu saldo geral (Conta Corrente) neste exato momento é de **${money}**!`;
   }
 
-  // Tier 1.5: Busca Aprendida! O Node procura no banco se ele "aprendeu" essa frase exata com o Gemini antes
-  const learned = await LearnedPattern.findOne({ where: { phrase: cleanMessage } });
+  // Tier 1.5: Busca Inteligente (Fuzzy) por Padrões Aprendidos
+  const learned = await LearnedPattern.findOne({ 
+    where: { 
+      phrase: { [Op.iLike]: `%${cleanMessage}%` } 
+    } 
+  });
+
   if (learned) {
     if (learned.intent === 'consultar_saldo') {
       const data = await executeTools('consultar_saldo', {}, userId);
       const money = Number(data.saldoAtualContaReal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-      return `🤖 *Cálculo Automático Aprendido:* Seu saldo geral (Conta Corrente) é de **${money}**!`;
+      return `🤖 *Cérebro Local (Aprendido):* Seu saldo geral é de **${money}**!`;
     }
-    // Para registrar_lancamento, precismos dos arguments, o que inviabiliza match exato local sem os regex, 
-    // então enviamos os que não forem puramente informativos para o Gemini.
+
+    if (learned.intent === 'registrar_lancamento') {
+      const { amount, description } = extractFinancialData(cleanMessage);
+      if (amount && description) {
+         const result = await executeTools('registrar_lancamento', { 
+           description, 
+           amount, 
+           type: 'expense', 
+           status: 'paid' 
+         }, userId);
+         return `⚡ *Script Local Orientado:* Lancei sua despesa de **R$ ${amount.toFixed(2)}** em **${description}**! (Processado localmente 🚀)`;
+      }
+    }
   }
 
   // Tier 2: Acionando O Cérebro Gigante (Google Gemini) se for algo novo ou complexo
@@ -336,9 +373,14 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
   if (functionCalls && functionCalls.length > 0) {
     const call = functionCalls[0];
     
-    // Auto-Aprendizado: Salvamos o que acabamos de descobrir no banco local se for uma chamada que não precisa de kwargs variáveis (Como saldo)
-    if (call.name === 'consultar_saldo' && !learned) {
-       await LearnedPattern.create({ phrase: cleanMessage, intent: call.name });
+    // Auto-Aprendizado: O sistema salva a inteligência para a próxima vez
+    if (!learned) {
+       await LearnedPattern.create({ 
+         phrase: cleanMessage, 
+         intent: call.name,
+         params: call.args // Guardamos os argumentos para entender o contexto do aprendizado
+       });
+       console.log(`[AI] Novo padrão aprendido localmente: "${cleanMessage}" -> ${call.name}`);
     }
     
     const toolResponseData = await executeTools(call.name, call.args, userId);
