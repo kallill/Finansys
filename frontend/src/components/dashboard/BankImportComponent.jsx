@@ -3,7 +3,7 @@ import {
     Upload, ChevronRight, CheckCircle2, AlertCircle, 
     HelpCircle, Building2, Smartphone
 } from 'lucide-react';
-import { importBankStatement, confirmBankImport } from '../services/api';
+import { importBankStatement, confirmBankImport } from '../../services/api';
 
 const BankImportComponent = ({ onComplete }) => {
     const [step, setStep] = useState(1);
