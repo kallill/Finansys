@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Wallet from './pages/Wallet';
 import Reports from './pages/Reports';
 import Cards from './pages/Cards';
+import BankImport from './pages/BankImport';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
         <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/import" element={<ProtectedRoute><BankImport /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

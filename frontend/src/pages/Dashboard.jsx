@@ -8,7 +8,6 @@ import Logo from '../components/ui/Logo';
 import StatCard from '../components/dashboard/StatCard';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import TransactionRow from '../components/dashboard/TransactionRow';
-import { PluggyConnect } from 'react-pluggy-connect';
 import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getPluggyConnectToken, savePluggyItemId, getCreditCards } from '../services/api';
 import useTheme from '../hooks/useTheme';
 import WhatsAppCard from '../components/dashboard/WhatsAppCard';
@@ -79,6 +78,7 @@ const Dashboard = () => {
     { id: 'dashboard', label: 'Visão Geral', icon: LayoutDashboard },
     { id: 'wallet', label: 'Minha Carteira', icon: WalletIcon },
     { id: 'cards', label: 'Meus Cartões', icon: CreditCard },
+    { id: 'import', label: 'Importar Extrato', icon: TrendingUp },
     { id: 'analytics', label: 'Relatórios', icon: PieChart },
     { id: 'transactions', label: 'Transações', icon: Menu },
   ];
@@ -282,14 +282,11 @@ const Dashboard = () => {
               </div>
 
                <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
-                  <div className="bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl p-4 text-center shadow-lg shadow-emerald-500/20">
-                    <p className="text-white font-medium mb-2">Conexão Open Finance</p>
-                    <p className="text-emerald-100 text-sm mb-3">Conecte seu banco e deixe a IA cuidar do resto.</p>
-                    <button onClick={async () => {
-                      const token = await getPluggyConnectToken();
-                      if (token) setPluggyToken(token);
-                    }} className="bg-white text-emerald-600 text-sm font-bold px-4 py-2 rounded-lg w-full hover:bg-slate-50 transition-colors shadow-sm">
-                      Conectar Agora
+                  <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl p-4 text-center shadow-lg shadow-emerald-500/20">
+                    <p className="text-white font-medium mb-1">Novo: Importação Manual</p>
+                    <p className="text-emerald-100 text-xs mb-3">Importe o extrato do seu banco (Nubank, Itaú, Inter) e deixe a IA categorizar.</p>
+                    <button onClick={() => navigate('/import')} className="bg-white text-emerald-600 text-sm font-bold px-4 py-2 rounded-lg w-full hover:bg-slate-50 transition-colors shadow-sm">
+                      Importar Extrato
                     </button>
                   </div>
                </div>
@@ -325,29 +322,6 @@ const Dashboard = () => {
             </div>
           )}
 
-          {pluggyToken && (
-            <PluggyConnect
-              connectToken={pluggyToken}
-              includeSandbox={true}
-              onSuccess={async (itemData) => {
-                try {
-                  setPluggyToken(null);
-                  await savePluggyItemId(itemData.item.id);
-                  alert('Banco conectado com sucesso! O Finansys iniciará a sincronização bancária em plano de fundo de forma invisível.');
-                  // Opcional: recarregar dados do dashboard
-                  window.location.reload();
-                } catch (err) {
-                  alert('Conectado no banco, mas houve um erro ao salvar o vínculo no Finansys.');
-                }
-              }}
-              onError={(error) => {
-                setPluggyToken(null);
-                console.error(error);
-                alert('Erro na conexão com o Banco: ' + error.message);
-              }}
-              onClose={() => setPluggyToken(null)}
-            />
-          )}
 
         </div>
       </main>

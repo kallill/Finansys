@@ -121,13 +121,23 @@ export const getReportTransactions = async (params) => {
 };
 
 export const getPluggyConnectToken = async () => {
-    try {
-        const response = await api.get('/pluggy/token');
-        return response.data.accessToken;
-    } catch (error) {
-        console.error("Erro ao gerar token do Open Finance", error);
-        return null;
-    }
+    const response = await api.get('/pluggy/connect-token');
+    return response.data.accessToken;
+};
+
+// --- NOVAS ROTAS DE IMPORTAÇÃO ---
+export const importBankStatement = async (formData) => {
+    const response = await api.post('/transactions/import', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response.data;
+};
+
+export const confirmBankImport = async (transactions) => {
+    const response = await api.post('/transactions/confirm-import', { transactions });
+    return response.data;
 };
 
 export const savePluggyItemId = async (itemId) => {
