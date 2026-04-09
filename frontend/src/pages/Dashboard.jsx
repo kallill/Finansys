@@ -8,9 +8,10 @@ import Logo from '../components/ui/Logo';
 import StatCard from '../components/dashboard/StatCard';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import TransactionRow from '../components/dashboard/TransactionRow';
-import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getPluggyConnectToken, savePluggyItemId, getCreditCards } from '../services/api';
+import { getTransactions, getDashboardStats, createTransaction, getDashboardSeries, getCreditCards } from '../services/api';
 import useTheme from '../hooks/useTheme';
 import WhatsAppCard from '../components/dashboard/WhatsAppCard';
+import BankImportComponent from '../components/dashboard/BankImportComponent';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -24,7 +25,6 @@ const Dashboard = () => {
   const [series, setSeries] = useState([]);
   const [stats, setStats] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [pluggyToken, setPluggyToken] = useState(null);
   const [newTx, setNewTx] = useState({ type: 'expense', description: '', amount: '', category: '', date: new Date().toISOString().slice(0,10) });
 
   useEffect(() => {
@@ -194,106 +194,113 @@ const Dashboard = () => {
 
         <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
           
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <StatCard 
-              title="Saldo Total" 
-              value={stats ? `R$ ${Number(stats.totals.balance).toFixed(2)}` : "R$ 0,00"} 
-              change=""
-              isPositive={(stats?.totals.balance ?? 0) >= 0} 
-              icon={DollarSign} 
-            />
-            <StatCard 
-              title="Receitas (Mês)" 
-              value={stats?.totals?.income ? `R$ ${Number(stats.totals.income).toFixed(2)}` : "R$ 0,00"} 
-              change=""
-              isPositive={true} 
-              icon={TrendingUp} 
-            />
-            <StatCard 
-              title="Despesas (Mês)" 
-              value={stats?.totals?.expense ? `R$ ${Number(stats.totals.expense).toFixed(2)}` : "R$ 0,00"} 
-              change=""
-              isPositive={false} 
-              icon={TrendingDown} 
-            />
-          </div>
-
-          <div className="flex gap-3">
-            <button onClick={() => { setNewTx({ ...newTx, type: 'income' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-emerald-500 text-white">Lançar Receita</button>
-            <button onClick={() => { setNewTx({ ...newTx, type: 'expense' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-rose-500 text-white">Lançar Despesa</button>
-            <button onClick={async () => {
-              const token = await getPluggyConnectToken();
-              if (token) setPluggyToken(token);
-              else alert('Erro. Verifique as credenciais PLUGGY_CLIENT_ID e SECRET no docker-compose.');
-            }} className="px-4 py-2 rounded-xl bg-indigo-600 text-white ml-auto flex items-center gap-2">
-              <CreditCard size={18} /> Conectar Conta Bancária
-            </button>
-          </div>
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            {/* Chart Area */}
-            <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-none transition-colors">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Fluxo de Caixa</h3>
-                <select className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1 outline-none">
-                  <option>Últimos 6 meses</option>
-                  <option>Este ano</option>
-                </select>
-              </div>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={series}>
-                    <XAxis dataKey="label" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="income" name="Receitas" fill="#10b981" />
-                    <Bar dataKey="expense" name="Despesas" fill="#ef4444" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* Recent Transactions & Actions */}
-            <div className="space-y-8">
-              <WhatsAppCard />
-              
-              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-none transition-colors">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recentes</h3>
-                <button onClick={() => navigate('/transactions')} className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300">Ver todas</button>
-              </div>
-              <div className="space-y-1">
-                {Array.isArray(transactions) && transactions.slice(0, 5).map((tx) => (
-                    <TransactionRow 
-                        key={tx.id}
-                        name={tx.description} 
-                        date={tx.date} 
-                        amount={Number(tx.amount).toFixed(2)} 
-                        type={tx.type} 
-                        category={tx.category}
-                        isCredit={!!tx.creditCardId}
-                        cardName={cards.find(c => c.id === tx.creditCardId)?.name}
-                    />
-                ))}
+          {activeTab === 'dashboard' ? (
+            <>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <StatCard 
+                  title="Saldo Total" 
+                  value={stats ? `R$ ${Number(stats.totals.balance).toFixed(2)}` : "R$ 0,00"} 
+                  change=""
+                  isPositive={(stats?.totals.balance ?? 0) >= 0} 
+                  icon={DollarSign} 
+                />
+                <StatCard 
+                  title="Receitas (Mês)" 
+                  value={stats?.totals?.income ? `R$ ${Number(stats.totals.income).toFixed(2)}` : "R$ 0,00"} 
+                  change=""
+                  isPositive={true} 
+                  icon={TrendingUp} 
+                />
+                <StatCard 
+                  title="Despesas (Mês)" 
+                  value={stats?.totals?.expense ? `R$ ${Number(stats.totals.expense).toFixed(2)}` : "R$ 0,00"} 
+                  change=""
+                  isPositive={false} 
+                  icon={TrendingDown} 
+                />
               </div>
 
-               <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
-                  <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl p-4 text-center shadow-lg shadow-emerald-500/20">
-                    <p className="text-white font-medium mb-1">Novo: Importação Manual</p>
-                    <p className="text-emerald-100 text-xs mb-3">Importe o extrato do seu banco (Nubank, Itaú, Inter) e deixe a IA categorizar.</p>
-                    <button onClick={() => navigate('/import')} className="bg-white text-emerald-600 text-sm font-bold px-4 py-2 rounded-lg w-full hover:bg-slate-50 transition-colors shadow-sm">
-                      Importar Extrato
-                    </button>
+              <div className="flex gap-3">
+                <button onClick={() => { setNewTx({ ...newTx, type: 'income' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-emerald-500 text-white flex items-center gap-2">
+                  <TrendingUp size={18} /> Lançar Receita
+                </button>
+                <button onClick={() => { setNewTx({ ...newTx, type: 'expense' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-rose-500 text-white flex items-center gap-2">
+                  <TrendingDown size={18} /> Lançar Despesa
+                </button>
+              </div>
+
+              {/* Main Content Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* Chart Area */}
+                <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-none transition-colors">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Fluxo de Caixa</h3>
+                    <select className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1 outline-none">
+                      <option>Últimos 6 meses</option>
+                      <option>Este ano</option>
+                    </select>
                   </div>
-               </div>
-            </div>
-          </div>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={series}>
+                        <XAxis dataKey="label" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="income" name="Receitas" fill="#10b981" />
+                        <Bar dataKey="expense" name="Despesas" fill="#ef4444" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
 
-          </div>
+                {/* Recent Transactions & Actions */}
+                <div className="space-y-8">
+                  <WhatsAppCard />
+                  
+                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-none transition-colors">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recentes</h3>
+                    <button onClick={() => navigate('/transactions')} className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300">Ver todas</button>
+                  </div>
+                  <div className="space-y-1">
+                    {Array.isArray(transactions) && transactions.slice(0, 5).map((tx) => (
+                        <TransactionRow 
+                            key={tx.id}
+                            name={tx.description} 
+                            date={tx.date} 
+                            amount={Number(tx.amount).toFixed(2)} 
+                            type={tx.type} 
+                            category={tx.category}
+                            isCredit={!!tx.creditCardId}
+                            cardName={cards.find(c => c.id === tx.creditCardId)?.name}
+                        />
+                    ))}
+                  </div>
+
+                   <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
+                      <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl p-4 text-center shadow-lg shadow-emerald-500/20">
+                        <p className="text-white font-medium mb-1">Novo: Importação Manual</p>
+                        <p className="text-emerald-100 text-xs mb-3">Importe o extrato do seu banco (Nubank, Itaú, Inter) e deixe a IA categorizar.</p>
+                        <button onClick={() => setActiveTab('import')} className="bg-white text-emerald-600 text-sm font-bold px-4 py-2 rounded-lg w-full hover:bg-slate-50 transition-colors shadow-sm">
+                          Importar Extrato
+                        </button>
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              </div>
+            </>
+          ) : activeTab === 'import' ? (
+            <BankImportComponent onComplete={() => setActiveTab('dashboard')} />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-64 text-slate-500">
+               <p>Selecione uma funcionalidade válida no menu lateral.</p>
+            </div>
+          )}
 
           {showModal && (
             <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
