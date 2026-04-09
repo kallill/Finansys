@@ -16,9 +16,11 @@ export const listTransactions = async (req: AuthRequest, res: Response) => {
       where: { userId },
       order: [['date', 'DESC'], ['id', 'DESC']]
     });
-    res.json({ transactions });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.json({ transactions: transactions || [] });
+  } catch (error: any) {
+    console.error('Error fetching transactions (Check DB columns):', error);
+    // Return empty list instead of 500 if possible, to keep the UI alive
+    res.status(200).json({ transactions: [], error: 'Algumas funções podem estar indisponíveis durante a migração' });
   }
 };
 

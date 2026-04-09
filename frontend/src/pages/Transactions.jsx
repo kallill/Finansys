@@ -25,12 +25,30 @@ const Transactions = () => {
   const load = async () => {
     setLoading(true);
     try {
-      const [txData, cardsData] = await Promise.all([getTransactions(), getCreditCards()]);
-      const arr = Array.isArray(txData) ? txData : Array.isArray(txData?.transactions) ? txData.transactions : [];
-      setTransactions(arr);
-      setCards(cardsData);
+      // Carrega cada um individualmente para que um erro em um não trave o outro
+      const [txResult, cardsResult] = await Promise.allSettled([
+        getTransactions(),
+        getCreditCards()
+      ]);
+
+      if (txResult.status === 'fulfilled') {
+        const txData = txResult.value;
+        const arr = Array.isArray(txData) ? txData : Array.isArray(txData?.transactions) ? txData.transactions : [];
+        setTransactions(arr);
+      } else {
+        console.error('Falha ao carregar transações:', txResult.reason);
+        setError('Não foi possível carregar o extrato. O banco de dados pode estar em manutenção.');
+      }
+
+      if (cardsResult.status === 'fulfilled') {
+        setCards(cardsResult.value || []);
+      } else {
+        console.error('Falha ao carregar cartões:', cardsResult.reason);
+        // Não bloqueia a tela, apenas avisa se estiver no modal
+      }
+
     } catch (e) {
-      setError('Falha ao carregar dados');
+      setError('Erro inesperado ao carregar dados');
     } finally {
       setLoading(false);
     }

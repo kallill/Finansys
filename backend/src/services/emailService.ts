@@ -10,10 +10,10 @@ const resend = apiKey ? new Resend(apiKey) : null;
 export const sendVerificationEmail = async (email: string, token: string) => {
   const appUrl = process.env.APP_URL || 'https://finansys.dksystem.online';
   const verificationLink = `${appUrl}/verify-email?token=${token}`;
-  const fromEmail = process.env.RESEND_FROM || 'onboarding@resend.dev';
+  const fromEmail = process.env.RESEND_FROM || 'suporte@dksystem.online';
 
   if (!resend) {
-    console.warn('Resend API key ausente. Email de verificação não será enviado.');
+    console.warn('CRITICAL: Resend API key is missing. Registration emails will NOT be sent.');
     return null;
   }
 
@@ -29,9 +29,16 @@ export const sendVerificationEmail = async (email: string, token: string) => {
         <p>Se você não criou esta conta, ignore este email.</p>
       `
     });
+    
+    if (data.error) {
+       console.error('Resend API returned error:', data.error);
+    } else {
+       console.log('Verification email sent successfully to:', email);
+    }
+    
     return data;
-  } catch (error) {
-    console.error('Error sending email:', error);
+  } catch (error: any) {
+    console.error('Fatal error in sendVerificationEmail:', error?.message || error);
     return null;
   }
 };
@@ -39,11 +46,13 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 export const sendResetPasswordEmail = async (email: string, token: string) => {
   const appUrl = process.env.APP_URL || 'https://finansys.dksystem.online';
   const resetLink = `${appUrl}/reset-password?token=${token}`;
-  const fromEmail = process.env.RESEND_FROM || 'onboarding@resend.dev';
+  const fromEmail = process.env.RESEND_FROM || 'suporte@dksystem.online';
+
   if (!resend) {
-    console.warn('Resend API key ausente. Email de reset não será enviado.');
+    console.warn('CRITICAL: Resend API key is missing. Reset emails will NOT be sent.');
     return null;
   }
+
   try {
     const data = await resend.emails.send({
       from: fromEmail,
@@ -56,9 +65,16 @@ export const sendResetPasswordEmail = async (email: string, token: string) => {
         <p>Se você não solicitou esta ação, ignore este email.</p>
       `
     });
+
+    if (data.error) {
+       console.error('Resend API returned error (reset):', data.error);
+    } else {
+       console.log('Reset password email sent successfully to:', email);
+    }
+
     return data;
-  } catch (error) {
-    console.error('Error sending email:', error);
+  } catch (error: any) {
+    console.error('Fatal error in sendResetPasswordEmail:', error?.message || error);
     return null;
   }
 };

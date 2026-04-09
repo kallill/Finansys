@@ -77,8 +77,14 @@ const startServer = async () => {
     try {
       await sequelize.sync({ alter: true }); 
       console.log('All models were synchronized successfully.');
-    } catch (syncError) {
-      console.error('Schema sync error (server will still start):', syncError);
+    } catch (syncError: any) {
+      console.error('CRITICAL: Schema sync error. Verify migrations or database constraints:', {
+        message: syncError.message,
+        name: syncError.name,
+        stack: syncError.stack,
+        original: syncError.original
+      });
+      // We don't exit(1) here yet to allow the health check to work
     }
 
     app.listen(port, () => {
