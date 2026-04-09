@@ -14,9 +14,17 @@ export const getStatus = async (req: AuthRequest, res: Response) => {
     const instanceName = `finansys-user-${userId}`;
     const status = await whatsappService.getStatus(instanceName);
     
+    // Sincronia Automática: Se estiver aberto e não tiver telefone, salva agora!
+    if (status.instance?.state === 'open' && status.instance?.ownerJid) {
+       const phone = status.instance.ownerJid.split('@')[0];
+       await User.update({ phone }, { where: { id: userId } });
+       console.log(`[WhatsApp Sync] Telefone do usuário ${userId} sincronizado: ${phone}`);
+    }
+    
     res.json({
       connected: status.instance?.state === 'open',
-      status: status.instance?.state
+      status: status.instance?.state,
+      phone: status.instance?.ownerJid?.split('@')[0] || null
     });
   } catch (error) {
     res.status(500).json({ message: 'Erro ao verificar status' });

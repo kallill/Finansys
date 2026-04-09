@@ -17,10 +17,19 @@ export const whatsappService = {
    */
   async getStatus(instanceName: string) {
     try {
-      const response = await api.get(`/instance/connectionState/${instanceName}`);
-      return response.data;
+      // Usamos fetchInstances para pegar o ownerJid se estiver open
+      const response = await api.get('/instance/fetchInstances');
+      const instance = response.data.find((ins: any) => ins.name === instanceName);
+      
+      if (!instance) return { instance: { state: 'not_found' } };
+      
+      return { 
+        instance: { 
+          state: instance.connectionStatus,
+          ownerJid: instance.ownerJid
+        } 
+      };
     } catch (error: any) {
-      if (error.response?.status === 404) return { instance: { state: 'not_found' } };
       console.error(`[Evolution API Error] Status ${instanceName}:`, error.response?.data || error.message);
       throw error;
     }

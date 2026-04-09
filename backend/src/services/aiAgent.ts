@@ -85,6 +85,12 @@ const tool_consultar_extrato: FunctionDeclaration = {
   },
 };
 
+const tool_consultar_panorama_gastos: FunctionDeclaration = {
+  name: 'consultar_panorama_gastos',
+  description: 'Gera um resumo de quanto foi gasto em cada categoria nos últimos 30 dias. Use para dar dicas de economia e análise financeira.',
+  parameters: { type: SchemaType.OBJECT, properties: {} },
+};
+
 const tool_apagar_transacao: FunctionDeclaration = {
   name: 'apagar_transacao',
   description: 'Procura a transação mais recente que bate com a descrição e/ou valor fornecidos e a deleta, servindo como função de DESFAZER ou corrigir erro.',
@@ -116,7 +122,8 @@ const tool_editar_transacao: FunctionDeclaration = {
 const tools = [{
   functionDeclarations: [
     tool_registrar_lancamento, tool_consultar_saldo, tool_consultar_resumo_categoria,
-    tool_consultar_extrato, tool_apagar_transacao, tool_editar_transacao, tool_consultar_fatura
+    tool_consultar_extrato, tool_apagar_transacao, tool_editar_transacao, tool_consultar_fatura,
+    tool_consultar_panorama_gastos
   ],
 }];
 
@@ -231,6 +238,27 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
       return { status: "error", message: "Não encontrei nenhuma transação recente parecida para editar." };
     }
 
+    if (callName === 'consultar_panorama_gastos') {
+      const dataInicio = new Date();
+      dataInicio.setDate(dataInicio.getDate() - 30);
+
+      const transactions = await Transaction.findAll({
+        where: { 
+           userId, 
+           type: 'expense', 
+           date: { [Op.gte]: dataInicio } 
+        },
+        attributes: [
+           'category',
+           [sequelize.fn('SUM', sequelize.col('amount')), 'total']
+        ],
+        group: ['category'],
+        raw: true
+      });
+
+      return { status: "success", resumoMensalPorCategoria: transactions };
+    }
+
     return { error: "Ferramenta não reconhecida." };
   } catch (error: any) {
     return { error: error.message };
@@ -265,10 +293,15 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
   
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.5-flash", 
+    model: "gemini-2.0-flash", 
     tools: tools,
     systemInstruction: `Você é uma IA Financeira Financeira. Responda em Português-BR para o WhatsApp. Formate valores como (R$ 1.500,00). 
-    Sempre analise o JSON de resposta da ferramenta invocada para formatar humanamente o resultado.`
+    Sempre analise o JSON de resposta da ferramenta invocada para formatar humanamente o resultado.
+    
+    COMPORTAMENTO DE CONSULTOR FINANCEIRO:
+    - Se o usuário perguntar onde está gastando muito, use 'consultar_panorama_gastos'.
+    - Seja proativo: sugira economias se vir gastos altos em categorias não essenciais (ex: Alimentação Fora, Lazer).
+    - Use emojis para tornar a conversa amigável mas profissional.`
   });
 
   const chat = model.startChat();

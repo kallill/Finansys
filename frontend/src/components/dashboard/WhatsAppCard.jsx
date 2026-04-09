@@ -64,9 +64,17 @@ const WhatsAppCard = () => {
 
       {isConnected ? (
         <div className="space-y-4 relative z-10">
-           <div className="p-3 bg-emerald-50 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl flex items-center gap-3">
-              <CheckCircle size={18} className="text-emerald-500" />
-              <span className="text-xs text-slate-600 dark:text-emerald-400 font-medium">Seu dispositivo está pareado</span>
+           <div className="p-3 bg-emerald-50 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl flex flex-col gap-2">
+              <div className="flex items-center gap-3">
+                 <CheckCircle size={18} className="text-emerald-500" />
+                 <span className="text-xs text-slate-600 dark:text-emerald-400 font-medium">Pareado com sucesso</span>
+              </div>
+              {status?.phone && (
+                <div className="flex items-center gap-3 pl-7">
+                  <Smartphone size={14} className="text-slate-400" />
+                  <span className="text-[10px] text-slate-500 font-mono tracking-tight">{status.phone}</span>
+                </div>
+              )}
            </div>
            <button 
              onClick={handleDisconnect}
