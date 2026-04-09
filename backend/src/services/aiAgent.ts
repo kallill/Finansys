@@ -316,7 +316,7 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
   
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.0-flash", 
+    model: "gemini-1.5-flash", 
     tools: tools,
     systemInstruction: `Você é uma IA Financeira Financeira. Responda em Português-BR para o WhatsApp. Formate valores como (R$ 1.500,00). 
     Sempre analise o JSON de resposta da ferramenta invocada para formatar humanamente o resultado.
@@ -362,7 +362,7 @@ export const categorizeDescription = async (description: string): Promise<{ cate
      if (!apiKey) return { category: 'Outros', type: 'expense' };
 
      const genAI = new GoogleGenerativeAI(apiKey);
-     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
      const prompt = `Analise a seguinte descrição de transação bancária: "${description}". 
      Responda APENAS um JSON no formato: {"category": "NomeDaCategoria", "type": "income" ou "expense"}.
