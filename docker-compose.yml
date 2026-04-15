@@ -92,6 +92,14 @@ services:
       - tunnel_net
       - app_network
 
+  cerasus-web:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./public_html:/usr/share/nginx/html:ro
+    networks:
+      - tunnel_net
+
   cloudflared:
     image: cloudflare/cloudflared:latest
     restart: always
