@@ -97,6 +97,7 @@ services:
     restart: always
     volumes:
       - ./public_html:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - tunnel_net
 
