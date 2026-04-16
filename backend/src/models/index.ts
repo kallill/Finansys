@@ -10,13 +10,9 @@ import CRMAssinatura from './CRMAssinatura';
 import CRMOrdemServico from './CRMOrdemServico';
 import CRMAnexoOS from './CRMAnexoOS';
 
-// === Relacionamentos Originais ===
-User.hasMany(Transaction, { foreignKey: 'userId', as: 'transactions' });
-Transaction.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-User.hasMany(CreditCard, { foreignKey: 'userId', as: 'creditCards' });
-CreditCard.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-User.hasMany(LearnedPattern, { foreignKey: 'userId', as: 'learnedPatterns' });
-LearnedPattern.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+// NOTA: Relacionamentos User/Transaction/CreditCard/LearnedPattern já definidos
+// dentro dos próprios arquivos de Model (Transaction.ts, CreditCard.ts, etc.).
+// NÃO redefinir aqui para evitar SequelizeAssociationError de alias duplicado.
 
 // === Relacionamentos CRM ===
 
