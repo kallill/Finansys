@@ -103,7 +103,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     restart: always
-    command: tunnel --no-autoupdate run
+    command: tunnel --no-autoupdate run --protocol http2
     environment:
       - TUNNEL_TOKEN=eyJhIjoiYmMxMzMwZjI1MGZkNmE3OTUwODlhN2RmM2I4ZmFhZjkiLCJ0IjoiODk1OTU1OTItZWE0MS00YTUxLWFhY2EtMjA2OTdiZTY4NzA2IiwicyI6IlpEVXlNREZsTTJJdFlqUTRPQzAwTldaakxUazBPR1V0TVRka04ySXhNVGhtT1RJNSJ9
     networks:

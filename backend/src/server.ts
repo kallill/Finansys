@@ -19,6 +19,7 @@ import webhookRoutes from './routes/webhookRoutes';
 import pluggyRoutes from './routes/pluggyRoutes';
 import whatsappRoutes from './routes/whatsappRoutes';
 import creditCardRoutes from './routes/creditCardRoutes';
+import crmAuthRoutes from './routes/crmAuthRoutes';
 
 // dotenv config removed from here (moved to top)
 
@@ -58,6 +59,9 @@ app.use('/webhook', webhookRoutes);
 app.use('/whatsapp', whatsappRoutes);
 app.use('/pluggy', pluggyRoutes);
 app.use('/credit-cards', creditCardRoutes);
+
+// CRM Admin Routes
+app.use('/api/crm/auth', crmAuthRoutes);
 
 // Serve static files from the React frontend app
 const frontendPath = path.join(__dirname, '../../frontend/dist');

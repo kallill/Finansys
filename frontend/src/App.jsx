@@ -15,6 +15,12 @@ import Cards from './pages/Cards';
 import BankImport from './pages/BankImport';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
+// Admin CRM Imports
+import AdminProtectedRoute from './components/auth/AdminProtectedRoute';
+import AdminLogin from './pages/admin/AdminLogin';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import AdminOS from './pages/admin/AdminOS';
+
 function App() {
   return (
     <BrowserRouter>
@@ -34,6 +40,12 @@ function App() {
         <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/import" element={<ProtectedRoute><BankImport /></ProtectedRoute>} />
+
+        {/* CRM Admin System */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+        <Route path="/admin/dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+        <Route path="/admin/os" element={<AdminProtectedRoute><AdminOS /></AdminProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
