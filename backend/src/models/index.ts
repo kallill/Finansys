@@ -1,9 +1,22 @@
+import User from './User';
+import Transaction from './Transaction';
+import LearnedPattern from './LearnedPattern';
+import CreditCard from './CreditCard';
+
 import CRMAdmin from './CRMAdmin';
 import CRMCliente from './CRMCliente';
 import CRMPlano from './CRMPlano';
 import CRMAssinatura from './CRMAssinatura';
 import CRMOrdemServico from './CRMOrdemServico';
 import CRMAnexoOS from './CRMAnexoOS';
+
+// === Relacionamentos Originais ===
+User.hasMany(Transaction, { foreignKey: 'userId', as: 'transactions' });
+Transaction.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+User.hasMany(CreditCard, { foreignKey: 'userId', as: 'creditCards' });
+CreditCard.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+User.hasMany(LearnedPattern, { foreignKey: 'userId', as: 'learnedPatterns' });
+LearnedPattern.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 // === Relacionamentos CRM ===
 

@@ -11,7 +11,7 @@ export const uploadAnexo = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    const os = await CRMOrdemServico.findByPk(id);
+    const os = await CRMOrdemServico.findByPk(id as string);
     if (!os) {
       res.status(404).json({ success: false, message: 'Ordem de serviço não encontrada.' });
       return;
