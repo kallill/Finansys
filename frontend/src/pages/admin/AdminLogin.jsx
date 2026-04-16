@@ -34,15 +34,15 @@ const AdminLogin = () => {
   return (
     <div className="min-h-screen bg-gray-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Blurs for Premium Feel */}
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-600/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-gray-600/20 rounded-full blur-3xl pointer-events-none" />
       
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="flex justify-center text-indigo-500 mb-4">
+        <div className="flex justify-center text-red-500 mb-4">
           <ShieldCheck size={56} strokeWidth={1.5} />
         </div>
         <h2 className="text-center text-3xl font-extrabold text-white">
-          Finansys CRM
+          Cerasus CRM
         </h2>
         <p className="mt-2 text-center text-sm text-gray-400">
           Acesso Restrito à Equipe Administrativa
@@ -73,7 +73,7 @@ const AdminLogin = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-gray-800/50 border border-gray-700 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm placeholder-gray-500 transition-all focus:bg-gray-800"
+                  className="bg-gray-800/50 border border-gray-700 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-500 transition-all focus:bg-gray-800"
                   placeholder="admin@cerasus.com.br"
                 />
               </div>
@@ -92,7 +92,7 @@ const AdminLogin = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-gray-800/50 border border-gray-700 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm placeholder-gray-500 transition-all focus:bg-gray-800"
+                  className="bg-gray-800/50 border border-gray-700 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-500 transition-all focus:bg-gray-800"
                   placeholder="••••••••"
                 />
               </div>
@@ -102,7 +102,7 @@ const AdminLogin = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-medium text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Autenticando...' : 'Entrar no Sistema'}
               </button>

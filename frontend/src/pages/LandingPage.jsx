@@ -98,24 +98,24 @@ const LandingPage = () => {
       {/* Hero Section */}
       <div className="relative pt-32 pb-20 overflow-hidden">
         {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-emerald-500/10 dark:bg-emerald-500/20 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-red-600/10 dark:bg-red-600/20 blur-[120px] rounded-full pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-8 animate-fade-in-up shadow-sm dark:shadow-none">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
             </span>
             Novo: Integração com PIX 2.0
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-slate-900 dark:text-white">
             Domine suas finanças com <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-600 dark:from-emerald-400 dark:to-blue-500">Inteligência Artificial</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-gray-600 dark:from-red-500 dark:to-gray-500">Inteligência Artificial</span>
           </h1>
           
           <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            O Finansys transforma a maneira como você lida com dinheiro. Dashboards intuitivos, previsões inteligentes e controle total em uma única plataforma.
+            O Cerasus CRM transforma a maneira como você lida com negócios. Dashboards intuitivos, previsões inteligentes e controle total em uma única plataforma.
           </p>
           
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-20">

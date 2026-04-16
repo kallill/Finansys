@@ -63,7 +63,7 @@ const AdminOS = () => {
       
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl text-white font-medium">Ordens Abertas</h3>
-        <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+        <button className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
           + Nova OS
         </button>
       </div>
@@ -97,7 +97,7 @@ const AdminOS = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">{os.data}</td>
                 <td className="px-6 py-4 text-right">
-                  <button onClick={() => handleOSClick(os)} className="text-indigo-400 hover:text-indigo-300 font-medium text-sm">
+                  <button onClick={() => handleOSClick(os)} className="text-red-500 hover:text-red-400 font-medium text-sm">
                     Ver Detalhes
                   </button>
                 </td>
@@ -137,11 +137,11 @@ const AdminOS = () => {
                 </h4>
                 
                 <div className="mb-4">
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-700 rounded-xl cursor-pointer hover:bg-gray-800/50 hover:border-indigo-500 transition-colors">
+                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-700 rounded-xl cursor-pointer hover:bg-gray-800/50 hover:border-red-500 transition-colors">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <UploadCloud className="w-8 h-8 mb-2 text-indigo-400" />
+                      <UploadCloud className="w-8 h-8 mb-2 text-red-500" />
                       <p className="mb-2 text-sm text-gray-400 text-center px-4">
-                        {uploading ? 'Enviando imagem...' : <><span className="font-semibold text-indigo-400">Clique para enviar</span> ou arraste a foto do serviço aqui</>}
+                        {uploading ? 'Enviando imagem...' : <><span className="font-semibold text-red-500">Clique para enviar</span> ou arraste a foto do serviço aqui</>}
                       </p>
                     </div>
                     <input type="file" className="hidden" accept="image/*,application/pdf" onChange={handleFileUpload} disabled={uploading} />

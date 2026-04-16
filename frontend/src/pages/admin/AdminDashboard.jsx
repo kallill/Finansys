@@ -39,14 +39,14 @@ const AdminLayout = ({ children, title }) => {
       <aside className="w-64 bg-gray-900 border-r border-gray-800 flex flex-col justify-between hidden md:flex shrink-0">
         <div>
           <div className="p-6 border-b border-gray-800">
-            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-              Finansys CRM
+            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-700">
+              Cerasus CRM
             </h1>
             <p className="text-xs text-gray-500 mt-1">Portal Administrativo</p>
           </div>
           
           <nav className="p-4 space-y-2">
-            <a href="/admin/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-indigo-600/20 text-indigo-400 font-medium border border-indigo-500/20">
+            <a href="/admin/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-red-600/20 text-red-500 font-medium border border-red-500/20">
               <TrendingUp size={20} />
               Dashboard
             </a>
@@ -71,7 +71,7 @@ const AdminLayout = ({ children, title }) => {
 
         <div className="p-4 border-t border-gray-800">
           <div className="flex items-center gap-3 px-4 py-2 mb-4">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center font-bold text-sm">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-red-500 to-red-700 flex items-center justify-center font-bold text-sm">
               {admin?.nome?.charAt(0) || 'A'}
             </div>
             <div>
@@ -135,11 +135,11 @@ const AdminDashboard = () => {
               <p className="text-sm font-medium text-gray-400 mb-1">Clientes Ativos</p>
               <h3 className="text-3xl font-bold text-white">104</h3>
             </div>
-            <div className="p-3 bg-blue-500/20 text-blue-400 rounded-lg">
+            <div className="p-3 bg-red-500/20 text-red-400 rounded-lg">
               <Users size={24} />
             </div>
           </div>
-          <p className="text-sm text-blue-400 mt-4 flex items-center gap-1">
+          <p className="text-sm text-red-400 mt-4 flex items-center gap-1">
             +6 novos clientes
           </p>
         </div>
@@ -189,15 +189,15 @@ const AdminDashboard = () => {
                 <YAxis stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} axisLine={false} tickLine={false} tickFormatter={(val) => `R$${val/1000}k`} />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', color: '#fff', borderRadius: '0.5rem' }}
-                  itemStyle={{ color: '#818cf8' }}
+                  itemStyle={{ color: '#ef4444' }}
                   formatter={(val) => [`R$ ${val.toLocaleString()}`, 'MRR']}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="mrr" 
-                  stroke="#818cf8" 
+                  stroke="#ef4444" 
                   strokeWidth={4} 
-                  dot={{ fill: '#818cf8', strokeWidth: 2, r: 4 }} 
+                  dot={{ fill: '#ef4444', strokeWidth: 2, r: 4 }} 
                   activeDot={{ r: 8, strokeWidth: 0 }}
                 />
               </LineChart>
@@ -218,7 +218,7 @@ const AdminDashboard = () => {
                   cursor={{fill: '#1f2937'}}
                   contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', color: '#fff', borderRadius: '0.5rem' }}
                 />
-                <Bar dataKey="value" fill="#818cf8" radius={[0, 4, 4, 0]} barSize={32} />
+                <Bar dataKey="value" fill="#ef4444" radius={[0, 4, 4, 0]} barSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>

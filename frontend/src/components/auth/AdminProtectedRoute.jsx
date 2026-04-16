@@ -5,7 +5,13 @@ const AdminProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('crm_token');
   const admin = localStorage.getItem('crm_admin');
 
+  console.log('[AdminAuth] Validando acesso...', { 
+    hasToken: !!token, 
+    hasAdmin: !!admin 
+  });
+
   if (!token || !admin) {
+    console.warn('[AdminAuth] Acesso negado: Token ou Admin ausente.');
     return <Navigate to="/admin/login" replace />;
   }
 

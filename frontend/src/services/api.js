@@ -6,10 +6,16 @@ const api = axios.create({
 
 // Interceptor para adicionar token em todas as requisições
 api.interceptors.request.use((config) => {
+  // Prioriza o crm_token se a rota for de CRM, caso contrário usa o token padrão
+  const crmToken = localStorage.getItem('crm_token');
   const token = localStorage.getItem('token');
-  if (token) {
+  
+  if (config.url.includes('/crm') && crmToken) {
+    config.headers.Authorization = `Bearer ${crmToken}`;
+  } else if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
   return config;
 });
 

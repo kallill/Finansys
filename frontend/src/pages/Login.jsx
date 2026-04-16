@@ -31,8 +31,8 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 relative overflow-hidden">
       {/* Background Decor */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-emerald-600/20 rounded-full blur-[100px]" />
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-red-600/20 rounded-full blur-[100px]" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-gray-600/20 rounded-full blur-[100px]" />
 
       <div className="w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl relative z-10">
         <div className="mb-8 text-center">
@@ -64,7 +64,7 @@ const Login = () => {
                     passwordRef.current?.focus();
                   }
                 }}
-                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all"
                 placeholder="seu@email.com"
                 required
               />
@@ -80,7 +80,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 ref={passwordRef}
-                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all"
                 placeholder="••••••••"
                 required
               />
@@ -89,10 +89,10 @@ const Login = () => {
 
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2 text-slate-400 cursor-pointer hover:text-white">
-              <input type="checkbox" className="rounded border-slate-700 bg-slate-800 text-emerald-500 focus:ring-emerald-500/50" />
+              <input type="checkbox" className="rounded border-slate-700 bg-slate-800 text-red-500 focus:ring-red-500/50" />
               Lembrar de mim
             </label>
-            <button type="button" onClick={() => navigate('/forgot-password')} className="text-emerald-400 hover:text-emerald-300">Esqueceu a senha?</button>
+            <button type="button" onClick={() => navigate('/forgot-password')} className="text-red-400 hover:text-red-300">Esqueceu a senha?</button>
           </div>
 
           <Button variant="primary" type="submit" className="w-full py-3.5" disabled={loading}>
@@ -106,7 +106,7 @@ const Login = () => {
 
         <div className="mt-8 text-center">
           <p className="text-slate-400 text-sm">
-            Não tem uma conta? <button onClick={() => navigate('/register')} className="text-emerald-400 hover:underline">Cadastre-se</button>
+            Não tem uma conta? <button onClick={() => navigate('/register')} className="text-red-400 hover:underline">Cadastre-se</button>
           </p>
         </div>
         
