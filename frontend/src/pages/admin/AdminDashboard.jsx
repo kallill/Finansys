@@ -9,7 +9,19 @@ import {
   BarChart, Bar
 } from 'recharts';
 
-// ... (dummy data remains the same)
+const dummyRevenueData = [
+  { name: 'Dez', mrr: 12000 },
+  { name: 'Jan', mrr: 15400 },
+  { name: 'Fev', mrr: 18000 },
+  { name: 'Mar', mrr: 22000 },
+  { name: 'Abr', mrr: 26500 },
+];
+
+const dummyConversionData = [
+  { name: 'Prospects', value: 45 },
+  { name: 'Ativos', value: 18 },
+  { name: 'Perdidos', value: 5 },
+];
 
 const AdminLayout = ({ children, title }) => {
   const navigate = useNavigate();
