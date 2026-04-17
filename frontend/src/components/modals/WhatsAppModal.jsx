@@ -19,7 +19,7 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
     }
   }, [isOpen]);
 
-  // Polling para verificar se o usuÃƒÆ’Ã‚Â¡rio escaneou
+  // Polling para verificar se o usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio escaneou
   useEffect(() => {
     let interval;
     if (isOpen && status !== 'connected') {
@@ -48,7 +48,7 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
         setQrCode(data.base64);
         setStatus('scanning');
       } else {
-         setError('A API nÃƒÆ’Ã‚Â£o retornou um cÃƒÆ’Ã‚Â³digo QR vÃƒÆ’Ã‚Â¡lido.');
+         setError('A API nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o retornou um cÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³digo QR vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lido.');
       }
     } catch (err) {
       setError('Falha ao conectar com o servidor do WhatsApp.');
@@ -71,7 +71,7 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
              </div>
              <div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">Conectar WhatsApp</h3>
-                <p className="text-xs text-slate-500">Escaneie o cÃƒÆ’Ã‚Â³digo para ativar seu bot</p>
+                <p className="text-xs text-slate-500">Escaneie o cÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³digo para ativar seu bot</p>
              </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
@@ -87,7 +87,7 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
                   <CheckCircle size={40} />
                </div>
                <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Conectado com Sucesso!</h4>
-               <p className="text-slate-500 mb-8">Seu robÃƒÆ’Ã‚Â´ financeiro jÃƒÆ’Ã‚Â¡ estÃƒÆ’Ã‚Â¡ ativo e pronto para receber suas transaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Âµes.</p>
+               <p className="text-slate-500 mb-8">Seu robÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â´ financeiro jÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ estÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ ativo e pronto para receber suas transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes.</p>
                <Button variant="primary" onClick={onClose} className="px-10">Concluir</Button>
             </div>
           ) : (
@@ -124,17 +124,17 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
                        </li>
                        <li className="flex gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
-                          <span className="text-slate-600 dark:text-slate-400">VÃƒÆ’Ã‚Â¡ em **ConfiguraÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Âµes** {'>'} **Aparelhos Conectados**</span>
+                          <span className="text-slate-600 dark:text-slate-400">VÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ em **ConfiguraÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes** {'>'} **Aparelhos Conectados**</span>
                        </li>
                        <li className="flex gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
-                          <span className="text-slate-600 dark:text-slate-400">Clique em **Conectar um Aparelho** e aponte a cÃƒÆ’Ã‚Â¢mera</span>
+                          <span className="text-slate-600 dark:text-slate-400">Clique em **Conectar um Aparelho** e aponte a cÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢mera</span>
                        </li>
                     </ol>
                  </div>
                  <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl">
                     <p className="text-[10px] text-blue-600 dark:text-blue-400 leading-relaxed font-medium capitalize">
-                       ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨ Importante: A primeira conexÃƒÆ’Ã‚Â£o vincula seu nÃƒÆ’Ã‚Âºmero permanentemente para falar com o RobÃƒÆ’Ã‚Â´.
+                       ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¨ Importante: A primeira conexÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o vincula seu nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºmero permanentemente para falar com o RobÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â´.
                     </p>
                  </div>
               </div>

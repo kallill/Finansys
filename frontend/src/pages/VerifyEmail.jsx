@@ -49,7 +49,7 @@ const VerifyEmail = () => {
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">Email Verificado!</h2>
             <p className="text-slate-400 mb-8">
-              Sua conta foi ativada com sucesso. VocÃƒÆ’Ã‚Âª jÃƒÆ’Ã‚Â¡ pode fazer login.
+              Sua conta foi ativada com sucesso. VocÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âª jÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ pode fazer login.
             </p>
             <Button onClick={() => navigate('/login')} className="w-full">
               Ir para Login
@@ -62,9 +62,9 @@ const VerifyEmail = () => {
             <div className="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center mx-auto mb-6">
               <XCircle size={32} />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">Falha na VerificaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Falha na VerificaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o</h2>
             <p className="text-slate-400 mb-8">
-              O link ÃƒÆ’Ã‚Â© invÃƒÆ’Ã‚Â¡lido ou expirou. Tente se cadastrar novamente ou entre em contato com o suporte.
+              O link ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© invÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lido ou expirou. Tente se cadastrar novamente ou entre em contato com o suporte.
             </p>
             <Button onClick={() => navigate('/login')} variant="outline" className="w-full">
               Voltar

@@ -22,7 +22,7 @@ const AdminProfile = () => {
     setSuccess('');
 
     if (formData.password && formData.password !== formData.confirmPassword) {
-      setError('As senhas nÃƒÆ’Ã‚Â£o coincidem.');
+      setError('As senhas nao coincidem.');
       return;
     }
 
@@ -33,7 +33,6 @@ const AdminProfile = () => {
 
       const response = await api.put('/api/crm/auth/profile', payload);
       
-      // Update local storage with new name
       const updatedAdmin = { ...currentAdmin, nome: response.data.admin.nome };
       localStorage.setItem('crm_admin', JSON.stringify(updatedAdmin));
       
@@ -60,7 +59,7 @@ const AdminProfile = () => {
                 <h3 className="text-2xl font-bold text-white">{currentAdmin.nome}</h3>
                 <p className="text-gray-400 font-medium flex items-center gap-2 mt-1">
                   <ShieldCheck size={16} className="text-red-500" />
-                  NÃƒÆ’Ã‚Â­vel {currentAdmin.nivel_acesso} Cerasus
+                  Nivel {currentAdmin.nivel_acesso} Cerasus
                 </p>
                 <p className="text-xs text-gray-500 mt-1 italic">{currentAdmin.email}</p>
               </div>
@@ -69,14 +68,14 @@ const AdminProfile = () => {
 
           <form onSubmit={handleSubmit} className="p-8 space-y-6">
             {error && (
-              <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-2xl text-sm animate-in fade-in slide-in-from-top-2">
+              <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-2xl text-sm">
                 <Lock size={16} />
                 {error}
               </div>
             )}
             
             {success && (
-              <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/50 text-green-500 px-4 py-3 rounded-2xl text-sm animate-in fade-in slide-in-from-top-2">
+              <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/50 text-green-500 px-4 py-3 rounded-2xl text-sm">
                 <CheckCircle2 size={16} />
                 {success}
               </div>
@@ -84,7 +83,7 @@ const AdminProfile = () => {
 
             <div className="space-y-4">
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-400 ml-1">Nome de ExibiÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o</label>
+                <label className="text-sm font-medium text-gray-400 ml-1">Nome de Exibicao</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                   <input 
@@ -138,7 +137,7 @@ const AdminProfile = () => {
                 {loading ? 'Salvando...' : 'Atualizar Perfil'}
               </button>
               <p className="text-center text-xs text-gray-500 mt-4 italic">
-                Sua sessÃƒÆ’Ã‚Â£o permanecerÃƒÆ’Ã‚Â¡ ativa apÃƒÆ’Ã‚Â³s a atualizaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o do nome. Se alterar a senha, recomenda-se realizar um novo login.
+                Sua sessao permanecera ativa apos a atualizacao do nome. Se alterar a senha, recomenda-se realizar um novo login.
               </p>
             </div>
           </form>
