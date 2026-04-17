@@ -1,8 +1,11 @@
 import express from 'express';
-import { loginAdmin, getAdmins, createAdmin, deleteAdmin, updateProfile } from '../controllers/crmAuthController';
+import { loginAdmin, getAdmins, createAdmin, deleteAdmin, updateProfile, getCaptcha } from '../controllers/crmAuthController';
 import { checkCrmAuth } from '../middlewares/crmAuthMiddleware';
 
 const router = express.Router();
+
+// Rota pública para gerar captcha
+router.get('/captcha', getCaptcha);
 
 router.post('/login', loginAdmin);
 

@@ -33,6 +33,8 @@
     "resend": "^6.9.1",
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7",
+    "svg-captcha": "^1.4.0",
+    "ioredis": "^5.5.0",
     "tedious": "18.3.0"
   },
   "devDependencies": {
@@ -40,6 +42,7 @@
     "@types/express": "^5.0.6",
     "@types/multer": "^2.1.0",
     "@types/node": "^25.2.1",
+    "@types/ioredis": "^5.0.0",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

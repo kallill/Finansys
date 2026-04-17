@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Mail, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Lock, Mail, AlertCircle, ShieldCheck, RefreshCw, KeyRound } from 'lucide-react';
 import api from '../../services/api';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [captchaValue, setCaptchaValue] = useState('');
+  const [captchaData, setCaptchaData] = useState({ id: '', svg: '' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
   const navigate = useNavigate();
+
+  const fetchCaptcha = async () => {
+    try {
+      const response = await api.get('/api/crm/auth/captcha');
+      setCaptchaData({
+        id: response.data.captchaId,
+        svg: response.data.svg
+      });
+      setCaptchaValue('');
+    } catch (err) {
+      console.error('Erro ao buscar captcha:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCaptcha();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,8 +36,12 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      // Usando API do backend CRM
-      const response = await api.post('/api/crm/auth/login', { email, password });
+      const response = await api.post('/api/crm/auth/login', { 
+        email, 
+        password, 
+        captchaId: captchaData.id, 
+        captchaValue 
+      });
       
       if (response.data.success) {
         localStorage.setItem('crm_token', response.data.token);
@@ -25,7 +49,16 @@ const AdminLogin = () => {
         navigate('/admin/dashboard');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Erro ao conectar com o servidor.');
+      const msg = err.response?.data?.message || 'Erro ao conectar com o servidor.';
+      setError(msg);
+      
+      // Se for erro de captcha ou bloqueio, renovar captcha
+      if (err.response?.status === 400 || err.response?.status === 403) {
+        fetchCaptcha();
+        if (err.response?.data?.isBlocked) {
+          setIsBlocked(true);
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -45,66 +78,97 @@ const AdminLogin = () => {
           Cerasus CRM
         </h2>
         <p className="mt-2 text-center text-sm text-gray-400">
-          Acesso Restrito a Equipe Administrativa
+          Infraestrutura Segura & Controle Administrativo
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="bg-gray-900/60 backdrop-blur-xl py-8 px-4 shadow-2xl border border-gray-800 rounded-2xl sm:px-10">
+        <div className="bg-gray-900/60 backdrop-blur-xl py-8 px-4 shadow-2xl border border-gray-800 rounded-3xl sm:px-10">
           <form className="space-y-6" onSubmit={handleLogin}>
             
             {error && (
-              <div className="bg-red-900/50 border border-red-500/50 p-4 rounded-xl flex items-center text-red-200">
+              <div className={`border p-4 rounded-xl flex items-center ${isBlocked ? 'bg-red-500/10 border-red-500/50 text-red-500' : 'bg-red-900/50 border-red-500/50 text-red-200'}`}>
                 <AlertCircle className="h-5 w-5 mr-3 flex-shrink-0" />
-                <span className="text-sm">{error}</span>
+                <span className="text-sm font-medium">{error}</span>
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Email
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 mb-2">
+                E-mail de Acesso
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-500" />
                 </div>
                 <input
-                  type="email"
-                  required
+                  type="email" required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-gray-800/50 border border-gray-700 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-500 transition-all focus:bg-gray-800"
+                  className="bg-gray-800/50 border border-gray-800 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-600 transition-all focus:bg-gray-800 outline-none"
                   placeholder="admin@cerasus.com.br"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Senha
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 mb-2">
+                Senha Operacional
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-500" />
                 </div>
                 <input
-                  type="password"
-                  required
+                  type="password" required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-gray-800/50 border border-gray-700 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-500 transition-all focus:bg-gray-800"
-                  placeholder="ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢"
+                  className="bg-gray-800/50 border border-gray-800 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-600 transition-all focus:bg-gray-800 outline-none"
+                  placeholder="••••••••"
                 />
               </div>
             </div>
 
-            <div>
+            {/* Captcha Section */}
+            <div className="pt-2">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 mb-2">
+                Desafio de Segurança (Anti-Bot)
+              </label>
+              <div className="flex gap-3">
+                <div 
+                  className="bg-black/40 border border-gray-800 rounded-xl overflow-hidden flex-1 h-12 flex items-center justify-center relative group"
+                  dangerouslySetInnerHTML={{ __html: captchaData.svg }}
+                />
+                <button 
+                  type="button"
+                  onClick={fetchCaptcha}
+                  className="p-3 bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white rounded-xl transition-all"
+                  title="Recarregar Captcha"
+                >
+                  <RefreshCw size={20} />
+                </button>
+              </div>
+              <div className="mt-3 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <KeyRound className="h-5 w-5 text-gray-500" />
+                </div>
+                <input
+                  type="text" required
+                  value={captchaValue}
+                  onChange={(e) => setCaptchaValue(e.target.value)}
+                  placeholder="Digite os caracteres acima"
+                  className="bg-gray-800/50 border border-gray-800 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-600 transition-all focus:bg-gray-800 outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="pt-4">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-medium text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-xl text-sm font-black uppercase tracking-widest text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
               >
-                {isLoading ? 'Autenticando...' : 'Entrar no Sistema'}
+                {isLoading ? 'Verificando...' : 'Acessar CRM'}
               </button>
             </div>
           </form>
