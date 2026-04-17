@@ -32,10 +32,10 @@ export const createPlan = async (req: Request, res: Response): Promise<void> => 
 
 export const updatePlan = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const planId = String(req.params.id);
     const { nome, valor, recursos_inclusos } = req.body;
 
-    const plan = await CRMPlano.findByPk(id);
+    const plan = await CRMPlano.findByPk(planId);
     if (!plan) {
       res.status(404).json({ message: 'Plano nÃ£o encontrado.' });
       return;
@@ -56,8 +56,8 @@ export const updatePlan = async (req: Request, res: Response): Promise<void> => 
 
 export const deletePlan = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
-    await CRMPlano.destroy({ where: { id } });
+    const planId = String(req.params.id);
+    await CRMPlano.destroy({ where: { id: planId } });
     res.json({ success: true, message: 'Plano excluÃ­do com sucesso.' });
   } catch (error) {
     console.error('Erro ao excluir plano:', error);
