@@ -20,6 +20,9 @@ import AdminProtectedRoute from './components/auth/AdminProtectedRoute';
 import AdminLogin from './pages/admin/AdminLogin';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import AdminOS from './pages/admin/AdminOS';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminProfile from './pages/admin/AdminProfile';
+import PlaceholderPage from './pages/admin/PlaceholderPage';
 
 function App() {
   return (
@@ -32,7 +35,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         
-        {/* Rotas Protegidas */}
+        {/* Rotas Protegidas de Usuário (Antigas) */}
         <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
         <Route path="/cards" element={<ProtectedRoute><Cards /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
@@ -41,11 +44,18 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/import" element={<ProtectedRoute><BankImport /></ProtectedRoute>} />
 
-        {/* CRM Admin System */}
+        {/* CRM Admin System (Cerasus) */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/admin/dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/admin/os" element={<AdminProtectedRoute><AdminOS /></AdminProtectedRoute>} />
+        <Route path="/admin/users" element={<AdminProtectedRoute><AdminUsers /></AdminProtectedRoute>} />
+        <Route path="/admin/profile" element={<AdminProtectedRoute><AdminProfile /></AdminProtectedRoute>} />
+        
+        {/* Placeholders para rotas em desenvolvimento */}
+        <Route path="/admin/clients" element={<AdminProtectedRoute><PlaceholderPage title="Clientes & Prospects" /></AdminProtectedRoute>} />
+        <Route path="/admin/plans" element={<AdminProtectedRoute><PlaceholderPage title="Planos e Contratos" /></AdminProtectedRoute>} />
+        <Route path="/admin/financial" element={<AdminProtectedRoute><PlaceholderPage title="Financeiro" /></AdminProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

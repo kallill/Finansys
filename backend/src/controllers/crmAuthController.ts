@@ -52,3 +52,134 @@ export const loginAdmin = async (req: Request, res: Response): Promise<void> => 
     res.status(500).json({ success: false, message: 'Erro interno no servidor.' });
   }
 };
+
+/**
+ * Lista todos os administradores (Apenas para nível Admin)
+ */
+export const getAdmins = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (req.admin?.nivel_acesso !== 'Admin') {
+      res.status(403).json({ message: 'Acesso negado. Apenas administradores podem gerenciar usuários.' });
+      return;
+    }
+
+    const admins = await CRMAdmin.findAll({
+      attributes: ['id', 'nome', 'email', 'nivel_acesso', 'createdAt']
+    });
+
+    res.json(admins);
+  } catch (error) {
+    console.error('Erro ao listar admins:', error);
+    res.status(500).json({ message: 'Erro ao listar administradores.' });
+  }
+};
+
+/**
+ * Cria um novo administrador
+ */
+export const createAdmin = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (req.admin?.nivel_acesso !== 'Admin') {
+      res.status(403).json({ message: 'Acesso negado.' });
+      return;
+    }
+
+    const { nome, email, password, nivel_acesso } = req.body;
+
+    const exists = await CRMAdmin.findOne({ where: { email } });
+    if (exists) {
+      res.status(400).json({ message: 'Este e-mail já está em uso.' });
+      return;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const senha_hash = await bcrypt.hash(password, salt);
+
+    const newAdmin = await CRMAdmin.create({
+      nome,
+      email,
+      senha_hash,
+      nivel_acesso: nivel_acesso || 'Standard'
+    });
+
+    res.status(201).json({
+      id: newAdmin.id,
+      nome: newAdmin.nome,
+      email: newAdmin.email,
+      nivel_acesso: newAdmin.nivel_acesso
+    });
+  } catch (error) {
+    console.error('Erro ao criar admin:', error);
+    res.status(500).json({ message: 'Erro ao criar administrador.' });
+  }
+};
+
+/**
+ * Remove um administrador
+ */
+export const deleteAdmin = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (req.admin?.nivel_acesso !== 'Admin') {
+      res.status(403).json({ message: 'Acesso negado.' });
+      return;
+    }
+
+    const { id } = req.params;
+
+    // Impedir que o admin delete a si mesmo acidentalmente por aqui
+    if (id === req.admin.id) {
+      res.status(400).json({ message: 'Você não pode deletar sua própria conta.' });
+      return;
+    }
+
+    await CRMAdmin.destroy({ where: { id } });
+    res.json({ success: true, message: 'Administrador removido com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao deletar admin:', error);
+    res.status(500).json({ message: 'Erro ao remover administrador.' });
+  }
+};
+
+/**
+ * Altera os dados do perfil logado (nome e senha)
+ */
+export const updateProfile = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { nome, password } = req.body;
+    const adminId = req.admin?.id;
+
+    if (!adminId) {
+      res.status(401).json({ message: 'Não autorizado.' });
+      return;
+    }
+
+    const admin = await CRMAdmin.findByPk(adminId);
+    if (!admin) {
+      res.status(404).json({ message: 'Administrador não encontrado.' });
+      return;
+    }
+
+    if (nome) admin.nome = nome;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      admin.senha_hash = await bcrypt.hash(password, salt);
+    }
+
+    await admin.save();
+
+    res.json({
+      success: true,
+      message: 'Perfil atualizado com sucesso.',
+      admin: {
+        id: admin.id,
+        nome: admin.nome,
+        email: admin.email,
+        nivel_acesso: admin.nivel_acesso
+      }
+    });
+
+  } catch (error) {
+    console.error('Erro ao atualizar perfil:', error);
+    res.status(500).json({ message: 'Erro ao atualizar dados do perfil.' });
+  }
+};

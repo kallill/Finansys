@@ -1,30 +1,19 @@
 import React, { useState } from 'react';
 import { 
   Users, TrendingUp, DollarSign, AlertCircle, 
-  Settings, LogOut, Package, Briefcase, FileImage
+  Settings, LogOut, Package, Briefcase, FileImage, UserCog
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar
 } from 'recharts';
 
-const dummyRevenueData = [
-  { name: 'Dez', mrr: 12000 },
-  { name: 'Jan', mrr: 15400 },
-  { name: 'Fev', mrr: 18000 },
-  { name: 'Mar', mrr: 22000 },
-  { name: 'Abr', mrr: 26500 },
-];
-
-const dummyConversionData = [
-  { name: 'Prospects', value: 45 },
-  { name: 'Ativos', value: 18 },
-  { name: 'Perdidos', value: 5 },
-];
+// ... (dummy data remains the same)
 
 const AdminLayout = ({ children, title }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const admin = JSON.parse(localStorage.getItem('crm_admin') || '{}');
 
   const handleLogout = () => {
@@ -33,75 +22,90 @@ const AdminLayout = ({ children, title }) => {
     navigate('/admin/login');
   };
 
+  const isActive = (path) => location.pathname === path;
+
+  const NavLink = ({ to, icon: Icon, children }) => (
+    <Link 
+      to={to} 
+      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+        isActive(to) 
+        ? 'bg-red-600/20 text-red-500 font-medium border border-red-500/20 shadow-sm' 
+        : 'text-gray-400 hover:bg-gray-800 hover:text-white border border-transparent'
+      }`}
+    >
+      <Icon size={20} />
+      {children}
+    </Link>
+  );
+
   return (
     <div className="flex h-screen bg-gray-950 text-white font-sans overflow-hidden">
       {/* Sidebar */}
       <aside className="w-64 bg-gray-900 border-r border-gray-800 flex flex-col justify-between hidden md:flex shrink-0">
         <div>
           <div className="p-6 border-b border-gray-800">
-            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-700">
+            <Link to="/admin/dashboard" className="block text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-700">
               Cerasus CRM
-            </h1>
-            <p className="text-xs text-gray-500 mt-1">Portal Administrativo</p>
+            </Link>
+            <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-semibold">Cerasus Solutions</p>
           </div>
           
           <nav className="p-4 space-y-2">
-            <a href="/admin/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-red-600/20 text-red-500 font-medium border border-red-500/20">
-              <TrendingUp size={20} />
-              Dashboard
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
-              <Users size={20} />
-              Clientes & Prospects
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
-              <Package size={20} />
-              Planos e Contratos
-            </a>
-            <a href="/admin/os" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
-              <Briefcase size={20} />
-              Ordens de Serviço
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
-              <DollarSign size={20} />
-              Financeiro
-            </a>
+            <NavLink to="/admin/dashboard" icon={TrendingUp}>Dashboard</NavLink>
+            <NavLink to="/admin/clients" icon={Users}>Clientes & Prospects</NavLink>
+            <NavLink to="/admin/plans" icon={Package}>Planos e Contratos</NavLink>
+            <NavLink to="/admin/os" icon={Briefcase}>Ordens de Serviço</NavLink>
+            <NavLink to="/admin/financial" icon={DollarSign}>Financeiro</NavLink>
+            
+            {/* Somente visível para Admin */}
+            {admin?.nivel_acesso === 'Admin' && (
+              <div className="pt-4 mt-4 border-t border-gray-800/50">
+                <p className="px-4 text-[10px] text-gray-500 uppercase font-bold mb-2 tracking-widest">Sistema</p>
+                <NavLink to="/admin/users" icon={UserCog}>Gestão de Usuários</NavLink>
+              </div>
+            )}
           </nav>
         </div>
 
         <div className="p-4 border-t border-gray-800">
-          <div className="flex items-center gap-3 px-4 py-2 mb-4">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-red-500 to-red-700 flex items-center justify-center font-bold text-sm">
+          <Link 
+            to="/admin/profile" 
+            className="flex items-center gap-3 px-4 py-2 mb-4 hover:bg-gray-800 rounded-xl transition-colors group"
+          >
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-500 to-red-700 flex items-center justify-center font-bold text-sm shadow-lg shadow-red-600/10">
               {admin?.nome?.charAt(0) || 'A'}
             </div>
-            <div>
-              <p className="text-sm font-medium">{admin?.nome || 'Administrador'}</p>
-              <p className="text-xs text-gray-500">{admin?.nivel_acesso}</p>
+            <div className="min-w-0">
+              <p className="text-sm font-medium truncate group-hover:text-red-500 transition-colors">{admin?.nome || 'Administrador'}</p>
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">{admin?.nivel_acesso}</p>
             </div>
-          </div>
+          </Link>
           <button 
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-2 w-full text-left text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+            className="flex items-center gap-3 px-4 py-2 w-full text-left text-gray-500 hover:text-red-500 hover:bg-red-500/5 rounded-lg transition-all text-sm font-medium"
           >
-            <LogOut size={18} />
-            Sair do Sistema
+            <LogOut size={16} />
+            Sair do CRM
           </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        <header className="bg-gray-900 border-b border-gray-800 p-6 flex items-center justify-between sticky top-0 z-10 hidden md:flex">
-          <h2 className="text-2xl font-semibold">{title}</h2>
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-gray-950/50 backdrop-blur-3xl">
+        <header className="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 p-6 flex items-center justify-between sticky top-0 z-10 hidden md:flex">
+          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">{title}</h2>
           <div className="flex items-center gap-4">
-            <button className="p-2 text-gray-400 hover:text-white rounded-full hover:bg-gray-800 transition-colors">
+            <Link 
+              to="/admin/profile" 
+              className="p-2 text-gray-400 hover:text-red-500 rounded-full hover:bg-gray-800 transition-all"
+              title="Configurações de Perfil"
+            >
               <Settings size={20} />
-            </button>
+            </Link>
           </div>
         </header>
 
-        <div className="p-6">
-          {/* Inject content here */}
+        <div className="p-6 max-w-[1600px] mx-auto w-full">
           {children}
         </div>
       </main>
