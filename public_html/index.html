@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="shortcut icon" href="logo.png">
     <style>
         * {
             margin: 0;
@@ -792,12 +794,15 @@
                 <li><a href="#servicos">Serviços</a></li>
                 <li><a href="#sobre">Sobre Nós</a></li>
                 <li><a href="#contato">Contato</a></li>
-		<li><a href="/admin/login">Login</a></li>
             </ul>
-            <div class="mobile-menu">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <a href="/admin/login" style="background: #ee2c2a; color: white; padding: 0.5rem 1.2rem; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 0.9rem;">Login CRM</a>
+                <div class="mobile-menu" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
             </div>
         </nav>
     </header>
@@ -809,7 +814,10 @@
                 <div class="hero-content">
                     <h1>Mais que TI.<br><span class="highlight">Estratégia<br>Empresarial.</span></h1>
                     <p class="subtitle">Consultoria que alinha tecnologia aos seus objetivos empresariais.</p>
-                    <a href="#contato" class="cta-primary">Solicitar Consultoria Estratégica</a>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="#contato" class="cta-primary">Solicitar Consultoria Estratégica</a>
+                        <a href="/admin/login" class="cta-primary" style="background: transparent; border: 2px solid #ee2c2a; color: white; box-shadow: none;">Área Administrativa</a>
+                    </div>
                 </div>
                 
                 <div class="hero-icons">
@@ -1136,6 +1144,24 @@
                 header.style.background = 'rgba(39, 39, 39, 0.98)';
             } else {
                 header.style.background = 'rgba(39, 39, 39, 0.95)';
+            }
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuToggle.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.width = '100%';
+                navLinks.style.background = '#272727';
+                navLinks.style.padding = '2rem';
+                navLinks.style.borderTop = '1px solid #3a3a3a';
             }
         });
 
