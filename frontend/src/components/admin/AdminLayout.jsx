@@ -84,8 +84,8 @@ const AdminLayout = ({ children, title }) => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-gray-950/50 backdrop-blur-3xl">
-        <header className="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 p-6 flex items-center justify-between sticky top-0 z-10 hidden md:flex">
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-gray-950">
+        <header className="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 p-6 flex items-center justify-between sticky top-0 z-20 hidden md:flex">
           <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">{title}</h2>
           <div className="flex items-center gap-4">
             <Link 

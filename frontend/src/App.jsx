@@ -23,6 +23,8 @@ import AdminOS from './pages/admin/AdminOS';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminProfile from './pages/admin/AdminProfile';
 import AdminPlans from './pages/admin/AdminPlans';
+import AdminClients from './pages/admin/AdminClients';
+import AdminFinancial from './pages/admin/AdminFinancial';
 import PlaceholderPage from './pages/admin/PlaceholderPage';
 
 function App() {
@@ -53,10 +55,10 @@ function App() {
         <Route path="/admin/users" element={<AdminProtectedRoute><AdminUsers /></AdminProtectedRoute>} />
         <Route path="/admin/profile" element={<AdminProtectedRoute><AdminProfile /></AdminProtectedRoute>} />
         
-        {/* Placeholders e Modulos Ativos */}
-        <Route path="/admin/clients" element={<AdminProtectedRoute><PlaceholderPage title="Clientes & Prospects" /></AdminProtectedRoute>} />
+        {/* Modulos Ativos */}
+        <Route path="/admin/clients" element={<AdminProtectedRoute><AdminClients /></AdminProtectedRoute>} />
         <Route path="/admin/plans" element={<AdminProtectedRoute><AdminPlans /></AdminProtectedRoute>} />
-        <Route path="/admin/financial" element={<AdminProtectedRoute><PlaceholderPage title="Financeiro" /></AdminProtectedRoute>} />
+        <Route path="/admin/financial" element={<AdminProtectedRoute><AdminFinancial /></AdminProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
