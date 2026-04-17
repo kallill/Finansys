@@ -72,7 +72,7 @@ const AdminLogin = () => {
       
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center mb-6">
-          <img src="/favicon.svg" alt="Cerasus Logo" className="h-16 w-16 drop-shadow-2xl" />
+          <img src="/logo.png" alt="Cerasus Logo" className="h-20 w-auto drop-shadow-2xl" />
         </div>
         <h2 className="text-center text-4xl font-black text-white tracking-tighter">
           Cerasus <span className="text-red-600 italic">CRM</span>
