@@ -96,7 +96,6 @@ services:
     build:
       context: .
       dockerfile: cerasus-web.Dockerfile
-    image: cerasus-web:latest
     restart: always
     networks:
       - tunnel_net
