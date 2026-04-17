@@ -93,11 +93,11 @@ services:
       - app_network
 
   cerasus-web:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: cerasus-web.Dockerfile
+    image: cerasus-web:latest
     restart: always
-    volumes:
-      - ./public_html:/usr/share/nginx/html:ro
-      - ./nginx:/etc/nginx/conf.d:ro
     networks:
       - tunnel_net
       - app_network
