@@ -71,11 +71,11 @@ const AdminLogin = () => {
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-gray-600/20 rounded-full blur-3xl pointer-events-none" />
       
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="flex justify-center text-red-500 mb-4">
-          <ShieldCheck size={56} strokeWidth={1.5} />
+        <div className="flex justify-center mb-6">
+          <img src="/favicon.svg" alt="Cerasus Logo" className="h-16 w-16 drop-shadow-2xl" />
         </div>
-        <h2 className="text-center text-3xl font-extrabold text-white">
-          Cerasus CRM
+        <h2 className="text-center text-4xl font-black text-white tracking-tighter">
+          Cerasus <span className="text-red-600 italic">CRM</span>
         </h2>
         <p className="mt-2 text-center text-sm text-gray-400">
           Infraestrutura Segura & Controle Administrativo
