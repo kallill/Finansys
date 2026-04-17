@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { 
   Users, TrendingUp, DollarSign, AlertCircle, Briefcase, Loader2
 } from 'lucide-react';
-import { 
+/* import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
-} from 'recharts';
+} from 'recharts'; */
 import api from '../../services/api';
 import AdminLayout from '../../components/admin/AdminLayout';
 
@@ -108,27 +108,8 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
           <h3 className="text-lg font-medium text-white mb-6">Projeção de Crescimento MRR</h3>
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={history}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
-                <XAxis dataKey="name" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} axisLine={false} tickLine={false} dy={10} />
-                <YAxis stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} axisLine={false} tickLine={false} tickFormatter={(val) => `R$${val/1000}k`} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', color: '#fff', borderRadius: '0.5rem' }}
-                  itemStyle={{ color: '#ef4444' }}
-                  formatter={(val) => [`R$ ${val.toLocaleString()}`, 'MRR']}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="mrr" 
-                  stroke="#ef4444" 
-                  strokeWidth={4} 
-                  dot={{ fill: '#ef4444', strokeWidth: 2, r: 4 }} 
-                  activeDot={{ r: 8, strokeWidth: 0 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="h-72 w-full flex items-center justify-center border border-gray-800 rounded-xl bg-gray-950/50">
+            <p className="text-gray-500 italic">Gráfico temporariamente desativado para teste de build...</p>
           </div>
         </div>
         
