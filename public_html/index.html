@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cerasus Solucoes Tecnologicas - Consultoria em TI e Ciberseguranca MSSP</title>
     <meta name="description" content="Lider em consultoria de TI e ciberseguranca MSSP. Transformamos complexidade tecnologica em simplicidade operacional com 8+ anos de experiencia.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" href="favicon.ico">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="shortcut icon" href="logo.png">
+    
     <style>
         * {
             margin: 0;
@@ -41,6 +45,7 @@
             width: 100%;
             z-index: 1000;
             transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         nav {
@@ -54,15 +59,10 @@
             display: flex;
             align-items: center;
             text-decoration: none;
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
         }
 
         .logo img {
-            height: 70px;
+            height: 60px;
             width: auto;
         }
 
@@ -77,1098 +77,210 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
-            position: relative;
+            font-size: 0.95rem;
         }
 
         .nav-links a:hover {
             color: #ee2c2a;
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
+        .lang-btn {
             background: #ee2c2a;
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .mobile-menu span {
-            width: 25px;
-            height: 3px;
-            background: white;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(135deg, #272727 0%, #3a3a3a 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ee2c2a" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
-            opacity: 0.3;
-        }
-
-        .hero-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-content {
-            flex: 1;
-            max-width: 600px;
-        }
-
-        .hero-icons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-left: 4rem;
-        }
-
-        .icon-box {
-            width: 100px;
-            height: 100px;
-            background: rgba(68, 68, 68, 0.8);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .icon-box:hover {
-            background: #ee2c2a;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(238, 44, 42, 0.4);
-        }
-
-        .icon-box:hover i {
             color: white;
-        }
-
-        .icon-box i {
-            font-size: 2.5rem;
-            color: #ee2c2a;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: white;
-            animation: fadeInUp 1s ease-out;
-            line-height: 1.1;
-        }
-
-        .hero h1 .highlight {
-            color: #ee2c2a;
-        }
-
-        .hero .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            color: #ccc;
-            font-weight: 300;
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .cta-primary {
-            display: inline-block;
-            background: linear-gradient(135deg, #ee2c2a 0%, #c41e1c 100%);
-            color: white;
-            padding: 1rem 2.5rem;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(238, 44, 42, 0.3);
-            animation: fadeInUp 1s ease-out 0.4s both;
         }
 
-        .cta-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(238, 44, 42, 0.4);
+        .lang-btn:hover {
+            background: #c41e1c;
+            transform: translateY(-2px);
         }
 
-        .positioning {
-            margin-top: 3rem;
-            animation: fadeInUp 1s ease-out 0.6s both;
+        /* Hero */
+        .hero {
+            padding-top: 150px;
+            padding-bottom: 100px;
+            background: radial-gradient(circle at top right, rgba(238, 44, 42, 0.1), transparent);
         }
 
-        .positioning h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
+        .hero-content h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight {
             color: #ee2c2a;
         }
 
-        .credibility {
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #ccc;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .cta-group {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .stars {
-            color: #ffd700;
-            font-size: 1.2rem;
-        }
-
-        /* Sections */
-        section {
-            padding: 5rem 0;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            color: #ee2c2a;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 4rem;
-            color: #ccc;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Pilares */
-        .pilares {
-            background: #3a3a3a;
-        }
-
-        .pilares-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
         }
 
-        .pilar-card {
-            background: #272727;
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pilar-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(238, 44, 42, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .pilar-card:hover::before {
-            left: 100%;
-        }
-
-        .pilar-card:hover {
-            transform: translateY(-10px);
-            border-color: #ee2c2a;
-            box-shadow: 0 20px 40px rgba(238, 44, 42, 0.2);
-        }
-
-        .pilar-icon {
-            font-size: 2.5rem;
-            color: #ee2c2a;
-            margin-bottom: 1rem;
-        }
-
-        .pilar-card h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
+        .btn-primary {
+            background: #ee2c2a;
             color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(238, 44, 42, 0.2);
         }
 
-        .pilar-card p {
-            color: #ccc;
-            line-height: 1.5;
-            font-size: 0.9rem;
-        }
-
-        /* ServiÃƒÂ§os */
-        .servicos-intro {
-            background: #3a3a3a;
-            padding: 3rem;
-            border-radius: 15px;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        .servicos-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-        }
-
-        .servico-card {
-            background: #3a3a3a;
-            padding: 1.5rem;
-            border-radius: 15px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .servico-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(238, 44, 42, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .servico-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(238, 44, 42, 0.2), 0 0 20px rgba(238, 44, 42, 0.1);
-            background: linear-gradient(135deg, #3a3a3a 0%, #444 100%);
-            border-color: #ee2c2a;
-        }
-
-        .servico-card:hover::before {
-            left: 100%;
-        }
-
-        .servico-card:hover h4 {
-            color: #ff4444;
-            text-shadow: 0 0 10px rgba(238, 44, 42, 0.5);
-        }
-
-        .servico-card:hover li {
-            color: #fff;
-        }
-
-        .servico-card:hover li::before {
-            color: #ff4444;
-            text-shadow: 0 0 5px rgba(238, 44, 42, 0.7);
-        }
-
-        .servico-card h4 {
-            color: #ee2c2a;
-            font-size: 1.1rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .servico-card ul {
-            list-style: none;
-            margin-top: 1rem;
-        }
-
-        .servico-card li {
-            padding: 0.3rem 0;
-            color: #ccc;
-            position: relative;
-            padding-left: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .servico-card li::before {
-            content: 'Ã¢Å“â€œ';
-            position: absolute;
-            left: 0;
-            color: #ee2c2a;
+        .btn-secondary {
+            border: 2px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
             font-weight: bold;
         }
 
-        /* Sobre */
-        .sobre {
-            background: #3a3a3a;
+        /* Sections */
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
         }
 
-        .sobre-content {
+        .grid-4 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .metricas {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
 
-        .metrica {
-            text-align: center;
-            padding: 2rem;
-            background: #272727;
-            border-radius: 15px;
-        }
-
-        .metrica-numero {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #ee2c2a;
-            display: block;
-        }
-
-        .metrica-texto {
-            color: #ccc;
-            margin-top: 0.5rem;
-        }
-
-        /* Por que escolher */
-        .por-que-escolher {
-            background: #272727;
-            padding: 5rem 0;
-        }
-
-        .por-que-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .por-que-text h2 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: white;
-        }
-
-        .por-que-text > p {
-            font-size: 1.1rem;
-            color: #ccc;
-            line-height: 1.7;
-            margin-bottom: 2.5rem;
-        }
-
-        .beneficios {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .beneficio {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .beneficio i {
-            font-size: 1.5rem;
-            color: #ee2c2a;
-            width: 40px;
-            text-align: center;
-        }
-
-        .beneficio h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 0.3rem;
-        }
-
-        .beneficio p {
-            font-size: 0.95rem;
-            color: #ccc;
-            line-height: 1.5;
-        }
-
-        .por-que-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .equipe-card {
-            background: #3a3a3a;
+        .card {
+            background: #333;
             padding: 2.5rem;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 350px;
-            width: 100%;
-            border: 2px solid transparent;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
             transition: all 0.3s ease;
         }
 
-        .equipe-card:hover {
+        .card:hover {
             border-color: #ee2c2a;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(238, 44, 42, 0.2);
+            transform: translateY(-10px);
         }
 
-        .equipe-placeholder {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #ee2c2a 0%, #c41e1c 100%);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-        }
-
-        .equipe-placeholder i {
-            font-size: 3rem;
-            color: white;
-        }
-
-        .equipe-card h4 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 0.8rem;
-        }
-
-        .equipe-card p {
-            color: #ccc;
-            line-height: 1.6;
-        }
-
-        /* Contato */
-        .contato-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-group {
+        .card i {
+            font-size: 2.5rem;
+            color: #ee2c2a;
             margin-bottom: 1.5rem;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #ccc;
-            font-weight: 500;
+        .card h3 {
+            margin-bottom: 1rem;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            background: #3a3a3a;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #ee2c2a;
-            box-shadow: 0 0 0 3px rgba(238, 44, 42, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, #ee2c2a 0%, #c41e1c 100%);
-            color: white;
-            padding: 1.2rem;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(238, 44, 42, 0.3);
+        .card p {
+            color: #aaa;
+            font-size: 0.95rem;
         }
 
         /* Footer */
         footer {
             background: #1a1a1a;
-            padding: 3rem 0 1rem;
-            text-align: center;
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        .footer-content {
+        .footer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
         }
 
-        .footer-section h4 {
-            color: #ee2c2a;
-            margin-bottom: 1rem;
-        }
+        .footer h4 { color: #ee2c2a; margin-bottom: 1.5rem; }
+        .footer p, .footer a { color: #888; text-decoration: none; display: block; margin-bottom: 0.5rem; }
 
-        .footer-section p,
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            line-height: 1.8;
-        }
-
-        .footer-section a:hover {
-            color: #ee2c2a;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #3a3a3a;
-            padding-top: 1rem;
-            color: #888;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu {
-                display: flex;
-            }
-
-            .hero-wrapper {
-                flex-direction: column;
-                text-align: center;
-                gap: 3rem;
-            }
-
-            .hero-icons {
-                margin-left: 0;
-                justify-self: center;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .sobre-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .metricas {
-                grid-template-columns: 1fr;
-            }
-
-            .pilares-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .pilar-card {
-                padding: 2rem;
-            }
-
-            .pilar-icon {
-                font-size: 3rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .pilar-card h3 {
-                font-size: 1.3rem;
-                margin-bottom: 1rem;
-            }
-
-            .pilar-card p {
-                font-size: 1rem;
-                line-height: 1.6;
-            }
-
-            .servicos-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .servico-card {
-                padding: 2rem;
-            }
-
-            .servico-card h4 {
-                font-size: 1.3rem;
-                margin-bottom: 1rem;
-            }
-
-            .servico-card li {
-                padding: 0.5rem 0;
-                font-size: 1rem;
-            }
-
-            .por-que-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-                text-align: center;
-            }
-
-            .por-que-text h2 {
-                font-size: 1.8rem;
-            }
-
-            .equipe-card {
-                max-width: 100%;
-            }
+            .nav-links { display: none; }
+            .hero-content h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <nav class="container">
             <a href="#" class="logo">
-                <img src="logo.png" alt="Cerasus" width="800" height="750">
+                <img src="logo.png" alt="Cerasus">
             </a>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#servicos">ServiÃƒÂ§os</a></li>
-                <li><a href="#sobre">Sobre NÃƒÂ³s</a></li>
+                <li><a href="#servicos">Servicos</a></li>
+                <li><a href="#sobre">Sobre Nos</a></li>
                 <li><a href="#contato">Contato</a></li>
             </ul>
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <a href="/admin/login" style="background: #ee2c2a; color: white; padding: 0.5rem 1.2rem; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 0.9rem;">Login CRM</a>
-                <div class="mobile-menu" id="menuToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
+            <a href="/admin/login" class="lang-btn">Login CRM</a>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-wrapper">
-                <div class="hero-content">
-                    <h1>Mais que TI.<br><span class="highlight">Estrategia<br>Empresarial.</span></h1>
-                    <p class="subtitle">Consultoria que alinha tecnologia aos seus objetivos empresariais.</p>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                        <a href="#contato" class="cta-primary">Solicitar Consultoria Estrategica</a>
-                        <a href="/admin/login" class="cta-primary" style="background: transparent; border: 2px solid #ee2c2a; color: white; box-shadow: none;">Area Administrativa</a>
-                    </div>
-                </div>
-                
-                <div class="hero-icons">
-                    <div class="icon-box">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="icon-box">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <div class="icon-box">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <div class="icon-box">
-                        <i class="fas fa-cogs"></i>
-                    </div>
+    <main>
+        <section id="home" class="hero container">
+            <div class="hero-content">
+                <h1>Mais que TI.<br><span class="highlight">Estrategia<br>Empresarial.</span></h1>
+                <p>Consultoria que alinha tecnologia aos seus objetivos empresariais para gerar resultados reais.</p>
+                <div class="cta-group">
+                    <a href="#contato" class="btn-primary">Solicitar Consultoria</a>
+                    <a href="/admin/login" class="btn-secondary">Area do Cliente</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Pilares EstratÃƒÂ©gicos -->
-    <section class="pilares">
-        <div class="container">
-            <h2 class="section-title">Nossos Pilares EstratÃƒÂ©gicos</h2>
-            <div class="pilares-grid">
-                <div class="pilar-card fade-in">
-                    <div class="pilar-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>CIBERSEGURANÃƒâ€¡A</h3>
-                    <p>SOC 24x7, SIEM/SOAR, EDR/XDR, consultoria em frameworks NIST/CIS para proteÃƒÂ§ÃƒÂ£o completa do seu ambiente digital.</p>
+        <section id="servicos" class="container">
+            <h2 class="section-title">Nossos Servicos</h2>
+            <div class="grid-4">
+                <div class="card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Seguranca</h3>
+                    <p>Protecao completa contra ameacas digitais com tecnologia MSSP de ponta.</p>
                 </div>
-                
-                <div class="pilar-card fade-in">
-                    <div class="pilar-icon">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <h3>INFRAESTRUTURA</h3>
-                    <p>VirtualizaÃƒÂ§ÃƒÂ£o enterprise, Cloud hÃƒÂ­brida, Data Centers resilientes para mÃƒÂ¡xima disponibilidade e performance.</p>
+                <div class="card">
+                    <i class="fas fa-server"></i>
+                    <h3>Infraestrutura</h3>
+                    <p>Arquitetura de TI resiliente para garantir que sua empresa nunca pare.</p>
                 </div>
-                
-                <div class="pilar-card fade-in">
-                    <div class="pilar-icon">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <h3>SUPORTE TÃƒâ€°CNICO</h3>
-                    <p>Help Desk multinÃƒÂ­veis, Field Service especializado, Microsoft 365 com atendimento de excelÃƒÂªncia.</p>
+                <div class="card">
+                    <i class="fas fa-headset"></i>
+                    <h3>Suporte</h3>
+                    <p>Atendimento especializado 24/7 focado na resolucao rapida de problemas.</p>
                 </div>
-                
-                <div class="pilar-card fade-in">
-                    <div class="pilar-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>CONSULTORIA</h3>
-                    <p>EstratÃƒÂ©gia digital, governanÃƒÂ§a de TI, projetos de transformaÃƒÂ§ÃƒÂ£o para acelerar seu crescimento.</p>
+                <div class="card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Consultoria</h3>
+                    <p>Planejamento estrategico para transformar sua TI em motor de crescimento.</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ServiÃƒÂ§os -->
-    <section id="servicos" class="servicos">
-        <div class="container">
-            <h2 class="section-title">Portfolio Completo</h2>
-            
-            <div class="servicos-intro">
-                <p class="section-subtitle">ServiÃƒÂ§os integrados de TI que protegem, otimizam e impulsionam sua empresa: ciberseguranÃƒÂ§a, infraestrutura, suporte e consultoria sob medida para organizaÃƒÂ§ÃƒÂµes que buscam excelÃƒÂªncia operacional.</p>
+        <section id="contato" class="container" style="padding-bottom: 100px;">
+            <h2 class="section-title">Contato</h2>
+            <p style="text-align: center; color: #888; margin-top: -3rem; margin-bottom: 3rem;">Inicie sua transformacao digital hoje mesmo.</p>
+            <div style="max-width: 500px; margin: 0 auto; background: #333; padding: 3rem; border-radius: 20px;">
+                <p style="margin-bottom: 1rem;">E-mail: contato@cerasus.com.br</p>
+                <p>Telefone: (51) 99310-9363</p>
+                <a href="mailto:contato@cerasus.com.br" class="btn-primary" style="display: block; text-align: center; margin-top: 2rem;">Enviar Mensagem</a>
             </div>
-            
-            <div class="servicos-grid">
-                <div class="servico-card fade-in">
-                    <h4><i class="fas fa-shield-alt"></i> CiberseguranÃƒÂ§a MSSP</h4>
-                    <p>ProteÃƒÂ§ÃƒÂ£o 24x7 com tecnologias de ponta e expertise especializada.</p>
-                    <ul>
-                        <li>SOC (Security Operations Center) 24x7</li>
-                        <li>SIEM/SOAR para detecÃƒÂ§ÃƒÂ£o avanÃƒÂ§ada</li>
-                        <li>EDR/XDR para endpoints e redes</li>
-                        <li>Consultoria em frameworks NIST/CIS</li>
-                        <li>Testes de penetraÃƒÂ§ÃƒÂ£o e auditoria</li>
-                        <li>Compliance e governanÃƒÂ§a de seguranÃƒÂ§a</li>
-                    </ul>
-                </div>
-                
-                <div class="servico-card fade-in">
-                    <h4><i class="fas fa-cloud"></i> Infraestrutura Enterprise</h4>
-                    <p>SoluÃƒÂ§ÃƒÂµes robustas para mÃƒÂ¡xima disponibilidade e performance.</p>
-                    <ul>
-                        <li>VirtualizaÃƒÂ§ÃƒÂ£o VMware e Hyper-V</li>
-                        <li>Cloud hÃƒÂ­brida (AWS, Azure, Google)</li>
-                        <li>Data Centers resilientes</li>
-                        <li>Backup e disaster recovery</li>
-                        <li>Monitoramento proativo 24x7</li>
-                        <li>OtimizaÃƒÂ§ÃƒÂ£o de performance</li>
-                    </ul>
-                </div>
-                
-                <div class="servico-card fade-in">
-                    <h4><i class="fas fa-tools"></i> Suporte Especializado</h4>
-                    <p>Atendimento tÃƒÂ©cnico de excelÃƒÂªncia com mÃƒÂºltiplos nÃƒÂ­veis de suporte.</p>
-                    <ul>
-                        <li>Help Desk N1, N2 e N3</li>
-                        <li>Field Service especializado</li>
-                        <li>Microsoft 365 completo</li>
-                        <li>Suporte remoto e presencial</li>
-                        <li>GestÃƒÂ£o de ativos de TI</li>
-                        <li>SLA personalizado</li>
-                    </ul>
-                </div>
-                
-                <div class="servico-card fade-in">
-                    <h4><i class="fas fa-lightbulb"></i> Consultoria EstratÃƒÂ©gica</h4>
-                    <p>TransformaÃƒÂ§ÃƒÂ£o digital alinhada aos objetivos de negÃƒÂ³cio.</p>
-                    <ul>
-                        <li>EstratÃƒÂ©gia digital empresarial</li>
-                        <li>GovernanÃƒÂ§a de TI (COBIT, ITIL)</li>
-                        <li>Projetos de transformaÃƒÂ§ÃƒÂ£o</li>
-                        <li>Arquitetura de soluÃƒÂ§ÃƒÂµes</li>
-                        <li>GestÃƒÂ£o de mudanÃƒÂ§as</li>
-                        <li>ROI e mÃƒÂ©tricas de TI</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Sobre NÃƒÂ³s -->
-    <section id="sobre" class="sobre">
-        <div class="container">
-            <h2 class="section-title">Credibilidade Institucional</h2>
-            
-            <div class="sobre-content">
-                <div>
-                    <p style="font-size: 1.2rem; line-height: 1.8; color: #ccc;">Com uma equipe de profissionais experientes hÃƒÂ¡ mais de 8 anos no setor, a Cerasus SoluÃƒÂ§ÃƒÂµes TecnolÃƒÂ³gicas ÃƒÂ© sua parceira estratÃƒÂ©gica em TI e ciberseguranÃƒÂ§a.</p>
-                    
-                    <p style="font-size: 1.1rem; line-height: 1.8; color: #ccc; margin-top: 1.5rem;">Transformamos complexidade tecnolÃƒÂ³gica em simplicidade operacional, oferecendo soluÃƒÂ§ÃƒÂµes que elevam a performance e protegem o patrimÃƒÂ´nio digital do seu negÃƒÂ³cio.</p>
-                </div>
-                
-                <div class="metricas">
-                    <div class="metrica fade-in">
-                        <span class="metrica-numero">8+</span>
-                        <span class="metrica-texto">Anos de experiÃƒÂªncia consolidada da equipe tÃƒÂ©cnica</span>
-                    </div>
-                    
-                    <div class="metrica fade-in">
-                        <span class="metrica-numero">20+</span>
-                        <span class="metrica-texto">Projetos estratÃƒÂ©gicos planejados para 2025</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Por que escolher a Cerasus -->
-    <section class="por-que-escolher">
-        <div class="container">
-            <div class="por-que-content">
-                <div class="por-que-text">
-                    <h2>Por que escolher a Cerasus?</h2>
-                    <p>Transformamos complexidade tecnolÃƒÂ³gica em simplicidade operacional, oferecendo soluÃƒÂ§ÃƒÂµes que elevam a performance e protegem o patrimÃƒÂ´nio digital do seu negÃƒÂ³cio.</p>
-                    
-                    <div class="beneficios">
-                        <div class="beneficio">
-                            <i class="fas fa-chart-line"></i>
-                            <div>
-                                <h4>Performance Otimizada</h4>
-                                <p>SoluÃƒÂ§ÃƒÂµes que aceleram seus processos</p>
-                            </div>
-                        </div>
-                        
-                        <div class="beneficio">
-                            <i class="fas fa-shield-alt"></i>
-                            <div>
-                                <h4>SeguranÃƒÂ§a MÃƒÂ¡xima</h4>
-                                <p>ProteÃƒÂ§ÃƒÂ£o avanÃƒÂ§ada contra ameaÃƒÂ§as</p>
-                            </div>
-                        </div>
-                        
-                        <div class="beneficio">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                            <div>
-                                <h4>Escalabilidade</h4>
-                                <p>Infraestrutura que cresce com vocÃƒÂª</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="por-que-image">
-                    <div class="equipe-card">
-                        <div class="equipe-placeholder">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h4>Equipe Especializada</h4>
-                        <p>Profissionais certificados com 8+ anos de experiÃƒÂªncia</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contato -->
-    <section id="contato" class="contato">
-        <div class="container">
-            <h2 class="section-title">A Escolha Certa - Entre em contato!</h2>
-            
-            <div class="contato-content">
-                <form class="fade-in">
-                    <div class="form-group">
-                        <label for="nome">Nome Completo *</label>
-                        <input type="text" id="nome" name="nome" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="empresa">Empresa *</label>
-                        <input type="text" id="empresa" name="empresa" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="cargo">Cargo/FunÃƒÂ§ÃƒÂ£o *</label>
-                        <input type="text" id="cargo" name="cargo" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">E-mail Corporativo *</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="telefone">Telefone *</label>
-                        <input type="tel" id="telefone" name="telefone" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="servico">ServiÃƒÂ§o de Interesse *</label>
-                        <select id="servico" name="servico" required>
-                            <option value="">Selecione um serviÃƒÂ§o</option>
-                            <option value="ciberseguranca">CiberseguranÃƒÂ§a MSSP</option>
-                            <option value="infraestrutura">Infraestrutura Enterprise</option>
-                            <option value="suporte">Suporte Especializado</option>
-                            <option value="consultoria">Consultoria EstratÃƒÂ©gica</option>
-                            <option value="multiplos">MÃƒÂºltiplos ServiÃƒÂ§os</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="mensagem">Descreva seu Desafio TecnolÃƒÂ³gico</label>
-                        <textarea id="mensagem" name="mensagem" placeholder="Conte-nos como podemos ajudar..."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn-submit">Eu escolho CERASUS</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Cerasus SoluÃƒÂ§ÃƒÂµes TecnolÃƒÂ³gicas</h4>
-                    <p>LÃƒÂ­der em consultoria de TI e ciberseguranÃƒÂ§a MSSP. Transformando complexidade tecnolÃƒÂ³gica em simplicidade operacional.</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>ServiÃƒÂ§os</h4>
-                    <p><a href="#servicos">CiberseguranÃƒÂ§a MSSP</a></p>
-                    <p><a href="#servicos">Infraestrutura Enterprise</a></p>
-                    <p><a href="#servicos">Suporte Especializado</a></p>
-                    <p><a href="#servicos">Consultoria EstratÃƒÂ©gica</a></p>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Contato</h4>
-                    <p><i class="fas fa-envelope"></i> contato@cerasus.com.br</p>
-                    <p><i class="fas fa-phone"></i> (51) 99310-9363 (47) 99136-4705</p>
-                    <p><i class="fas fa-map-marker-alt"></i> RS,SC e MT</p>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 Cerasus SoluÃƒÂ§ÃƒÂµes TecnolÃƒÂ³gicas. Todos os direitos reservados.</p>
-            </div>
+        <div class="container text-center">
+            <p>&copy; 2025 Cerasus Solucoes Tecnologicas. RS, SC e MT.</p>
         </div>
     </footer>
-
-    <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Fade in animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(39, 39, 39, 0.98)';
-            } else {
-                header.style.background = 'rgba(39, 39, 39, 0.95)';
-            }
-        });
-
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.querySelector('.nav-links');
-        
-        menuToggle.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-            if (navLinks.style.display === 'flex') {
-                navLinks.style.flexDirection = 'column';
-                navLinks.style.position = 'absolute';
-                navLinks.style.top = '100%';
-                navLinks.style.left = '0';
-                navLinks.style.width = '100%';
-                navLinks.style.background = '#272727';
-                navLinks.style.padding = '2rem';
-                navLinks.style.borderTop = '1px solid #3a3a3a';
-            }
-        });
-
-        // Form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Obrigado pelo seu interesse! Entraremos em contato em breve para agendar sua consultoria gratuita.');
-        });
-    </script>
 </body>
 </html>
