@@ -45,7 +45,7 @@ const AdminLogin = () => {
           Cerasus CRM
         </h2>
         <p className="mt-2 text-center text-sm text-gray-400">
-          Acesso Restrito ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  Equipe Administrativa
+          Acesso Restrito a Equipe Administrativa
         </p>
       </div>
 
