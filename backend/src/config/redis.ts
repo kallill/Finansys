@@ -7,7 +7,7 @@ const redis = new Redis({
   host: redisHost,
   port: redisPort,
   maxRetriesPerRequest: 3,
-  retryStrategy(times) {
+  retryStrategy(times: number) {
     const delay = Math.min(times * 100, 2000);
     return delay;
   }
@@ -17,7 +17,7 @@ redis.on('connect', () => {
   console.log('Redis connected successfully');
 });
 
-redis.on('error', (err) => {
+redis.on('error', (err: Error) => {
   console.error('Redis connection error:', err);
 });
 

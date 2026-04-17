@@ -65,32 +65,25 @@ export const loginAdmin = async (req: Request, res: Response): Promise<void> => 
       res.status(400).json({ success: false, message: 'Desafio de seguranca (Captcha) incorreto.' });
       return;
     }
-    // Consumir o captcha (nao pode usar o mesmo duas vezes)
+    // Consumir o captcha
     await redis.del(`crm_captcha:${captchaId}`);
 
-    // 4. Buscar Admin
+    // 4. Buscar Admin e Validar Senha
     const admin = await CRMAdmin.findOne({ where: { email } });
+    const isMatch = admin ? await bcrypt.compare(password, admin.senha_hash) : false;
 
-    // 5. Validar Senha
-    let isMatch = false;
-    if (admin) {
-      isMatch = await bcrypt.compare(password, admin.senha_hash);
-    }
-
-    if (!isMatch) {
+    if (!admin || !isMatch) {
       // Incrementar tentativas
       const attempts = await redis.incr(attemptsKey);
-      await redis.expire(attemptsKey, 3600); // Reseta contador em 1h
+      await redis.expire(attemptsKey, 3600);
 
       if (attempts >= 5) {
-        // Bloqueio Progressivo: 1 min, 2 min, 4 min... (max 24h)
         const penaltyMultiplier = Math.pow(2, attempts - 5);
         const blockTime = Math.min(60 * penaltyMultiplier, 86400); 
-        
         await redis.set(lockoutKey, 'true', 'EX', blockTime);
         res.status(403).json({ 
           success: false, 
-          message: `Seguranca Cerasus: 5+ falhas detectadas. Bloqueio progressivo de ${Math.ceil(blockTime / 60)} min ativo para seu IP/E-mail.`,
+          message: `Seguranca Cerasus: 5+ falhas detectadas. Bloqueio ativo.`,
           isBlocked: true
         });
         return;
@@ -98,8 +91,7 @@ export const loginAdmin = async (req: Request, res: Response): Promise<void> => 
 
       res.status(401).json({ 
         success: false, 
-        message: `Credenciais invalidas. Tentativa ${attempts} de 5 antes do bloqueio.`,
-        attemptsRemaining: 5 - attempts
+        message: `Credenciais invalidas. Tentativa ${attempts} de 5 antes do bloqueio.`
       });
       return;
     }
@@ -134,30 +126,20 @@ export const loginAdmin = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-/**
- * Lista todos os administradores (Apenas para nivel Admin)
- */
 export const getAdmins = async (req: Request, res: Response): Promise<void> => {
   try {
     if (req.admin?.nivel_acesso !== 'Admin') {
-      res.status(403).json({ message: 'Acesso negado. Apenas administradores podem gerenciar usuarios.' });
+      res.status(403).json({ message: 'Acesso negado.' });
       return;
     }
 
-    const admins = await CRMAdmin.findAll({
-      attributes: ['id', 'nome', 'email', 'nivel_acesso', 'createdAt']
-    });
-
+    const admins = await CRMAdmin.findAll({ attributes: ['id', 'nome', 'email', 'nivel_acesso', 'createdAt'] });
     res.json(admins);
   } catch (error) {
-    console.error('Erro ao listar admins:', error);
     res.status(500).json({ message: 'Erro ao listar administradores.' });
   }
 };
 
-/**
- * Cria um novo administrador
- */
 export const createAdmin = async (req: Request, res: Response): Promise<void> => {
   try {
     if (req.admin?.nivel_acesso !== 'Admin') {
@@ -166,38 +148,22 @@ export const createAdmin = async (req: Request, res: Response): Promise<void> =>
     }
 
     const { nome, email, password, nivel_acesso } = req.body;
-
     const exists = await CRMAdmin.findOne({ where: { email } });
     if (exists) {
-      res.status(400).json({ message: 'Este e-mail ja esta em uso.' });
+      res.status(400).json({ message: 'E-mail em uso.' });
       return;
     }
 
     const salt = await bcrypt.genSalt(10);
     const senha_hash = await bcrypt.hash(password, salt);
 
-    const newAdmin = await CRMAdmin.create({
-      nome,
-      email,
-      senha_hash,
-      nivel_acesso: nivel_acesso || 'Standard'
-    });
-
-    res.status(201).json({
-      id: newAdmin.id,
-      nome: newAdmin.nome,
-      email: newAdmin.email,
-      nivel_acesso: newAdmin.nivel_acesso
-    });
+    const newAdmin = await CRMAdmin.create({ nome, email, senha_hash, nivel_acesso: nivel_acesso || 'Standard' });
+    res.status(201).json({ id: newAdmin.id, nome: newAdmin.nome, email: newAdmin.email, nivel_acesso: newAdmin.nivel_acesso });
   } catch (error) {
-    console.error('Erro ao criar admin:', error);
     res.status(500).json({ message: 'Erro ao criar administrador.' });
   }
 };
 
-/**
- * Remove um administrador
- */
 export const deleteAdmin = async (req: Request, res: Response): Promise<void> => {
   try {
     if (req.admin?.nivel_acesso !== 'Admin') {
@@ -206,24 +172,18 @@ export const deleteAdmin = async (req: Request, res: Response): Promise<void> =>
     }
 
     const { id } = req.params;
-
-    // Impedir que o admin delete a si mesmo acidentalmente por aqui
     if (id === req.admin?.id) {
-      res.status(400).json({ message: 'Voce nao pode deletar sua propria conta.' });
+      res.status(400).json({ message: 'Nao pode deletar a si mesmo.' });
       return;
     }
 
     await CRMAdmin.destroy({ where: { id } });
-    res.json({ success: true, message: 'Administrador removido com sucesso.' });
+    res.json({ success: true, message: 'Removido com sucesso.' });
   } catch (error) {
-    console.error('Erro ao deletar admin:', error);
     res.status(500).json({ message: 'Erro ao remover administrador.' });
   }
 };
 
-/**
- * Altera os dados do perfil logado (nome e senha)
- */
 export const updateProfile = async (req: Request, res: Response): Promise<void> => {
   try {
     const { nome, password } = req.body;
@@ -236,7 +196,7 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
 
     const admin = await CRMAdmin.findByPk(adminId);
     if (!admin) {
-      res.status(404).json({ message: 'Administrador nao encontrado.' });
+      res.status(404).json({ message: 'Nao encontrado.' });
       return;
     }
 
@@ -247,20 +207,8 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
     }
 
     await admin.save();
-
-    res.json({
-      success: true,
-      message: 'Perfil atualizado com sucesso.',
-      admin: {
-        id: admin.id,
-        nome: admin.nome,
-        email: admin.email,
-        nivel_acesso: admin.nivel_acesso
-      }
-    });
-
+    res.json({ success: true, admin: { id: admin.id, nome: admin.nome, email: admin.email, nivel_acesso: admin.nivel_acesso } });
   } catch (error) {
-    console.error('Erro ao atualizar perfil:', error);
-    res.status(500).json({ message: 'Erro ao atualizar dados do perfil.' });
+    res.status(500).json({ message: 'Erro ao atualizar dados.' });
   }
 };
