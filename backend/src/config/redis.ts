@@ -7,6 +7,8 @@ const redis = new Redis({
   host: redisHost,
   port: redisPort,
   maxRetriesPerRequest: 3,
+  connectTimeout: 2000,
+  commandTimeout: 1000,
   retryStrategy(times: number) {
     const delay = Math.min(times * 100, 2000);
     return delay;
