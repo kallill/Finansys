@@ -19,9 +19,9 @@ const ForgotPassword = () => {
     setMessage('');
     try {
       const res = await forgotPassword(email);
-      setMessage(res.message || 'Se o e-mail existir, enviaremos um link de redefiniÃƒÂ§ÃƒÂ£o.');
+      setMessage(res.message || 'Se o e-mail existir, enviaremos um link de redefiniÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o.');
     } catch (err) {
-      setError('NÃƒÂ£o foi possÃƒÂ­vel enviar. Tente novamente mais tarde.');
+      setError('NÃƒÆ’Ã‚Â£o foi possÃƒÆ’Ã‚Â­vel enviar. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
@@ -38,7 +38,7 @@ const ForgotPassword = () => {
             <Logo />
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">Esqueceu sua senha</h2>
-          <p className="text-slate-400">Informe seu e-mail para receber o link de redefiniÃƒÂ§ÃƒÂ£o.</p>
+          <p className="text-slate-400">Informe seu e-mail para receber o link de redefiniÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o.</p>
         </div>
 
         {message && (

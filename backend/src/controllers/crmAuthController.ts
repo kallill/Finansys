@@ -8,21 +8,21 @@ export const loginAdmin = async (req: Request, res: Response): Promise<void> => 
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.status(400).json({ success: false, message: 'E-mail e senha sÃƒÂ£o obrigatÃƒÂ³rios.' });
+      res.status(400).json({ success: false, message: 'E-mail e senha sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o obrigatÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³rios.' });
       return;
     }
 
     const admin = await CRMAdmin.findOne({ where: { email } });
 
     if (!admin) {
-      res.status(401).json({ success: false, message: 'Credenciais invÃƒÂ¡lidas.' });
+      res.status(401).json({ success: false, message: 'Credenciais invÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lidas.' });
       return;
     }
 
     const isMatch = await bcrypt.compare(password, admin.senha_hash);
 
     if (!isMatch) {
-      res.status(401).json({ success: false, message: 'Credenciais invÃƒÂ¡lidas.' });
+      res.status(401).json({ success: false, message: 'Credenciais invÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lidas.' });
       return;
     }
 
@@ -54,12 +54,12 @@ export const loginAdmin = async (req: Request, res: Response): Promise<void> => 
 };
 
 /**
- * Lista todos os administradores (Apenas para nÃƒÂ­vel Admin)
+ * Lista todos os administradores (Apenas para nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­vel Admin)
  */
 export const getAdmins = async (req: Request, res: Response): Promise<void> => {
   try {
     if (req.admin?.nivel_acesso !== 'Admin') {
-      res.status(403).json({ message: 'Acesso negado. Apenas administradores podem gerenciar usuÃƒÂ¡rios.' });
+      res.status(403).json({ message: 'Acesso negado. Apenas administradores podem gerenciar usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rios.' });
       return;
     }
 
@@ -88,7 +88,7 @@ export const createAdmin = async (req: Request, res: Response): Promise<void> =>
 
     const exists = await CRMAdmin.findOne({ where: { email } });
     if (exists) {
-      res.status(400).json({ message: 'Este e-mail jÃƒÂ¡ estÃƒÂ¡ em uso.' });
+      res.status(400).json({ message: 'Este e-mail jÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ estÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ em uso.' });
       return;
     }
 
@@ -128,7 +128,7 @@ export const deleteAdmin = async (req: Request, res: Response): Promise<void> =>
 
     // Impedir que o admin delete a si mesmo acidentalmente por aqui
     if (id === req.admin.id) {
-      res.status(400).json({ message: 'VocÃƒÂª nÃƒÂ£o pode deletar sua prÃƒÂ³pria conta.' });
+      res.status(400).json({ message: 'VocÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âª nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o pode deletar sua prÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³pria conta.' });
       return;
     }
 
@@ -149,13 +149,13 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
     const adminId = req.admin?.id;
 
     if (!adminId) {
-      res.status(401).json({ message: 'NÃƒÂ£o autorizado.' });
+      res.status(401).json({ message: 'NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o autorizado.' });
       return;
     }
 
     const admin = await CRMAdmin.findByPk(adminId);
     if (!admin) {
-      res.status(404).json({ message: 'Administrador nÃƒÂ£o encontrado.' });
+      res.status(404).json({ message: 'Administrador nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o encontrado.' });
       return;
     }
 

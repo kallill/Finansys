@@ -25,7 +25,7 @@ const Transactions = () => {
   const load = async () => {
     setLoading(true);
     try {
-      // Carrega cada um individualmente para que um erro em um nÃƒÂ£o trave o outro
+      // Carrega cada um individualmente para que um erro em um nÃƒÆ’Ã‚Â£o trave o outro
       const [txResult, cardsResult] = await Promise.allSettled([
         getTransactions(),
         getCreditCards()
@@ -36,15 +36,15 @@ const Transactions = () => {
         const arr = Array.isArray(txData) ? txData : Array.isArray(txData?.transactions) ? txData.transactions : [];
         setTransactions(arr);
       } else {
-        console.error('Falha ao carregar transaÃƒÂ§ÃƒÂµes:', txResult.reason);
-        setError('NÃƒÂ£o foi possÃƒÂ­vel carregar o extrato. O banco de dados pode estar em manutenÃƒÂ§ÃƒÂ£o.');
+        console.error('Falha ao carregar transaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Âµes:', txResult.reason);
+        setError('NÃƒÆ’Ã‚Â£o foi possÃƒÆ’Ã‚Â­vel carregar o extrato. O banco de dados pode estar em manutenÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o.');
       }
 
       if (cardsResult.status === 'fulfilled') {
         setCards(cardsResult.value || []);
       } else {
-        console.error('Falha ao carregar cartÃƒÂµes:', cardsResult.reason);
-        // NÃƒÂ£o bloqueia a tela, apenas avisa se estiver no modal
+        console.error('Falha ao carregar cartÃƒÆ’Ã‚Âµes:', cardsResult.reason);
+        // NÃƒÆ’Ã‚Â£o bloqueia a tela, apenas avisa se estiver no modal
       }
 
     } catch (e) {
@@ -100,17 +100,17 @@ const Transactions = () => {
       setModalOpen(false);
       await load();
     } catch {
-      setError('Erro ao salvar transaÃƒÂ§ÃƒÂ£o');
+      setError('Erro ao salvar transaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o');
     }
   };
 
   const onDelete = async (id) => {
-    if (!window.confirm('Excluir transaÃƒÂ§ÃƒÂ£o?')) return;
+    if (!window.confirm('Excluir transaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o?')) return;
     try {
       await deleteTransaction(id);
       await load();
     } catch {
-      setError('Erro ao excluir transaÃƒÂ§ÃƒÂ£o');
+      setError('Erro ao excluir transaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o');
     }
   };
 
@@ -124,11 +124,11 @@ const Transactions = () => {
             </button>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <div className="p-2 bg-emerald-500/10 text-emerald-600 rounded-lg"><Filter size={20}/></div>
-              TransaÃƒÂ§ÃƒÂµes
+              TransaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Âµes
             </h1>
           </div>
           <div className="flex gap-3">
-            <Button variant="primary" onClick={openCreate} className="shadow-lg shadow-emerald-500/20"><Plus size={18} /> Nova TransaÃƒÂ§ÃƒÂ£o</Button>
+            <Button variant="primary" onClick={openCreate} className="shadow-lg shadow-emerald-500/20"><Plus size={18} /> Nova TransaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o</Button>
           </div>
         </div>
 
@@ -140,7 +140,7 @@ const Transactions = () => {
               <thead>
                 <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
                   <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Data</th>
-                  <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">DescriÃƒÂ§ÃƒÂ£o</th>
+                  <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">DescriÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o</th>
                   <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Categoria</th>
                   <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Origem</th>
                   <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Status</th>
@@ -171,7 +171,7 @@ const Transactions = () => {
                       <td className="p-4">
                         {tx.creditCardId ? (
                           <div className="flex items-center gap-1.5 text-indigo-500 text-[10px] font-bold">
-                             <CreditCard size={12} /> {cards.find(c => c.id === tx.creditCardId)?.name || 'CartÃƒÂ£o'}
+                             <CreditCard size={12} /> {cards.find(c => c.id === tx.creditCardId)?.name || 'CartÃƒÆ’Ã‚Â£o'}
                           </div>
                         ) : (
                           <div className="flex items-center gap-1.5 text-emerald-500 text-[10px] font-bold">
@@ -217,8 +217,8 @@ const Transactions = () => {
               <form className="space-y-4" onSubmit={onSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-full">
-                    <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">O que vocÃƒÂª estÃƒÂ¡ registrando?</label>
-                    <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Ex: Mercado AtacadÃƒÂ£o" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required />
+                    <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">O que vocÃƒÆ’Ã‚Âª estÃƒÆ’Ã‚Â¡ registrando?</label>
+                    <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Ex: Mercado AtacadÃƒÆ’Ã‚Â£o" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required />
                   </div>
                   
                   <div>
@@ -228,14 +228,14 @@ const Transactions = () => {
 
                   <div>
                     <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">Categoria</label>
-                    <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Ex: AlimentaÃƒÂ§ÃƒÂ£o" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} required />
+                    <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Ex: AlimentaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} required />
                   </div>
 
                   <div>
                     <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">Tipo de Fluxo</label>
                     <select className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
-                      <option value="expense">Ã°Å¸â€œâ€° Despesa (SaÃƒÂ­da)</option>
-                      <option value="income">Ã°Å¸â€œË† Receita (Entrada)</option>
+                      <option value="expense">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Â° Despesa (SaÃƒÆ’Ã‚Â­da)</option>
+                      <option value="income">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‹â€  Receita (Entrada)</option>
                     </select>
                   </div>
 
@@ -248,16 +248,16 @@ const Transactions = () => {
                      <label className="text-xs font-semibold text-slate-500 ml-2 mb-3 block">Forma de Pagamento / Destino</label>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                           <label className="text-[10px] text-slate-400 uppercase font-bold ml-1 mb-1 block">Status de EfetivaÃƒÂ§ÃƒÂ£o</label>
+                           <label className="text-[10px] text-slate-400 uppercase font-bold ml-1 mb-1 block">Status de EfetivaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o</label>
                            <select className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" value={form.status} onChange={e => setForm({ ...form, status: e.target.value })}>
-                              <option value="paid">Ã¢Å“â€¦ JÃƒÂ¡ Pago/Recebido</option>
-                              <option value="pending">Ã¢ÂÂ³ Pendente/Agendado</option>
+                              <option value="paid">ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ JÃƒÆ’Ã‚Â¡ Pago/Recebido</option>
+                              <option value="pending">ÃƒÂ¢Ã‚ÂÃ‚Â³ Pendente/Agendado</option>
                            </select>
                         </div>
                         <div>
-                           <label className="text-[10px] text-slate-400 uppercase font-bold ml-1 mb-1 block">CartÃƒÂ£o de CrÃƒÂ©dito</label>
+                           <label className="text-[10px] text-slate-400 uppercase font-bold ml-1 mb-1 block">CartÃƒÆ’Ã‚Â£o de CrÃƒÆ’Ã‚Â©dito</label>
                            <select className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" value={form.creditCardId} onChange={e => setForm({ ...form, creditCardId: e.target.value })}>
-                              <option value="">NÃƒÂ£o usar CartÃƒÂ£o</option>
+                              <option value="">NÃƒÆ’Ã‚Â£o usar CartÃƒÆ’Ã‚Â£o</option>
                               {cards.map(card => (
                                 <option key={card.id} value={card.id}>{card.name}</option>
                               ))}

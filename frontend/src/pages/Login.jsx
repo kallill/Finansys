@@ -81,7 +81,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 ref={passwordRef}
                 className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all"
-                placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
+                placeholder="ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢"
                 required
               />
             </div>
@@ -106,7 +106,7 @@ const Login = () => {
 
         <div className="mt-8 text-center">
           <p className="text-slate-400 text-sm">
-            NÃƒÂ£o tem uma conta? <button onClick={() => navigate('/register')} className="text-red-400 hover:underline">Cadastre-se</button>
+            NÃƒÆ’Ã‚Â£o tem uma conta? <button onClick={() => navigate('/register')} className="text-red-400 hover:underline">Cadastre-se</button>
           </p>
         </div>
         

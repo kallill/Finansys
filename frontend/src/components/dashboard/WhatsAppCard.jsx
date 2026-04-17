@@ -25,7 +25,7 @@ const WhatsAppCard = () => {
   }, []);
 
   const handleDisconnect = async () => {
-    if (window.confirm('Deseja realmente desconectar seu WhatsApp do robÃƒÂ´?')) {
+    if (window.confirm('Deseja realmente desconectar seu WhatsApp do robÃƒÆ’Ã‚Â´?')) {
       await logoutWhatsApp();
       fetchStatus();
     }
@@ -44,7 +44,7 @@ const WhatsAppCard = () => {
 
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl shadow-sm relative overflow-hidden group">
-      {/* DecoraÃƒÂ§ÃƒÂ£o sutil */}
+      {/* DecoraÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o sutil */}
       <div className={`absolute top-0 right-0 w-32 h-32 ${isConnected ? 'bg-emerald-500/5' : 'bg-blue-500/5'} rounded-full -mr-10 -mt-10 transition-colors`}></div>
       
       <div className="flex items-center gap-4 mb-6 relative z-10">
@@ -52,11 +52,11 @@ const WhatsAppCard = () => {
           <MessageSquare size={24} />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-none mb-1">CÃƒÂ©rebro WhatsApp</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-none mb-1">CÃƒÆ’Ã‚Â©rebro WhatsApp</h3>
           <div className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-slate-300 dark:bg-slate-700'}`}></span>
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              {isConnected ? 'ConexÃƒÂ£o Ativa' : 'Desconectado'}
+              {isConnected ? 'ConexÃƒÆ’Ã‚Â£o Ativa' : 'Desconectado'}
             </span>
           </div>
         </div>
@@ -86,7 +86,7 @@ const WhatsAppCard = () => {
       ) : (
         <div className="relative z-10">
            <p className="text-xs text-slate-500 mb-5 leading-relaxed">
-             Conecte seu WhatsApp para registrar transaÃƒÂ§ÃƒÂµes usando sua voz ou texto natural com IA.
+             Conecte seu WhatsApp para registrar transaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Âµes usando sua voz ou texto natural com IA.
            </p>
            <Button 
              variant="primary" 

@@ -17,7 +17,7 @@ export const checkCrmAuth = (req: Request, res: Response, next: NextFunction): v
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ message: 'Token nÃƒÂ£o fornecido ou formato invÃƒÂ¡lido.' });
+    res.status(401).json({ message: 'Token nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o fornecido ou formato invÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lido.' });
     return;
   }
 
@@ -32,6 +32,6 @@ export const checkCrmAuth = (req: Request, res: Response, next: NextFunction): v
     req.admin = decoded;
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Token de Admin invÃƒÂ¡lido ou expirado.' });
+    res.status(401).json({ message: 'Token de Admin invÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lido ou expirado.' });
   }
 };

@@ -3,14 +3,14 @@ import { Transaction, LearnedPattern, CreditCard } from '../models';
 import { Sequelize, Op } from 'sequelize';
 import sequelize from '../config/database';
 
-// Declarando as funÃƒÂ§ÃƒÂµes (Ferramentas) para o Gemini
+// Declarando as funÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes (Ferramentas) para o Gemini
 const tool_consultar_fatura: FunctionDeclaration = {
   name: 'consultar_fatura',
-  description: 'Lista o saldo e os gastos consolidados da fatura de um determinado cartÃƒÂ£o de crÃƒÂ©dito.',
+  description: 'Lista o saldo e os gastos consolidados da fatura de um determinado cartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o de crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dito.',
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
-      cardName: { type: SchemaType.STRING, description: 'O nome do cartÃƒÂ£o de crÃƒÂ©dito (ex: Nubank)' }
+      cardName: { type: SchemaType.STRING, description: 'O nome do cartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o de crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dito (ex: Nubank)' }
     },
     required: ['cardName']
   },
@@ -18,37 +18,37 @@ const tool_consultar_fatura: FunctionDeclaration = {
 
 const tool_registrar_lancamento: FunctionDeclaration = {
   name: 'registrar_lancamento',
-  description: 'Registra uma nova transaÃƒÂ§ÃƒÂ£o financeira (receita ou despesa) no banco de dados.',
+  description: 'Registra uma nova transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o financeira (receita ou despesa) no banco de dados.',
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
       description: {
         type: SchemaType.STRING,
-        description: 'DescriÃƒÂ§ÃƒÂ£o curta da transaÃƒÂ§ÃƒÂ£o. Ex: "Mercado".',
+        description: 'DescriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o curta da transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o. Ex: "Mercado".',
       },
       amount: {
         type: SchemaType.NUMBER,
-        description: 'Valor numÃƒÂ©rico positivo da transaÃƒÂ§ÃƒÂ£o.',
+        description: 'Valor numÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©rico positivo da transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o.',
       },
       type: {
         type: SchemaType.STRING,
-        description: 'Tipo da transaÃƒÂ§ÃƒÂ£o. "income" (receita) ou "expense" (despesa).',
+        description: 'Tipo da transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o. "income" (receita) ou "expense" (despesa).',
       },
       category: {
         type: SchemaType.STRING,
-        description: 'A categoria do lanÃƒÂ§amento.',
+        description: 'A categoria do lanÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§amento.',
       },
       status: {
         type: SchemaType.STRING,
-        description: 'Status do pagamento. Use "pending" para contas a pagar/receber no futuro, e "paid" para contas jÃƒÂ¡ resolvidas de forma imediata.',
+        description: 'Status do pagamento. Use "pending" para contas a pagar/receber no futuro, e "paid" para contas jÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ resolvidas de forma imediata.',
       },
       dueDate: {
         type: SchemaType.STRING,
-        description: 'Data de vencimento ou do gasto no formato YYYY-MM-DD. Apenas ÃƒÂºtil se for uma data futura.',
+        description: 'Data de vencimento ou do gasto no formato YYYY-MM-DD. Apenas ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºtil se for uma data futura.',
       },
       creditCardName: {
         type: SchemaType.STRING,
-        description: 'Nome do CartÃƒÂ£o de CrÃƒÂ©dito (ex: Nubank, Itau), apenas se o usuÃƒÂ¡rio explicitar que pagou no cartÃƒÂ£o de crÃƒÂ©dito.',
+        description: 'Nome do CartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o de CrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dito (ex: Nubank, Itau), apenas se o usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio explicitar que pagou no cartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o de crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dito.',
       }
     },
     required: ['description', 'amount', 'type', 'category'],
@@ -57,13 +57,13 @@ const tool_registrar_lancamento: FunctionDeclaration = {
 
 const tool_consultar_saldo: FunctionDeclaration = {
   name: 'consultar_saldo',
-  description: 'Consulta o panorama financeiro do usuÃƒÂ¡rio: saldo atual, soma total de ganhos (receitas) e soma total gasta (despesas). Use para perguntas de totais gerais.',
+  description: 'Consulta o panorama financeiro do usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio: saldo atual, soma total de ganhos (receitas) e soma total gasta (despesas). Use para perguntas de totais gerais.',
   parameters: { type: SchemaType.OBJECT, properties: {} },
 };
 
 const tool_consultar_resumo_categoria: FunctionDeclaration = {
   name: 'consultar_resumo_categoria',
-  description: 'Consulta o total gasto na categoria no mÃƒÂªs atual.',
+  description: 'Consulta o total gasto na categoria no mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âªs atual.',
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
@@ -76,43 +76,43 @@ const tool_consultar_resumo_categoria: FunctionDeclaration = {
 
 const tool_consultar_extrato: FunctionDeclaration = {
   name: 'consultar_extrato',
-  description: 'Lista as transaÃƒÂ§ÃƒÂµes detalhadas (extrato) recentes do usuÃƒÂ¡rio.',
+  description: 'Lista as transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes detalhadas (extrato) recentes do usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio.',
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
-      limit: { type: SchemaType.NUMBER, description: 'NÃƒÂºmero de transaÃƒÂ§ÃƒÂµes para listar. PadrÃƒÂ£o 5.' },
-      type: { type: SchemaType.STRING, description: 'Filtro opcional. "income" para ver sÃƒÂ³ receitas, "expense" para sÃƒÂ³ despesas.' }
+      limit: { type: SchemaType.NUMBER, description: 'NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºmero de transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes para listar. PadrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o 5.' },
+      type: { type: SchemaType.STRING, description: 'Filtro opcional. "income" para ver sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³ receitas, "expense" para sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³ despesas.' }
     }
   },
 };
 
 const tool_consultar_panorama_gastos: FunctionDeclaration = {
   name: 'consultar_panorama_gastos',
-  description: 'Gera um resumo de quanto foi gasto em cada categoria nos ÃƒÂºltimos 30 dias. Use para dar dicas de economia e anÃƒÂ¡lise financeira.',
+  description: 'Gera um resumo de quanto foi gasto em cada categoria nos ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºltimos 30 dias. Use para dar dicas de economia e anÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lise financeira.',
   parameters: { type: SchemaType.OBJECT, properties: {} },
 };
 
 const tool_apagar_transacao: FunctionDeclaration = {
   name: 'apagar_transacao',
-  description: 'Procura a transaÃƒÂ§ÃƒÂ£o mais recente que bate com a descriÃƒÂ§ÃƒÂ£o e/ou valor fornecidos e a deleta, servindo como funÃƒÂ§ÃƒÂ£o de DESFAZER ou corrigir erro.',
+  description: 'Procura a transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o mais recente que bate com a descriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o e/ou valor fornecidos e a deleta, servindo como funÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o de DESFAZER ou corrigir erro.',
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
-      descriptionContains: { type: SchemaType.STRING, description: 'Parte da descriÃƒÂ§ÃƒÂ£o da transaÃƒÂ§ÃƒÂ£o que o usuÃƒÂ¡rio quer apagar (ex: "Mercado")' },
-      amountApprox: { type: SchemaType.NUMBER, description: 'Valor em formato de nÃƒÂºmero inteiro ou float da transaÃƒÂ§ÃƒÂ£o a ser apagada (ex: 50.50)' }
+      descriptionContains: { type: SchemaType.STRING, description: 'Parte da descriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o da transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o que o usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio quer apagar (ex: "Mercado")' },
+      amountApprox: { type: SchemaType.NUMBER, description: 'Valor em formato de nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºmero inteiro ou float da transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o a ser apagada (ex: 50.50)' }
     }
   },
 };
 
 const tool_editar_transacao: FunctionDeclaration = {
   name: 'editar_transacao',
-  description: 'Procura a transaÃƒÂ§ÃƒÂ£o mais recente pela descriÃƒÂ§ÃƒÂ£o e/ou valor, e altera seus dados pelos novos valores informados.',
+  description: 'Procura a transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o mais recente pela descriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o e/ou valor, e altera seus dados pelos novos valores informados.',
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
-      searchDescription: { type: SchemaType.STRING, description: 'Palavra-chave da transaÃƒÂ§ÃƒÂ£o que deseja procurar para editar' },
-      searchAmount: { type: SchemaType.NUMBER, description: 'Valor da transaÃƒÂ§ÃƒÂ£o antiga que se deseja procurar' },
-      newDescription: { type: SchemaType.STRING, description: 'A nova descriÃƒÂ§ÃƒÂ£o a ser aplicada' },
+      searchDescription: { type: SchemaType.STRING, description: 'Palavra-chave da transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o que deseja procurar para editar' },
+      searchAmount: { type: SchemaType.NUMBER, description: 'Valor da transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o antiga que se deseja procurar' },
+      newDescription: { type: SchemaType.STRING, description: 'A nova descriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o a ser aplicada' },
       newAmount: { type: SchemaType.NUMBER, description: 'O novo valor a ser aplicado' },
       newCategory: { type: SchemaType.STRING, description: 'A nova categoria a ser aplicada' },
       newType: { type: SchemaType.STRING, description: '"income" ou "expense" (apenas se for trocar o tipo)' }
@@ -135,8 +135,8 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
       let finalStatus = callArgs.status || 'paid';
       let finalDate = callArgs.dueDate ? new Date(callArgs.dueDate) : new Date();
 
-      // LÃƒÂ³gica de DetecÃƒÂ§ÃƒÂ£o de CartÃƒÂ£o
-      const possibleCardContext = (callArgs.creditCardName || (callArgs.description || "").toLowerCase().includes('cartÃƒÂ£o'));
+      // LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³gica de DetecÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o de CartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o
+      const possibleCardContext = (callArgs.creditCardName || (callArgs.description || "").toLowerCase().includes('cartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o'));
 
       if (possibleCardContext) {
          const searchName = callArgs.creditCardName;
@@ -147,7 +147,7 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
          }
 
          if (!card) {
-            // Se nÃƒÂ£o encontrou pelo nome ou o nome veio vazio (ex: "no cartÃƒÂ£o")
+            // Se nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o encontrou pelo nome ou o nome veio vazio (ex: "no cartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o")
             const allCards = await CreditCard.findAll({ where: { userId } });
             if (allCards.length === 1) {
                card = allCards[0];
@@ -155,14 +155,14 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
                const names = allCards.map(c => c.name).join(' ou ');
                return { 
                  status: "error", 
-                 message: `O usuÃƒÂ¡rio possui mÃƒÂºltiplos cartÃƒÂµes: ${names}. Por favor, pergunte em qual deles ele deseja realizar o lanÃƒÂ§amento.` 
+                 message: `O usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio possui mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºltiplos cartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes: ${names}. Por favor, pergunte em qual deles ele deseja realizar o lanÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§amento.` 
                };
             }
          }
 
          if (card) {
             creditCardId = card.id;
-            finalStatus = 'pending'; // Gastos no crÃƒÂ©dito rodam pra conta futura (Fatura)
+            finalStatus = 'pending'; // Gastos no crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dito rodam pra conta futura (Fatura)
          }
       }
 
@@ -174,11 +174,11 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
          status: finalStatus,
          creditCardId
       });
-      return { status: "success", message: creditCardId ? `TransaÃƒÂ§ÃƒÂ£o salva no cartÃƒÂ£o.` : "TransaÃƒÂ§ÃƒÂ£o salva.", transactionId: tx.id, statusFinal: finalStatus, usadoCartaoCredito: !!creditCardId };
+      return { status: "success", message: creditCardId ? `TransaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o salva no cartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o.` : "TransaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o salva.", transactionId: tx.id, statusFinal: finalStatus, usadoCartaoCredito: !!creditCardId };
     }
 
     if (callName === 'consultar_saldo') {
-      // Ignora pendentes e cartÃƒÂµes de crÃƒÂ©dito na conta principal! Dinheiro Real apenas.
+      // Ignora pendentes e cartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes de crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dito na conta principal! Dinheiro Real apenas.
       const transactions = await Transaction.findAll({ 
          where: { userId, status: 'paid', creditCardId: null } 
       });
@@ -190,7 +190,7 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
 
     if (callName === 'consultar_fatura') {
        const card = await CreditCard.findOne({ where: { userId, name: { [Op.iLike]: `%${callArgs.cardName}%` } } });
-       if (!card) return { error: `CartÃƒÂ£o de crÃƒÂ©dito da operadora ${callArgs.cardName} nÃƒÂ£o foi encontrado no sistema do usuÃƒÂ¡rio.` };
+       if (!card) return { error: `CartÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o de crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dito da operadora ${callArgs.cardName} nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o foi encontrado no sistema do usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio.` };
 
        const transactions = await Transaction.findAll({ where: { userId, creditCardId: card.id, status: 'pending' } });
        const totalFatura = transactions.reduce((acc, tx:any) => acc + Number(tx.amount), 0);
@@ -232,9 +232,9 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
 
       if (txToDelele) {
         await txToDelele.destroy();
-        return { status: "success", message: `A transaÃƒÂ§ÃƒÂ£o '${txToDelele.description}' de valor ${txToDelele.amount} foi excluÃƒÂ­da definitivamente.` };
+        return { status: "success", message: `A transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o '${txToDelele.description}' de valor ${txToDelele.amount} foi excluÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­da definitivamente.` };
       }
-      return { status: "error", message: "NÃƒÂ£o encontrei nenhuma transaÃƒÂ§ÃƒÂ£o recente parecida com essas caracterÃƒÂ­sticas para apagar." };
+      return { status: "error", message: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o encontrei nenhuma transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o recente parecida com essas caracterÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­sticas para apagar." };
     }
 
     if (callName === 'editar_transacao') {
@@ -256,9 +256,9 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
         if (callArgs.newType) txToEdit.type = callArgs.newType;
         
         await txToEdit.save();
-        return { status: "success", message: `TransaÃƒÂ§ÃƒÂ£o atualizada com sucesso para: ${txToEdit.description} - R$ ${txToEdit.amount} (${txToEdit.category})` };
+        return { status: "success", message: `TransaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o atualizada com sucesso para: ${txToEdit.description} - R$ ${txToEdit.amount} (${txToEdit.category})` };
       }
-      return { status: "error", message: "NÃƒÂ£o encontrei nenhuma transaÃƒÂ§ÃƒÂ£o recente parecida para editar." };
+      return { status: "error", message: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o encontrei nenhuma transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o recente parecida para editar." };
     }
 
     if (callName === 'consultar_panorama_gastos') {
@@ -282,25 +282,25 @@ const executeTools = async (callName: string, callArgs: any, userId: number) => 
       return { status: "success", resumoMensalPorCategoria: transactions };
     }
 
-    return { error: "Ferramenta nÃƒÂ£o reconhecida." };
+    return { error: "Ferramenta nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o reconhecida." };
   } catch (error: any) {
     return { error: error.message };
   }
 };
 
 /**
- * Helper para extrair dados financeiros (valor e descriÃƒÂ§ÃƒÂ£o) de uma frase localmente.
- * ÃƒÅ¡til para economizar chamadas de IA em frases com padrÃƒÂµes aprendidos.
+ * Helper para extrair dados financeiros (valor e descriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o) de uma frase localmente.
+ * ÃƒÆ’Ã†â€™Ãƒâ€¦Ã‚Â¡til para economizar chamadas de IA em frases com padrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes aprendidos.
  */
 const extractFinancialData = (phrase: string) => {
   const amountRegex = /(\d+[,.]\d+|\d+)/;
   const match = phrase.match(amountRegex);
   const amount = match ? parseFloat(match[0].replace(',', '.')) : null;
 
-  // DescriÃƒÂ§ÃƒÂ£o: Retira o valor e palavras de ligaÃƒÂ§ÃƒÂ£o comuns
+  // DescriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o: Retira o valor e palavras de ligaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o comuns
   let description = phrase
     .replace(amountRegex, '')
-    .replace(/gastei|paguei|recebi|lanÃƒÂ§ar|fui|no|na|de|do|da|com|por|reais|valor/gi, '')
+    .replace(/gastei|paguei|recebi|lanÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ar|fui|no|na|de|do|da|com|por|reais|valor/gi, '')
     .trim();
 
   // Capitaliza a primeira letra
@@ -312,14 +312,14 @@ const extractFinancialData = (phrase: string) => {
 export const processAIRequest = async (userMessage: string, userId: number) => {
   const cleanMessage = userMessage.toLowerCase().trim();
 
-  // Tier 1: Regex Burro Mas RÃƒÂ¡pido (Economiza Gemini em perguntas de saldo simples)
+  // Tier 1: Regex Burro Mas RÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡pido (Economiza Gemini em perguntas de saldo simples)
   if (['saldo', 'meu saldo', 'qual meu saldo', 'ver saldo'].includes(cleanMessage)) {
     const data = await executeTools('consultar_saldo', {}, userId);
     const money = Number(data.saldoAtualContaReal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    return `Ã¢Å¡Â¡ *CÃƒÂ¡lculo do Roteador Local:* Seu saldo geral (Conta Corrente) neste exato momento ÃƒÂ© de **${money}**!`;
+    return `ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¡ *CÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lculo do Roteador Local:* Seu saldo geral (Conta Corrente) neste exato momento ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© de **${money}**!`;
   }
 
-  // Tier 1.5: Busca Inteligente (Fuzzy) por PadrÃƒÂµes Aprendidos
+  // Tier 1.5: Busca Inteligente (Fuzzy) por PadrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes Aprendidos
   const learned = await LearnedPattern.findOne({ 
     where: { 
       phrase: { [Op.iLike]: `%${cleanMessage}%` } 
@@ -330,7 +330,7 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
     if (learned.intent === 'consultar_saldo') {
       const data = await executeTools('consultar_saldo', {}, userId);
       const money = Number(data.saldoAtualContaReal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-      return `Ã°Å¸Â¤â€“ *CÃƒÂ©rebro Local (Aprendido):* Seu saldo geral ÃƒÂ© de **${money}**!`;
+      return `ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚Â¤ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ *CÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©rebro Local (Aprendido):* Seu saldo geral ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© de **${money}**!`;
     }
 
     if (learned.intent === 'registrar_lancamento') {
@@ -342,26 +342,26 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
            type: 'expense', 
            status: 'paid' 
          }, userId);
-         return `Ã¢Å¡Â¡ *Script Local Orientado:* Lancei sua despesa de **R$ ${amount.toFixed(2)}** em **${description}**! (Processado localmente Ã°Å¸Å¡â‚¬)`;
+         return `ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¡ *Script Local Orientado:* Lancei sua despesa de **R$ ${amount.toFixed(2)}** em **${description}**! (Processado localmente ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬)`;
       }
     }
   }
 
-  // Tier 2: Acionando O CÃƒÂ©rebro Gigante (Google Gemini) se for algo novo ou complexo
+  // Tier 2: Acionando O CÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©rebro Gigante (Google Gemini) se for algo novo ou complexo
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY nÃƒÂ£o configurada no servidor (VPS).');
+  if (!apiKey) throw new Error('GEMINI_API_KEY nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o configurada no servidor (VPS).');
   
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ 
     model: "gemini-2.5-flash", 
     tools: tools,
-    systemInstruction: `VocÃƒÂª ÃƒÂ© uma IA Financeira Financeira. Responda em PortuguÃƒÂªs-BR para o WhatsApp. Formate valores como (R$ 1.500,00). 
+    systemInstruction: `VocÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âª ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© uma IA Financeira Financeira. Responda em PortuguÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âªs-BR para o WhatsApp. Formate valores como (R$ 1.500,00). 
     Sempre analise o JSON de resposta da ferramenta invocada para formatar humanamente o resultado.
     
     COMPORTAMENTO DE CONSULTOR FINANCEIRO:
-    - Se o usuÃƒÂ¡rio perguntar onde estÃƒÂ¡ gastando muito, use 'consultar_panorama_gastos'.
-    - Seja proativo: sugira economias se vir gastos altos em categorias nÃƒÂ£o essenciais (ex: AlimentaÃƒÂ§ÃƒÂ£o Fora, Lazer).
-    - Use emojis para tornar a conversa amigÃƒÂ¡vel mas profissional.`
+    - Se o usuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio perguntar onde estÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ gastando muito, use 'consultar_panorama_gastos'.
+    - Seja proativo: sugira economias se vir gastos altos em categorias nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o essenciais (ex: AlimentaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o Fora, Lazer).
+    - Use emojis para tornar a conversa amigÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡vel mas profissional.`
   });
 
   const chat = model.startChat();
@@ -373,14 +373,14 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
   if (functionCalls && functionCalls.length > 0) {
     const call = functionCalls[0];
     
-    // Auto-Aprendizado: O sistema salva a inteligÃƒÂªncia para a prÃƒÂ³xima vez
+    // Auto-Aprendizado: O sistema salva a inteligÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âªncia para a prÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³xima vez
     if (!learned) {
        await LearnedPattern.create({ 
          phrase: cleanMessage, 
          intent: call.name,
          params: call.args // Guardamos os argumentos para entender o contexto do aprendizado
        });
-       console.log(`[AI] Novo padrÃƒÂ£o aprendido localmente: "${cleanMessage}" -> ${call.name}`);
+       console.log(`[AI] Novo padrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o aprendido localmente: "${cleanMessage}" -> ${call.name}`);
     }
     
     const toolResponseData = await executeTools(call.name, call.args, userId);
@@ -396,7 +396,7 @@ export const processAIRequest = async (userMessage: string, userId: number) => {
 };
 
 /**
- * MÃƒÂ¡gica do Gemini para categorizar transaÃƒÂ§ÃƒÂµes bancÃƒÂ¡rias do Open Finance
+ * MÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡gica do Gemini para categorizar transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes bancÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rias do Open Finance
  */
 export const categorizeDescription = async (description: string): Promise<{ category: string, type: 'income' | 'expense' }> => {
   try {
@@ -406,17 +406,17 @@ export const categorizeDescription = async (description: string): Promise<{ cate
      const genAI = new GoogleGenerativeAI(apiKey);
      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-     const prompt = `Analise a seguinte descriÃƒÂ§ÃƒÂ£o de transaÃƒÂ§ÃƒÂ£o bancÃƒÂ¡ria: "${description}". 
+     const prompt = `Analise a seguinte descriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o de transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o bancÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ria: "${description}". 
      Responda APENAS um JSON no formato: {"category": "NomeDaCategoria", "type": "income" ou "expense"}.
      Exemplo: "UBER TRIP" -> {"category": "Transporte", "type": "expense"}.
-     "SALARIO" -> {"category": "SalÃƒÂ¡rio", "type": "income"}.`;
+     "SALARIO" -> {"category": "SalÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio", "type": "income"}.`;
 
      const result = await model.generateContent(prompt);
      const text = result.response.text();
      const cleanJson = text.replace(/```json|```/g, '').trim();
      return JSON.parse(cleanJson);
   } catch (error) {
-     console.error("Erro na categorizaÃƒÂ§ÃƒÂ£o inteligente:", error);
+     console.error("Erro na categorizaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o inteligente:", error);
      return { category: 'Outros', type: 'expense' };
   }
 };

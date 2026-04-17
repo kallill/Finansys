@@ -11,10 +11,10 @@ const PlaceholderPage = ({ title }) => {
           <Construction size={80} className="text-red-500 relative z-10 animate-bounce" />
         </div>
         <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-white">
-          MÃƒÂ³dulo em Desenvolvimento
+          MÃƒÆ’Ã‚Â³dulo em Desenvolvimento
         </h2>
         <p className="text-gray-400 max-w-md text-lg leading-relaxed">
-          O mÃƒÂ³dulo de <span className="text-red-500 font-semibold">{title}</span> estÃƒÂ¡ sendo preparado para oferecer a melhor experiÃƒÂªncia operacional da Cerasus.
+          O mÃƒÆ’Ã‚Â³dulo de <span className="text-red-500 font-semibold">{title}</span> estÃƒÆ’Ã‚Â¡ sendo preparado para oferecer a melhor experiÃƒÆ’Ã‚Âªncia operacional da Cerasus.
         </p>
         <div className="mt-8 flex gap-4">
           <div className="h-1 w-12 bg-gray-800 rounded-full"></div>

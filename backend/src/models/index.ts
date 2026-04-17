@@ -10,9 +10,9 @@ import CRMAssinatura from './CRMAssinatura';
 import CRMOrdemServico from './CRMOrdemServico';
 import CRMAnexoOS from './CRMAnexoOS';
 
-// NOTA: Relacionamentos User/Transaction/CreditCard/LearnedPattern jÃƒÂ¡ definidos
-// dentro dos prÃƒÂ³prios arquivos de Model (Transaction.ts, CreditCard.ts, etc.).
-// NÃƒÆ’O redefinir aqui para evitar SequelizeAssociationError de alias duplicado.
+// NOTA: Relacionamentos User/Transaction/CreditCard/LearnedPattern ja definidos
+// dentro dos proprios arquivos de Model (Transaction.ts, CreditCard.ts, etc.).
+// NAO redefinir aqui para evitar SequelizeAssociationError de alias duplicado.
 
 // === Relacionamentos CRM ===
 

@@ -7,8 +7,7 @@ export const getStats = async (req: Request, res: Response): Promise<void> => {
     // 1. Contagem de Clientes Ativos
     const activeClients = await CRMCliente.count();
 
-    // 2. CÃƒÂ¡lculo do MRR (Soma dos valores dos planos de todas as assinaturas ativas)
-    // Para simplificar, vamos buscar as assinaturas e incluir o valor do plano
+    // 2. Calculo do MRR (Soma dos valores dos planos de todas as assinaturas ativas)
     const assinaturas = await CRMAssinatura.findAll({
       include: [{ model: CRMPlano, as: 'plano' }]
     });
@@ -17,24 +16,23 @@ export const getStats = async (req: Request, res: Response): Promise<void> => {
       return acc + (Number(current.plano?.valor) || 0);
     }, 0);
 
-    // 3. CÃƒÂ¡lculo de InadimplÃƒÂªncia (Soma dos valores das assinaturas com status 'Atrasado')
+    // 3. Calculo de Inadimplencia (Soma dos valores das assinaturas com status 'Atrasado')
     const totalInadimplencia = assinaturas
       .filter((s: any) => s.status_pagamento === 'Atrasado')
       .reduce((acc, current: any) => {
         return acc + (Number(current.plano?.valor) || 0);
       }, 0);
 
-    // 4. Ordens de ServiÃƒÂ§o Abertas (Status != 'ConcluÃƒÂ­da')
+    // 4. Ordens de Servico Abertas (Status != 'Concluida')
     const openOS = await CRMOrdemServico.count({
       where: {
         status: {
-          [Op.ne]: 'ConcluÃƒÂ­da'
+          [Op.ne]: 'Concluida'
         }
       }
     });
 
-    // 5. Dados para o grÃƒÂ¡fico (Mockando histÃƒÂ³rico baseado no MRR atual para visualizaÃƒÂ§ÃƒÂ£o)
-    // Em um sistema real, terÃƒÂ­amos uma tabela de histÃƒÂ³rico mensal
+    // 5. Dados para o grafico (Mockando historico baseado no MRR atual para visualizacao)
     const mrrHistory = [
       { name: 'Jan', mrr: totalMRR * 0.8 },
       { name: 'Fev', mrr: totalMRR * 0.85 },
@@ -54,7 +52,7 @@ export const getStats = async (req: Request, res: Response): Promise<void> => {
     });
 
   } catch (error) {
-    console.error('Erro ao buscar estatÃƒÂ­sticas do dashboard:', error);
+    console.error('Erro ao buscar estatisticas do dashboard:', error);
     res.status(500).json({ success: false, message: 'Erro ao processar dados do dashboard.' });
   }
 };

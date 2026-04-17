@@ -9,7 +9,7 @@ export const importStatement = async (req: Request, res: Response) => {
         const userId = (req as any).user.id;
 
         if (!file) {
-            return res.status(400).json({ message: 'Arquivo nÃƒÂ£o enviado.' });
+            return res.status(400).json({ message: 'Arquivo nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o enviado.' });
         }
 
         const rawTransactions = await parseBankFile(file.buffer, file.originalname, bank || 'generic');
@@ -20,8 +20,8 @@ export const importStatement = async (req: Request, res: Response) => {
             transactions: enrichedTransactions 
         });
     } catch (error: any) {
-        console.error('Erro na importaÃƒÂ§ÃƒÂ£o:', error);
-        res.status(500).json({ message: 'Falha ao processar o extrato bancÃƒÂ¡rio.', error: error.message });
+        console.error('Erro na importaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o:', error);
+        res.status(500).json({ message: 'Falha ao processar o extrato bancÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡rio.', error: error.message });
     }
 };
 
@@ -31,7 +31,7 @@ export const confirmImport = async (req: Request, res: Response) => {
         const userId = (req as any).user.id;
 
         if (!Array.isArray(transactions)) {
-            return res.status(400).json({ message: 'Formato de dados invÃƒÂ¡lido.' });
+            return res.status(400).json({ message: 'Formato de dados invÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lido.' });
         }
 
         const createdTransactions = await Promise.all(transactions.map(t => {
@@ -43,10 +43,10 @@ export const confirmImport = async (req: Request, res: Response) => {
         }));
 
         res.json({ 
-            message: `${createdTransactions.length} transaÃƒÂ§ÃƒÂµes importadas com sucesso!`,
+            message: `${createdTransactions.length} transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes importadas com sucesso!`,
             count: createdTransactions.length 
         });
     } catch (error: any) {
-        res.status(500).json({ message: 'Erro ao salvar transaÃƒÂ§ÃƒÂµes importadas.', error: error.message });
+        res.status(500).json({ message: 'Erro ao salvar transaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes importadas.', error: error.message });
     }
 };

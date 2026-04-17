@@ -20,7 +20,7 @@ export const parseBankFile = async (buffer: Buffer, filename: string, bank: stri
         return parseCSV(content, bank);
     }
     
-    throw new Error('Formato de arquivo nÃƒÂ£o suportado (.csv ou .ofx apenas)');
+    throw new Error('Formato de arquivo nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o suportado (.csv ou .ofx apenas)');
 };
 
 const parseOFX = async (content: string): Promise<ParsedTransaction[]> => {
@@ -41,7 +41,7 @@ const parseOFX = async (content: string): Promise<ParsedTransaction[]> => {
 const parseCSV = (content: string, bank: string): ParsedTransaction[] => {
     const rows = csv.parse(content);
     
-    // PadrÃƒÂ£o Nubank: data, valor, identificador, descriÃƒÂ§ÃƒÂ£o
+    // PadrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o Nubank: data, valor, identificador, descriÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o
     if (bank.toLowerCase() === 'nubank') {
         return rows.slice(1).map(row => {
             const amount = parseFloat(row[1]);
@@ -54,7 +54,7 @@ const parseCSV = (content: string, bank: string): ParsedTransaction[] => {
         });
     }
 
-    // PadrÃƒÂ£o GenÃƒÂ©rico para outros bancos se nÃƒÂ£o reconhecido
+    // PadrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o GenÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©rico para outros bancos se nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o reconhecido
     return rows.slice(1).map(row => {
         const amount = parseFloat(row[2] || row[1]);
         return {

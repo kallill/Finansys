@@ -47,14 +47,14 @@ const AdminLayout = ({ children, title }) => {
             <NavLink to="/admin/dashboard" icon={LayoutDashboard}>Dashboard</NavLink>
             <NavLink to="/admin/clients" icon={Users}>Clientes & Prospects</NavLink>
             <NavLink to="/admin/plans" icon={Package}>Planos e Contratos</NavLink>
-            <NavLink to="/admin/os" icon={Briefcase}>Ordens de ServiÃƒÂ§o</NavLink>
+            <NavLink to="/admin/os" icon={Briefcase}>Ordens de ServiÃƒÆ’Ã‚Â§o</NavLink>
             <NavLink to="/admin/financial" icon={DollarSign}>Financeiro</NavLink>
             
-            {/* Somente visÃƒÂ­vel para Admin */}
+            {/* Somente visÃƒÆ’Ã‚Â­vel para Admin */}
             {admin?.nivel_acesso === 'Admin' && (
               <div className="pt-4 mt-4 border-t border-gray-800/50">
                 <p className="px-4 text-[10px] text-gray-500 uppercase font-bold mb-2 tracking-widest">Sistema</p>
-                <NavLink to="/admin/users" icon={UserCog}>GestÃƒÂ£o de UsuÃƒÂ¡rios</NavLink>
+                <NavLink to="/admin/users" icon={UserCog}>GestÃƒÆ’Ã‚Â£o de UsuÃƒÆ’Ã‚Â¡rios</NavLink>
               </div>
             )}
           </nav>
@@ -91,7 +91,7 @@ const AdminLayout = ({ children, title }) => {
             <Link 
               to="/admin/profile" 
               className="p-2 text-gray-400 hover:text-red-500 rounded-full hover:bg-gray-800 transition-all"
-              title="ConfiguraÃƒÂ§ÃƒÂµes de Perfil"
+              title="ConfiguraÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Âµes de Perfil"
             >
               <Settings size={20} />
             </Link>

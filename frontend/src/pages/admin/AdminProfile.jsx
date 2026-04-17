@@ -22,7 +22,7 @@ const AdminProfile = () => {
     setSuccess('');
 
     if (formData.password && formData.password !== formData.confirmPassword) {
-      setError('As senhas nÃƒÂ£o coincidem.');
+      setError('As senhas nÃƒÆ’Ã‚Â£o coincidem.');
       return;
     }
 
@@ -60,7 +60,7 @@ const AdminProfile = () => {
                 <h3 className="text-2xl font-bold text-white">{currentAdmin.nome}</h3>
                 <p className="text-gray-400 font-medium flex items-center gap-2 mt-1">
                   <ShieldCheck size={16} className="text-red-500" />
-                  NÃƒÂ­vel {currentAdmin.nivel_acesso} Cerasus
+                  NÃƒÆ’Ã‚Â­vel {currentAdmin.nivel_acesso} Cerasus
                 </p>
                 <p className="text-xs text-gray-500 mt-1 italic">{currentAdmin.email}</p>
               </div>
@@ -84,7 +84,7 @@ const AdminProfile = () => {
 
             <div className="space-y-4">
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-400 ml-1">Nome de ExibiÃƒÂ§ÃƒÂ£o</label>
+                <label className="text-sm font-medium text-gray-400 ml-1">Nome de ExibiÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                   <input 
@@ -138,7 +138,7 @@ const AdminProfile = () => {
                 {loading ? 'Salvando...' : 'Atualizar Perfil'}
               </button>
               <p className="text-center text-xs text-gray-500 mt-4 italic">
-                Sua sessÃƒÂ£o permanecerÃƒÂ¡ ativa apÃƒÂ³s a atualizaÃƒÂ§ÃƒÂ£o do nome. Se alterar a senha, recomenda-se realizar um novo login.
+                Sua sessÃƒÆ’Ã‚Â£o permanecerÃƒÆ’Ã‚Â¡ ativa apÃƒÆ’Ã‚Â³s a atualizaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o do nome. Se alterar a senha, recomenda-se realizar um novo login.
               </p>
             </div>
           </form>

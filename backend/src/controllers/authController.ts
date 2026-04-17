@@ -31,11 +31,11 @@ export const register = async (req: Request, res: Response) => {
       verificationToken
     });
 
-    // Tenta enviar email de verificaÃƒÂ§ÃƒÂ£o (nÃƒÂ£o-bloqueante: se falhar, conta ÃƒÂ© criada assim mesmo)
+    // Tenta enviar email de verificaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o (nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o-bloqueante: se falhar, conta ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© criada assim mesmo)
     try {
       await sendVerificationEmail(email, verificationToken);
     } catch (emailError) {
-      console.warn('Aviso: falha ao enviar email de verificaÃƒÂ§ÃƒÂ£o (conta criada mesmo assim):', emailError);
+      console.warn('Aviso: falha ao enviar email de verificaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o (conta criada mesmo assim):', emailError);
     }
 
     // We can choose to login immediately or ask for verification first

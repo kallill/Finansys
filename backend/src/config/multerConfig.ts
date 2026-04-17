@@ -2,7 +2,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-// Crie a pasta se nÃƒÂ£o existir (apontando para uma pasta que Nginx possa expor depois, ex: public_html/uploads)
+// Crie a pasta se nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o existir (apontando para uma pasta que Nginx possa expor depois, ex: public_html/uploads)
 const uploadDir = path.resolve(__dirname, '../../../../public_html/uploads/os');
 
 if (!fs.existsSync(uploadDir)) {
@@ -24,7 +24,7 @@ const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCa
   if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
     cb(null, true);
   } else {
-    cb(new Error('Formato de arquivo invÃƒÂ¡lido. Apenas imagens e PDFs sÃƒÂ£o permitidos.'));
+    cb(new Error('Formato de arquivo invÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lido. Apenas imagens e PDFs sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o permitidos.'));
   }
 };
 
