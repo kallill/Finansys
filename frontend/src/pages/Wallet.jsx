@@ -32,7 +32,7 @@ const WalletPage = () => {
           <h1 className="text-2xl font-bold flex items-center gap-2"><WalletIcon /> Minha Carteira</h1>
           <div className="flex gap-3">
             <Button variant="secondary" onClick={() => navigate('/dashboard')}>Voltar</Button>
-            <Button variant="primary" onClick={() => navigate('/transactions')}><DollarSign /> Nova TransaÃ§Ã£o</Button>
+            <Button variant="primary" onClick={() => navigate('/transactions')}><DollarSign /> Nova TransaÃƒÂ§ÃƒÂ£o</Button>
           </div>
         </div>
 
@@ -42,18 +42,18 @@ const WalletPage = () => {
             <p className="text-2xl font-bold">R$ {Number(summary.totals.balance).toFixed(2)}</p>
           </div>
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
-            <p className="text-sm text-slate-500">Receitas (MÃªs)</p>
+            <p className="text-sm text-slate-500">Receitas (MÃƒÂªs)</p>
             <p className="text-2xl font-bold text-emerald-600">R$ {Number(summary.totals.income).toFixed(2)}</p>
           </div>
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
-            <p className="text-sm text-slate-500">Despesas (MÃªs)</p>
+            <p className="text-sm text-slate-500">Despesas (MÃƒÂªs)</p>
             <p className="text-2xl font-bold text-rose-600">R$ {Number(summary.totals.expense).toFixed(2)}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 lg:col-span-1">
-            <h2 className="font-semibold mb-4">DistribuiÃ§Ã£o por Categoria</h2>
+            <h2 className="font-semibold mb-4">DistribuiÃƒÂ§ÃƒÂ£o por Categoria</h2>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -66,7 +66,7 @@ const WalletPage = () => {
             </div>
           </div>
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 lg:col-span-2">
-            <h2 className="font-semibold mb-4">Fluxo nos Ãšltimos Meses</h2>
+            <h2 className="font-semibold mb-4">Fluxo nos ÃƒÅ¡ltimos Meses</h2>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={series}>

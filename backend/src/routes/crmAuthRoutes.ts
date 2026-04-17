@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/login', loginAdmin);
 
-// Rotas protegidas por autenticaÃ§Ã£o de Admin
+// Rotas protegidas por autenticaÃƒÂ§ÃƒÂ£o de Admin
 router.get('/me', checkCrmAuth, (req, res) => {
   res.json({ success: true, admin: req.admin });
 });

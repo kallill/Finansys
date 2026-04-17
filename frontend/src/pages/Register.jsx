@@ -36,7 +36,7 @@ const Register = () => {
           </div>
           <h2 className="text-2xl font-bold text-white mb-4">Verifique seu Email</h2>
           <p className="text-slate-400 mb-8">
-            Enviamos um link de confirmaÃ§Ã£o para <strong>{formData.email}</strong>. 
+            Enviamos um link de confirmaÃƒÂ§ÃƒÂ£o para <strong>{formData.email}</strong>. 
             Por favor, clique no link para ativar sua conta.
           </p>
           <Button onClick={() => navigate('/login')} variant="outline" className="w-full">
@@ -59,7 +59,7 @@ const Register = () => {
             <Logo />
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">Crie sua conta</h2>
-          <p className="text-slate-400">Comece a gerenciar suas finanÃ§as hoje.</p>
+          <p className="text-slate-400">Comece a gerenciar suas finanÃƒÂ§as hoje.</p>
         </div>
 
         {error && (
@@ -108,7 +108,7 @@ const Register = () => {
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
                 required
                 minLength={6}
               />
@@ -119,14 +119,14 @@ const Register = () => {
             {loading ? (
               <span className="animate-pulse">Criando conta...</span>
             ) : (
-              <>Criar Conta GrÃ¡tis <ArrowRight size={18} /></>
+              <>Criar Conta GrÃƒÂ¡tis <ArrowRight size={18} /></>
             )}
           </Button>
         </form>
 
         <div className="mt-8 text-center">
           <p className="text-slate-400 text-sm">
-            JÃ¡ tem uma conta? <button onClick={() => navigate('/login')} className="text-emerald-400 hover:underline">Fazer Login</button>
+            JÃƒÂ¡ tem uma conta? <button onClick={() => navigate('/login')} className="text-emerald-400 hover:underline">Fazer Login</button>
           </p>
         </div>
         

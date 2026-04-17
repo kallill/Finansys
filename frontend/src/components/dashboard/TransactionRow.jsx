@@ -11,11 +11,11 @@ const TransactionRow = ({ name, date, amount, type, category, isCredit, cardName
         <p className="font-semibold text-slate-900 dark:text-white line-clamp-1">{name}</p>
         <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
            <span>{new Date(date).toLocaleDateString('pt-BR')}</span>
-           <span>â€¢</span>
+           <span>Ã¢â‚¬Â¢</span>
            <span>{category}</span>
            {isCredit && (
               <span className="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-500 text-[9px] font-bold uppercase tracking-wider">
-                {cardName || 'CartÃ£o'}
+                {cardName || 'CartÃƒÂ£o'}
               </span>
            )}
         </div>

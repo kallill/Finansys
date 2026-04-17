@@ -14,10 +14,10 @@ const BankImportComponent = ({ onComplete }) => {
     const [message, setMessage] = useState(null);
 
     const banks = [
-        { id: 'nubank', name: 'Nubank', logo: 'ðŸŸ£', format: 'CSV', tutorial: 'App > Perfil > Configurar > Exportar extrato CSV' },
-        { id: 'itau', name: 'ItaÃº', logo: 'ðŸŸ ', format: 'OFX/CSV', tutorial: 'Internet Banking > Extrato > Salvar em OFX (Money)' },
-        { id: 'inter', name: 'Inter', logo: 'ðŸŸ ', format: 'OFX', tutorial: 'Internet Banking > Conta Corrente > Extrato > Exportar OFX' },
-        { id: 'santander', name: 'Santander', logo: 'ðŸ”´', format: 'OFX/CSV', tutorial: 'Internet Banking > Conta Corrente > Extrato > Exportar' },
+        { id: 'nubank', name: 'Nubank', logo: 'Ã°Å¸Å¸Â£', format: 'CSV', tutorial: 'App > Perfil > Configurar > Exportar extrato CSV' },
+        { id: 'itau', name: 'ItaÃƒÂº', logo: 'Ã°Å¸Å¸Â ', format: 'OFX/CSV', tutorial: 'Internet Banking > Extrato > Salvar em OFX (Money)' },
+        { id: 'inter', name: 'Inter', logo: 'Ã°Å¸Å¸Â ', format: 'OFX', tutorial: 'Internet Banking > Conta Corrente > Extrato > Exportar OFX' },
+        { id: 'santander', name: 'Santander', logo: 'Ã°Å¸â€Â´', format: 'OFX/CSV', tutorial: 'Internet Banking > Conta Corrente > Extrato > Exportar' },
     ];
 
     const handleFileUpload = async (e) => {
@@ -45,10 +45,10 @@ const BankImportComponent = ({ onComplete }) => {
         setLoading(true);
         try {
             await confirmBankImport(preview);
-            setMessage({ type: 'success', text: 'ImportaÃ§Ã£o concluÃ­da com sucesso!' });
+            setMessage({ type: 'success', text: 'ImportaÃƒÂ§ÃƒÂ£o concluÃƒÂ­da com sucesso!' });
             if (onComplete) setTimeout(onComplete, 2000);
         } catch (err) {
-            setMessage({ type: 'error', text: 'Erro ao salvar transaÃ§Ãµes.' });
+            setMessage({ type: 'error', text: 'Erro ao salvar transaÃƒÂ§ÃƒÂµes.' });
         } finally {
             setLoading(false);
         }
@@ -128,7 +128,7 @@ const BankImportComponent = ({ onComplete }) => {
                                 </div>
                                 <input type="file" className="hidden" accept=".csv,.ofx" onChange={handleFileUpload} />
                             </label>
-                            <button onClick={() => setStep(1)} className="mt-4 text-xs text-slate-500 hover:text-emerald-500 underline text-center w-full">Voltar para seleÃ§Ã£o de banco</button>
+                            <button onClick={() => setStep(1)} className="mt-4 text-xs text-slate-500 hover:text-emerald-500 underline text-center w-full">Voltar para seleÃƒÂ§ÃƒÂ£o de banco</button>
                         </div>
                     </div>
                 </div>
@@ -140,7 +140,7 @@ const BankImportComponent = ({ onComplete }) => {
                     <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                         <h3 className="font-bold flex items-center gap-2">
                             <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                            RevisÃ£o da IA Finansys
+                            RevisÃƒÂ£o da IA Finansys
                         </h3>
                         <button onClick={() => setStep(2)} className="text-slate-500 text-sm hover:underline">Trocar arquivo</button>
                     </div>
@@ -150,7 +150,7 @@ const BankImportComponent = ({ onComplete }) => {
                             <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 text-xs uppercase sticky top-0 z-10">
                                 <tr>
                                     <th className="px-6 py-4 font-bold">Data</th>
-                                    <th className="px-6 py-4 font-bold">DescriÃ§Ã£o</th>
+                                    <th className="px-6 py-4 font-bold">DescriÃƒÂ§ÃƒÂ£o</th>
                                     <th className="px-6 py-4 font-bold">Categoria (IA)</th>
                                     <th className="px-6 py-4 font-bold text-right">Valor</th>
                                 </tr>
@@ -180,7 +180,7 @@ const BankImportComponent = ({ onComplete }) => {
                             disabled={loading}
                             className="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2"
                         >
-                            {loading ? 'Processando...' : 'Confirmar ImportaÃ§Ã£o'}
+                            {loading ? 'Processando...' : 'Confirmar ImportaÃƒÂ§ÃƒÂ£o'}
                             <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>

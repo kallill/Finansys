@@ -13,7 +13,7 @@ const api = axios.create({
 
 export const whatsappService = {
   /**
-   * Verifica o status de uma instÃ¢ncia
+   * Verifica o status de uma instÃƒÂ¢ncia
    */
   async getStatus(instanceName: string) {
     try {
@@ -36,7 +36,7 @@ export const whatsappService = {
   },
 
   /**
-   * Cria uma nova instÃ¢ncia se nÃ£o existir
+   * Cria uma nova instÃƒÂ¢ncia se nÃƒÂ£o existir
    */
   async createInstance(instanceName: string) {
     const integrations = ["WHATSAPP-BAILEYS", "baileys", "whatsapp-baileys"];
@@ -44,7 +44,7 @@ export const whatsappService = {
 
     for (const integration of integrations) {
       try {
-        console.log(`[WhatsApp] Tentando criar instÃ¢ncia ${instanceName} com integraÃ§Ã£o: ${integration}`);
+        console.log(`[WhatsApp] Tentando criar instÃƒÂ¢ncia ${instanceName} com integraÃƒÂ§ÃƒÂ£o: ${integration}`);
         const response = await api.post('/instance/create', {
           instanceName,
           qrcode: true,
@@ -56,7 +56,7 @@ export const whatsappService = {
         if (error.response?.status === 403 || lastError?.message?.includes('already exists')) {
           return { message: 'Instance already exists' };
         }
-        // Se for erro de integraÃ§Ã£o, tenta a prÃ³xima
+        // Se for erro de integraÃƒÂ§ÃƒÂ£o, tenta a prÃƒÂ³xima
         if (lastError?.message?.includes('integration')) {
           continue;
         }
@@ -64,7 +64,7 @@ export const whatsappService = {
       }
     }
     
-    // Se chegou aqui, tenta sem o campo integration (Ãºltimo recurso)
+    // Se chegou aqui, tenta sem o campo integration (ÃƒÂºltimo recurso)
     try {
       const response = await api.post('/instance/create', { instanceName, qrcode: true });
       return response.data;
@@ -75,10 +75,10 @@ export const whatsappService = {
   },
 
   /**
-   * ObtÃ©m o QR Code para pareamento
+   * ObtÃƒÂ©m o QR Code para pareamento
    */
   async getQRCode(instanceName: string) {
-    // Verifica status antes para evitar erro 500 se jÃ¡ estiver conectado
+    // Verifica status antes para evitar erro 500 se jÃƒÂ¡ estiver conectado
     try {
       const status = await this.getStatus(instanceName);
       if (status.instance?.state === 'open') {
@@ -88,7 +88,7 @@ export const whatsappService = {
       // Ignora erro de status e tenta criar/conectar
     }
 
-    // Garante que a instÃ¢ncia existe
+    // Garante que a instÃƒÂ¢ncia existe
     await this.createInstance(instanceName);
     
     // Busca o QR Code
@@ -97,7 +97,7 @@ export const whatsappService = {
   },
 
   /**
-   * Configura a Webhook da instÃ¢ncia para o n8n
+   * Configura a Webhook da instÃƒÂ¢ncia para o n8n
    */
   async setWebhook(instanceName: string, webhookUrl: string) {
     try {
@@ -118,7 +118,7 @@ export const whatsappService = {
   },
 
   /**
-   * Encerra a sessÃ£o
+   * Encerra a sessÃƒÂ£o
    */
   async logout(instanceName: string) {
     try {

@@ -13,7 +13,7 @@ router.post('/', authMiddleware, createTransaction);
 router.put('/:id', authMiddleware, updateTransaction);
 router.delete('/:id', authMiddleware, deleteTransaction);
 
-// Rotas de ImportaÃ§Ã£o
+// Rotas de ImportaÃƒÂ§ÃƒÂ£o
 router.post('/import', [authMiddleware, upload.single('file')], importStatement);
 router.post('/confirm-import', authMiddleware, confirmImport);
 

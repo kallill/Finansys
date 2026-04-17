@@ -20,7 +20,7 @@ export const listTransactions = async (req: AuthRequest, res: Response) => {
   } catch (error: any) {
     console.error('Error fetching transactions (Check DB columns):', error);
     // Return empty list instead of 500 if possible, to keep the UI alive
-    res.status(200).json({ transactions: [], error: 'Algumas funÃ§Ãµes podem estar indisponÃ­veis durante a migraÃ§Ã£o' });
+    res.status(200).json({ transactions: [], error: 'Algumas funÃƒÂ§ÃƒÂµes podem estar indisponÃƒÂ­veis durante a migraÃƒÂ§ÃƒÂ£o' });
   }
 };
 

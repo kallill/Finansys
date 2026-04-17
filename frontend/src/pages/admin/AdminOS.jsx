@@ -6,8 +6,8 @@ import api from '../../services/api';
 // Fake Data for visual representation currently. 
 // In production, this would be fetched via `useEffect` from `/api/crm/os`.
 const mockOSData = [
-  { id: 1, cliente: 'Agrobusiness Corp', desc: 'InstalaÃ§Ã£o de Servidores', status: 'Em Andamento', data: '16/04/2026', anexos: [] },
-  { id: 2, cliente: 'Tech Startups SA', desc: 'Consultoria Cloud', status: 'ConcluÃ­da', data: '12/04/2026', anexos: ['https://cerasus.com.br/uploads/os/fake1.jpg'] },
+  { id: 1, cliente: 'Agrobusiness Corp', desc: 'InstalaÃƒÂ§ÃƒÂ£o de Servidores', status: 'Em Andamento', data: '16/04/2026', anexos: [] },
+  { id: 2, cliente: 'Tech Startups SA', desc: 'Consultoria Cloud', status: 'ConcluÃƒÂ­da', data: '12/04/2026', anexos: ['https://cerasus.com.br/uploads/os/fake1.jpg'] },
 ];
 
 const AdminOS = () => {
@@ -37,7 +37,7 @@ const AdminOS = () => {
       //   headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${localStorage.getItem('crm_token')}` }
       // });
       
-      // SimulaÃ§Ã£o para UX
+      // SimulaÃƒÂ§ÃƒÂ£o para UX
       setTimeout(() => {
         const dummyUrl = URL.createObjectURL(file);
         const updatedOrdens = ordens.map(o => {
@@ -59,7 +59,7 @@ const AdminOS = () => {
   };
 
   return (
-    <AdminLayout title="GestÃ£o de Ordens de ServiÃ§o (OS)">
+    <AdminLayout title="GestÃƒÂ£o de Ordens de ServiÃƒÂ§o (OS)">
       
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl text-white font-medium">Ordens Abertas</h3>
@@ -74,10 +74,10 @@ const AdminOS = () => {
           <thead className="bg-gray-800/50 text-gray-300 font-medium">
             <tr>
               <th className="px-6 py-4">ID / Cliente</th>
-              <th className="px-6 py-4">DescriÃ§Ã£o do ServiÃ§o</th>
+              <th className="px-6 py-4">DescriÃƒÂ§ÃƒÂ£o do ServiÃƒÂ§o</th>
               <th className="px-6 py-4">Status</th>
               <th className="px-6 py-4">Data</th>
-              <th className="px-6 py-4 text-right">AÃ§Ã£o</th>
+              <th className="px-6 py-4 text-right">AÃƒÂ§ÃƒÂ£o</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-800">
@@ -89,7 +89,7 @@ const AdminOS = () => {
                 <td className="px-6 py-4">{os.desc}</td>
                 <td className="px-6 py-4">
                   <span className={`px-2.5 py-1 rounded-full text-xs font-medium border
-                    ${os.status === 'ConcluÃ­da' ? 'bg-green-500/10 text-green-400 border-green-500/20' : ''}
+                    ${os.status === 'ConcluÃƒÂ­da' ? 'bg-green-500/10 text-green-400 border-green-500/20' : ''}
                     ${os.status === 'Em Andamento' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' : ''}
                   `}>
                     {os.status}
@@ -115,7 +115,7 @@ const AdminOS = () => {
             
             <div className="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-gray-900/90 backdrop-blur-md z-10">
               <h3 className="text-lg font-bold text-white">OS #{selectedOS.id}</h3>
-              <button onClick={closeMenu} className="text-gray-400 hover:text-white">âœ•</button>
+              <button onClick={closeMenu} className="text-gray-400 hover:text-white">Ã¢Å“â€¢</button>
             </div>
 
             <div className="p-6 flex-1">
@@ -125,7 +125,7 @@ const AdminOS = () => {
               </div>
 
               <div className="mb-6">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">DescriÃ§Ã£o</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">DescriÃƒÂ§ÃƒÂ£o</p>
                 <p className="text-gray-300 text-sm whitespace-pre-wrap">{selectedOS.desc}</p>
               </div>
 
@@ -133,7 +133,7 @@ const AdminOS = () => {
               <div className="mt-8 border-t border-gray-800 pt-6">
                 <h4 className="text-sm font-medium text-white mb-4 flex items-center gap-2">
                   <ImageIcon size={16} />
-                  Anexos e ComprovaÃ§Ãµes
+                  Anexos e ComprovaÃƒÂ§ÃƒÂµes
                 </h4>
                 
                 <div className="mb-4">
@@ -141,7 +141,7 @@ const AdminOS = () => {
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <UploadCloud className="w-8 h-8 mb-2 text-red-500" />
                       <p className="mb-2 text-sm text-gray-400 text-center px-4">
-                        {uploading ? 'Enviando imagem...' : <><span className="font-semibold text-red-500">Clique para enviar</span> ou arraste a foto do serviÃ§o aqui</>}
+                        {uploading ? 'Enviando imagem...' : <><span className="font-semibold text-red-500">Clique para enviar</span> ou arraste a foto do serviÃƒÂ§o aqui</>}
                       </p>
                     </div>
                     <input type="file" className="hidden" accept="image/*,application/pdf" onChange={handleFileUpload} disabled={uploading} />
@@ -167,7 +167,7 @@ const AdminOS = () => {
             <div className="p-6 border-t border-gray-800 bg-gray-900 sticky bottom-0">
               <button className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-medium transition-colors">
                 <CheckCircle size={18} />
-                Marcar como ConcluÃ­da
+                Marcar como ConcluÃƒÂ­da
               </button>
             </div>
 

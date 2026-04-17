@@ -14,11 +14,11 @@ export const getStatus = async (req: AuthRequest, res: Response) => {
     const instanceName = `finansys-user-${userId}`;
     const status = await whatsappService.getStatus(instanceName);
     
-    // Sincronia AutomÃ¡tica: Se estiver aberto e nÃ£o tiver telefone, salva agora!
+    // Sincronia AutomÃƒÂ¡tica: Se estiver aberto e nÃƒÂ£o tiver telefone, salva agora!
     if (status.instance?.state === 'open' && status.instance?.ownerJid) {
        const phone = status.instance.ownerJid.split('@')[0];
        await User.update({ phone }, { where: { id: userId } });
-       console.log(`[WhatsApp Sync] Telefone do usuÃ¡rio ${userId} sincronizado: ${phone}`);
+       console.log(`[WhatsApp Sync] Telefone do usuÃƒÂ¡rio ${userId} sincronizado: ${phone}`);
     }
     
     res.json({
@@ -71,13 +71,13 @@ export const logout = async (req: AuthRequest, res: Response) => {
 };
 
 /**
- * Webhook recebido da Evolution para atualizar o status e capturar o nÃºmero
+ * Webhook recebido da Evolution para atualizar o status e capturar o nÃƒÂºmero
  */
 export const handleEvolutionWebhook = async (req: Request, res: Response) => {
   try {
     const { event, instance, data } = req.body;
     
-    // Evento de conexÃ£o aberta
+    // Evento de conexÃƒÂ£o aberta
     if (event === 'CONNECTION_UPDATE' && data?.state === 'open') {
         const userId = instance.replace('finansys-user-', '');
         const jid = data.user?.id; // Formato: 5511999999999@s.whatsapp.net
@@ -85,7 +85,7 @@ export const handleEvolutionWebhook = async (req: Request, res: Response) => {
         if (userId && jid) {
             const phone = jid.split('@')[0];
             await User.update({ phone }, { where: { id: userId } });
-            console.log(`[WhatsApp Webhook] UsuÃ¡rio ${userId} conectou com o nÃºmero ${phone}`);
+            console.log(`[WhatsApp Webhook] UsuÃƒÂ¡rio ${userId} conectou com o nÃƒÂºmero ${phone}`);
         }
     }
 

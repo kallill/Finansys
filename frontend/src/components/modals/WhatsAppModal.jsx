@@ -19,7 +19,7 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
     }
   }, [isOpen]);
 
-  // Polling para verificar se o usuÃ¡rio escaneou
+  // Polling para verificar se o usuÃƒÂ¡rio escaneou
   useEffect(() => {
     let interval;
     if (isOpen && status !== 'connected') {
@@ -48,7 +48,7 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
         setQrCode(data.base64);
         setStatus('scanning');
       } else {
-         setError('A API nÃ£o retornou um cÃ³digo QR vÃ¡lido.');
+         setError('A API nÃƒÂ£o retornou um cÃƒÂ³digo QR vÃƒÂ¡lido.');
       }
     } catch (err) {
       setError('Falha ao conectar com o servidor do WhatsApp.');
@@ -71,7 +71,7 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
              </div>
              <div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">Conectar WhatsApp</h3>
-                <p className="text-xs text-slate-500">Escaneie o cÃ³digo para ativar seu bot</p>
+                <p className="text-xs text-slate-500">Escaneie o cÃƒÂ³digo para ativar seu bot</p>
              </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
@@ -87,7 +87,7 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
                   <CheckCircle size={40} />
                </div>
                <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Conectado com Sucesso!</h4>
-               <p className="text-slate-500 mb-8">Seu robÃ´ financeiro jÃ¡ estÃ¡ ativo e pronto para receber suas transaÃ§Ãµes.</p>
+               <p className="text-slate-500 mb-8">Seu robÃƒÂ´ financeiro jÃƒÂ¡ estÃƒÂ¡ ativo e pronto para receber suas transaÃƒÂ§ÃƒÂµes.</p>
                <Button variant="primary" onClick={onClose} className="px-10">Concluir</Button>
             </div>
           ) : (
@@ -124,17 +124,17 @@ const WhatsAppModal = ({ isOpen, onClose, onConnected }) => {
                        </li>
                        <li className="flex gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
-                          <span className="text-slate-600 dark:text-slate-400">VÃ¡ em **ConfiguraÃ§Ãµes** {'>'} **Aparelhos Conectados**</span>
+                          <span className="text-slate-600 dark:text-slate-400">VÃƒÂ¡ em **ConfiguraÃƒÂ§ÃƒÂµes** {'>'} **Aparelhos Conectados**</span>
                        </li>
                        <li className="flex gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
-                          <span className="text-slate-600 dark:text-slate-400">Clique em **Conectar um Aparelho** e aponte a cÃ¢mera</span>
+                          <span className="text-slate-600 dark:text-slate-400">Clique em **Conectar um Aparelho** e aponte a cÃƒÂ¢mera</span>
                        </li>
                     </ol>
                  </div>
                  <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl">
                     <p className="text-[10px] text-blue-600 dark:text-blue-400 leading-relaxed font-medium capitalize">
-                       ðŸš¨ Importante: A primeira conexÃ£o vincula seu nÃºmero permanentemente para falar com o RobÃ´.
+                       Ã°Å¸Å¡Â¨ Importante: A primeira conexÃƒÂ£o vincula seu nÃƒÂºmero permanentemente para falar com o RobÃƒÂ´.
                     </p>
                  </div>
               </div>

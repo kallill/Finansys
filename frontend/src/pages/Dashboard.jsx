@@ -21,7 +21,7 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState({ name: 'UsuÃ¡rio', email: '' });
+  const [user, setUser] = useState({ name: 'UsuÃƒÂ¡rio', email: '' });
   const [series, setSeries] = useState([]);
   const [stats, setStats] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -33,7 +33,7 @@ const Dashboard = () => {
         try {
             setUser(JSON.parse(storedUser));
         } catch (e) {
-            console.error("Erro ao ler usuÃ¡rio do localStorage");
+            console.error("Erro ao ler usuÃƒÂ¡rio do localStorage");
         }
     }
   }, []);
@@ -75,12 +75,12 @@ const Dashboard = () => {
   }, []);
 
   const menuItems = [
-    { id: 'dashboard', label: 'VisÃ£o Geral', icon: LayoutDashboard },
+    { id: 'dashboard', label: 'VisÃƒÂ£o Geral', icon: LayoutDashboard },
     { id: 'wallet', label: 'Minha Carteira', icon: WalletIcon },
-    { id: 'cards', label: 'Meus CartÃµes', icon: CreditCard },
+    { id: 'cards', label: 'Meus CartÃƒÂµes', icon: CreditCard },
     { id: 'import', label: 'Importar Extrato', icon: TrendingUp },
-    { id: 'analytics', label: 'RelatÃ³rios', icon: PieChart },
-    { id: 'transactions', label: 'TransaÃ§Ãµes', icon: Menu },
+    { id: 'analytics', label: 'RelatÃƒÂ³rios', icon: PieChart },
+    { id: 'transactions', label: 'TransaÃƒÂ§ÃƒÂµes', icon: Menu },
   ];
 
   return (
@@ -171,7 +171,7 @@ const Dashboard = () => {
             </div>
             
             <button 
-              onClick={() => alert('VocÃª nÃ£o tem notificaÃ§Ãµes pendentes no momento.')}
+              onClick={() => alert('VocÃƒÂª nÃƒÂ£o tem notificaÃƒÂ§ÃƒÂµes pendentes no momento.')}
               className="relative p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
             >
               <Bell size={20} />
@@ -181,7 +181,7 @@ const Dashboard = () => {
             <div className="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-800">
               <div className="text-right hidden md:block">
                 <p className="text-sm font-medium text-slate-900 dark:text-white">{user.name}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Plano GrÃ¡tis</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Plano GrÃƒÂ¡tis</p>
               </div>
               <button onClick={() => navigate('/profile')} className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-blue-500 p-0.5">
                 <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 flex items-center justify-center overflow-hidden">
@@ -206,14 +206,14 @@ const Dashboard = () => {
                   icon={DollarSign} 
                 />
                 <StatCard 
-                  title="Receitas (MÃªs)" 
+                  title="Receitas (MÃƒÂªs)" 
                   value={stats?.totals?.income ? `R$ ${Number(stats.totals.income).toFixed(2)}` : "R$ 0,00"} 
                   change=""
                   isPositive={true} 
                   icon={TrendingUp} 
                 />
                 <StatCard 
-                  title="Despesas (MÃªs)" 
+                  title="Despesas (MÃƒÂªs)" 
                   value={stats?.totals?.expense ? `R$ ${Number(stats.totals.expense).toFixed(2)}` : "R$ 0,00"} 
                   change=""
                   isPositive={false} 
@@ -223,10 +223,10 @@ const Dashboard = () => {
 
               <div className="flex gap-3">
                 <button onClick={() => { setNewTx({ ...newTx, type: 'income' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-emerald-500 text-white flex items-center gap-2">
-                  <TrendingUp size={18} /> LanÃ§ar Receita
+                  <TrendingUp size={18} /> LanÃƒÂ§ar Receita
                 </button>
                 <button onClick={() => { setNewTx({ ...newTx, type: 'expense' }); setShowModal(true); }} className="px-4 py-2 rounded-xl bg-rose-500 text-white flex items-center gap-2">
-                  <TrendingDown size={18} /> LanÃ§ar Despesa
+                  <TrendingDown size={18} /> LanÃƒÂ§ar Despesa
                 </button>
               </div>
 
@@ -238,7 +238,7 @@ const Dashboard = () => {
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white">Fluxo de Caixa</h3>
                     <select className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1 outline-none">
-                      <option>Ãšltimos 6 meses</option>
+                      <option>ÃƒÅ¡ltimos 6 meses</option>
                       <option>Este ano</option>
                     </select>
                   </div>
@@ -282,8 +282,8 @@ const Dashboard = () => {
 
                    <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
                       <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl p-4 text-center shadow-lg shadow-emerald-500/20">
-                        <p className="text-white font-medium mb-1">Novo: ImportaÃ§Ã£o Manual</p>
-                        <p className="text-emerald-100 text-xs mb-3">Importe o extrato do seu banco (Nubank, ItaÃº, Inter) e deixe a IA categorizar.</p>
+                        <p className="text-white font-medium mb-1">Novo: ImportaÃƒÂ§ÃƒÂ£o Manual</p>
+                        <p className="text-emerald-100 text-xs mb-3">Importe o extrato do seu banco (Nubank, ItaÃƒÂº, Inter) e deixe a IA categorizar.</p>
                         <button onClick={() => setActiveTab('import')} className="bg-white text-emerald-600 text-sm font-bold px-4 py-2 rounded-lg w-full hover:bg-slate-50 transition-colors shadow-sm">
                           Importar Extrato
                         </button>
@@ -298,7 +298,7 @@ const Dashboard = () => {
             <BankImportComponent onComplete={() => setActiveTab('dashboard')} />
           ) : (
             <div className="flex flex-col items-center justify-center h-64 text-slate-500">
-               <p>Selecione uma funcionalidade vÃ¡lida no menu lateral.</p>
+               <p>Selecione uma funcionalidade vÃƒÂ¡lida no menu lateral.</p>
             </div>
           )}
 
@@ -307,7 +307,7 @@ const Dashboard = () => {
               <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-md border border-slate-200 dark:border-slate-800">
                 <h3 className="text-lg font-bold mb-4">{newTx.type === 'income' ? 'Nova Receita' : 'Nova Despesa'}</h3>
                 <div className="space-y-3">
-                  <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="DescriÃ§Ã£o" value={newTx.description} onChange={e => setNewTx({ ...newTx, description: e.target.value })} />
+                  <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="DescriÃƒÂ§ÃƒÂ£o" value={newTx.description} onChange={e => setNewTx({ ...newTx, description: e.target.value })} />
                   <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" placeholder="Categoria" value={newTx.category} onChange={e => setNewTx({ ...newTx, category: e.target.value })} />
                   <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" type="number" step="0.01" placeholder="Valor" value={newTx.amount} onChange={e => setNewTx({ ...newTx, amount: e.target.value })} />
                   <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-3" type="date" value={newTx.date} onChange={e => setNewTx({ ...newTx, date: e.target.value })} />

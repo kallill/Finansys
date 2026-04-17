@@ -7,7 +7,7 @@ class CRMOrdemServico extends Model {
   public descricao!: string;
   public data_inicio!: Date;
   public data_conclusao!: Date | null;
-  public status!: 'Aberta' | 'Em Andamento' | 'ConcluÃ­da';
+  public status!: 'Aberta' | 'Em Andamento' | 'ConcluÃƒÂ­da';
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -36,7 +36,7 @@ CRMOrdemServico.init({
     allowNull: true,
   },
   status: {
-    type: DataTypes.ENUM('Aberta', 'Em Andamento', 'ConcluÃ­da'),
+    type: DataTypes.ENUM('Aberta', 'Em Andamento', 'ConcluÃƒÂ­da'),
     defaultValue: 'Aberta',
   }
 }, {

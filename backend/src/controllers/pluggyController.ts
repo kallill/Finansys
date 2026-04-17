@@ -25,12 +25,12 @@ export const updatePluggyItemId = async (req: AuthRequest, res: Response) => {
     }
 
     const user = await User.findByPk(userId);
-    if (!user) return res.status(404).json({ message: "UsuÃ¡rio nÃ£o encontrado." });
+    if (!user) return res.status(404).json({ message: "UsuÃƒÂ¡rio nÃƒÂ£o encontrado." });
 
     user.pluggyItemId = itemId;
     await user.save();
 
-    res.json({ status: "success", message: "ConexÃ£o bancÃ¡ria vinculada com sucesso." });
+    res.json({ status: "success", message: "ConexÃƒÂ£o bancÃƒÂ¡ria vinculada com sucesso." });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

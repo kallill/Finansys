@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    // Configuração de "Sobrevivência" para VPS: processa um arquivo por vez
+    // ConfiguraÃ§Ã£o de "SobrevivÃªncia" para VPS: processa um arquivo por vez
     rollupOptions: {
       maxParallelFileOps: 1,
       output: {
@@ -13,7 +13,7 @@ export default defineConfig({
       }
     },
     sourcemap: false,
-    minify: 'esbuild', // Esbuild é mais rápido e usa menos RAM que Terser
+    minify: 'esbuild', // Esbuild Ã© mais rÃ¡pido e usa menos RAM que Terser
     chunkSizeWarningLimit: 2000
   }
 })

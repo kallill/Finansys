@@ -45,7 +45,7 @@ const AdminLogin = () => {
           Cerasus CRM
         </h2>
         <p className="mt-2 text-center text-sm text-gray-400">
-          Acesso Restrito Ã  Equipe Administrativa
+          Acesso Restrito ÃƒÂ  Equipe Administrativa
         </p>
       </div>
 
@@ -93,7 +93,7 @@ const AdminLogin = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-gray-800/50 border border-gray-700 text-white block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-500 transition-all focus:bg-gray-800"
-                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                  placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
                 />
               </div>
             </div>

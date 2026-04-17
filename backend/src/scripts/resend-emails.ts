@@ -3,37 +3,37 @@ import { sendVerificationEmail } from '../services/emailService';
 import sequelize from '../config/database';
 
 /**
- * Script para re-enviar e-mails de verificaÃ§Ã£o para usuÃ¡rios que ainda nÃ£o confirmaram a conta.
- * Ãštil para limpar a fila apÃ³s a configuraÃ§Ã£o correta do domÃ­nio dksystem.online.
+ * Script para re-enviar e-mails de verificaÃƒÂ§ÃƒÂ£o para usuÃƒÂ¡rios que ainda nÃƒÂ£o confirmaram a conta.
+ * ÃƒÅ¡til para limpar a fila apÃƒÂ³s a configuraÃƒÂ§ÃƒÂ£o correta do domÃƒÂ­nio dksystem.online.
  */
 async function resendVerifications() {
   console.log('--- Iniciando Script de Re-envio de E-mails ---');
   
   try {
-    // Garante conexÃ£o com o banco
+    // Garante conexÃƒÂ£o com o banco
     await sequelize.authenticate();
     console.log('Banco de dados conectado.');
 
-    // Busca usuÃ¡rios nÃ£o verificados que tenham um token
+    // Busca usuÃƒÂ¡rios nÃƒÂ£o verificados que tenham um token
     const pendingUsers = await User.findAll({
       where: {
         isVerified: false
       }
     });
 
-    console.log(`Encontrados ${pendingUsers.length} usuÃ¡rios pendentes.`);
+    console.log(`Encontrados ${pendingUsers.length} usuÃƒÂ¡rios pendentes.`);
 
     for (const user of pendingUsers) {
       if (user.verificationToken) {
         console.log(`Enviando para: ${user.email}...`);
         try {
           await sendVerificationEmail(user.email, user.verificationToken);
-          console.log(`âœ… Sucesso: ${user.email}`);
+          console.log(`Ã¢Å“â€¦ Sucesso: ${user.email}`);
         } catch (error) {
-          console.error(`âŒ Falha ao enviar para ${user.email}:`, error);
+          console.error(`Ã¢ÂÅ’ Falha ao enviar para ${user.email}:`, error);
         }
       } else {
-        console.log(`âš ï¸ UsuÃ¡rio ${user.email} nÃ£o possui token de verificaÃ§Ã£o.`);
+        console.log(`Ã¢Å¡Â Ã¯Â¸Â UsuÃƒÂ¡rio ${user.email} nÃƒÂ£o possui token de verificaÃƒÂ§ÃƒÂ£o.`);
       }
     }
 

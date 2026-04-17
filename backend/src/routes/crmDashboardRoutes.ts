@@ -4,7 +4,7 @@ import { checkCrmAuth } from '../middlewares/crmAuthMiddleware';
 
 const router = express.Router();
 
-// Todas as rotas de Dashboard exigem autenticaÃ§Ã£o de Admin
+// Todas as rotas de Dashboard exigem autenticaÃƒÂ§ÃƒÂ£o de Admin
 router.get('/stats', checkCrmAuth, getStats);
 
 export default router;

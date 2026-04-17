@@ -23,7 +23,7 @@ const AdminUsers = () => {
       const response = await api.get('/api/crm/auth/admins');
       setUsers(response.data);
     } catch (err) {
-      console.error('Erro ao buscar usuÃ¡rios:', err);
+      console.error('Erro ao buscar usuÃƒÂ¡rios:', err);
     } finally {
       setLoading(false);
     }
@@ -40,18 +40,18 @@ const AdminUsers = () => {
     
     try {
       await api.post('/api/crm/auth/admins', formData);
-      setSuccess('UsuÃ¡rio criado com sucesso!');
+      setSuccess('UsuÃƒÂ¡rio criado com sucesso!');
       setFormData({ nome: '', email: '', password: '', nivel_acesso: 'Standard' });
       setShowModal(false);
       fetchUsers();
     } catch (err) {
-      setError(err.response?.data?.message || 'Erro ao criar usuÃ¡rio.');
+      setError(err.response?.data?.message || 'Erro ao criar usuÃƒÂ¡rio.');
     }
   };
 
   const handleDelete = async (id) => {
     if (id === currentAdmin.id) {
-      alert('VocÃª nÃ£o pode deletar sua prÃ³pria conta operacional.');
+      alert('VocÃƒÂª nÃƒÂ£o pode deletar sua prÃƒÂ³pria conta operacional.');
       return;
     }
     
@@ -61,12 +61,12 @@ const AdminUsers = () => {
       await api.delete(`/api/crm/auth/admins/${id}`);
       fetchUsers();
     } catch (err) {
-      alert('Erro ao remover usuÃ¡rio.');
+      alert('Erro ao remover usuÃƒÂ¡rio.');
     }
   };
 
   return (
-    <AdminLayout title="GestÃ£o de UsuÃ¡rios">
+    <AdminLayout title="GestÃƒÂ£o de UsuÃƒÂ¡rios">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h3 className="text-xl font-semibold text-white">Administradores do CRM</h3>
@@ -77,7 +77,7 @@ const AdminUsers = () => {
           className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-red-600/20"
         >
           <Plus size={20} />
-          Novo UsuÃ¡rio
+          Novo UsuÃƒÂ¡rio
         </button>
       </div>
 
@@ -88,8 +88,8 @@ const AdminUsers = () => {
               <tr className="bg-gray-800/50 border-b border-gray-700">
                 <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase">Nome</th>
                 <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase">E-mail</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase">NÃ­vel</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase">AÃ§Ãµes</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase">NÃƒÂ­vel</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase">AÃƒÂ§ÃƒÂµes</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
@@ -130,7 +130,7 @@ const AdminUsers = () => {
               ))}
               {loading && (
                 <tr>
-                  <td colSpan="4" className="px-6 py-8 text-center text-gray-500 italic">Carregando usuÃ¡rios...</td>
+                  <td colSpan="4" className="px-6 py-8 text-center text-gray-500 italic">Carregando usuÃƒÂ¡rios...</td>
                 </tr>
               )}
             </tbody>
@@ -138,7 +138,7 @@ const AdminUsers = () => {
         </div>
       </div>
 
-      {/* Modal Novo UsuÃ¡rio */}
+      {/* Modal Novo UsuÃƒÂ¡rio */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-gray-950 border border-gray-800 rounded-3xl w-full max-w-md shadow-2xl animate-in fade-in zoom-in duration-200">
@@ -172,7 +172,7 @@ const AdminUsers = () => {
                   className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-all"
                   value={formData.nome}
                   onChange={(e) => setFormData({...formData, nome: e.target.value})}
-                  placeholder="Ex: JoÃ£o Silva"
+                  placeholder="Ex: JoÃƒÂ£o Silva"
                 />
               </div>
 
@@ -189,25 +189,25 @@ const AdminUsers = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-sm text-gray-400 ml-1">Senha TemporÃ¡ria</label>
+                <label className="text-sm text-gray-400 ml-1">Senha TemporÃƒÂ¡ria</label>
                 <input 
                   type="password" 
                   required
                   className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-all"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                  placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-sm text-gray-400 ml-1">NÃ­vel de Acesso</label>
+                <label className="text-sm text-gray-400 ml-1">NÃƒÂ­vel de Acesso</label>
                 <select 
                   className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-all appearance-none"
                   value={formData.nivel_acesso}
                   onChange={(e) => setFormData({...formData, nivel_acesso: e.target.value})}
                 >
-                  <option value="Standard">Standard (VisualizaÃ§Ã£o/OS)</option>
+                  <option value="Standard">Standard (VisualizaÃƒÂ§ÃƒÂ£o/OS)</option>
                   <option value="Admin">Admin (Controle Total)</option>
                 </select>
               </div>

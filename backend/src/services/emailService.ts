@@ -26,7 +26,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
         <h1>Bem-vindo ao Finansys!</h1>
         <p>Por favor, verifique seu email clicando no link abaixo:</p>
         <a href="${verificationLink}" style="padding: 10px 20px; background-color: #10b981; color: white; text-decoration: none; border-radius: 5px;">Verificar Email</a>
-        <p>Se vocÃª nÃ£o criou esta conta, ignore este email.</p>
+        <p>Se vocÃƒÂª nÃƒÂ£o criou esta conta, ignore este email.</p>
       `
     });
     
@@ -58,12 +58,12 @@ export const sendResetPasswordEmail = async (email: string, token: string) => {
     const data = await resend.emails.send({
       from: fromEmail,
       to: email,
-      subject: 'RedefiniÃ§Ã£o de senha - Finansys',
+      subject: 'RedefiniÃƒÂ§ÃƒÂ£o de senha - Finansys',
       html: `
-        <h1>RedefiniÃ§Ã£o de senha</h1>
-        <p>Clique no botÃ£o abaixo para redefinir sua senha:</p>
+        <h1>RedefiniÃƒÂ§ÃƒÂ£o de senha</h1>
+        <p>Clique no botÃƒÂ£o abaixo para redefinir sua senha:</p>
         <a href="${resetLink}" style="padding: 10px 20px; background-color: #10b981; color: white; text-decoration: none; border-radius: 5px;">Redefinir Senha</a>
-        <p>Se vocÃª nÃ£o solicitou esta aÃ§Ã£o, ignore este email.</p>
+        <p>Se vocÃƒÂª nÃƒÂ£o solicitou esta aÃƒÂ§ÃƒÂ£o, ignore este email.</p>
       `
     });
 

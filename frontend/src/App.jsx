@@ -36,7 +36,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         
-        {/* Rotas Protegidas de UsuÃ¡rio (Antigas) */}
+        {/* Rotas Protegidas de UsuÃƒÂ¡rio (Antigas) */}
         <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
         <Route path="/cards" element={<ProtectedRoute><Cards /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
@@ -53,7 +53,7 @@ function App() {
         <Route path="/admin/users" element={<AdminProtectedRoute><AdminUsers /></AdminProtectedRoute>} />
         <Route path="/admin/profile" element={<AdminProtectedRoute><AdminProfile /></AdminProtectedRoute>} />
         
-        {/* Placeholders e MÃ³dulos Ativos */}
+        {/* Placeholders e MÃƒÂ³dulos Ativos */}
         <Route path="/admin/clients" element={<AdminProtectedRoute><PlaceholderPage title="Clientes & Prospects" /></AdminProtectedRoute>} />
         <Route path="/admin/plans" element={<AdminProtectedRoute><AdminPlans /></AdminProtectedRoute>} />
         <Route path="/admin/financial" element={<AdminProtectedRoute><PlaceholderPage title="Financeiro" /></AdminProtectedRoute>} />
