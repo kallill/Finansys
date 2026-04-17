@@ -1,23 +1,23 @@
 # Build Frontend
-FROM node:20-slim AS frontend-build
+FROM node:22-slim AS frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
-RUN npm cache clean --force && npm install
+RUN npm install
 COPY frontend/ ./
-# Desativa sourcemaps para economizar memória e CPU no build
-RUN NODE_OPTIONS="--max-old-space-size=2048" npm run build -- --sourcemap false
+# Otimizações de memória e CPU
+RUN NODE_OPTIONS="--max-old-space-size=2048" npm run build
 
 # Build Backend
-FROM node:20-slim AS backend-build
+FROM node:22-slim AS backend-build
 WORKDIR /app/backend
 RUN apt-get update && apt-get install -y build-essential python3 && rm -rf /var/lib/apt/lists/*
 COPY backend/package*.json ./
-RUN npm cache clean --force && npm install
+RUN npm install
 COPY backend/ ./
 RUN npm run build
 
 # Stage Final
-FROM node:20-slim
+FROM node:22-slim
 WORKDIR /app
 COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 COPY --from=backend-build /app/backend/dist /app/backend/dist
