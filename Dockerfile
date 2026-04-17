@@ -2,17 +2,18 @@
 FROM node:22-slim AS frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
-RUN npm install
+# Instala somente as dependências necessárias de forma conservadora
+RUN npm install --no-audit --no-fund
 COPY frontend/ ./
-# Otimizações de memória e CPU
-RUN NODE_OPTIONS="--max-old-space-size=2048" npm run build
+# NODE_OPTIONS configurado para 1.5GB para sobrar RAM para o sistema da VPS rodar o build
+RUN NODE_OPTIONS="--max-old-space-size=1536" npm run build
 
 # Build Backend
 FROM node:22-slim AS backend-build
 WORKDIR /app/backend
 RUN apt-get update && apt-get install -y build-essential python3 && rm -rf /var/lib/apt/lists/*
 COPY backend/package*.json ./
-RUN npm install
+RUN npm install --no-audit --no-fund
 COPY backend/ ./
 RUN npm run build
 
@@ -25,7 +26,7 @@ COPY --from=backend-build /app/backend/package*.json /app/backend/
 WORKDIR /app/backend
 
 RUN apt-get update && apt-get install -y build-essential python3 && \
-    npm install --production && \
+    npm install --production --no-audit --no-fund && \
     apt-get purge -y build-essential python3 && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*

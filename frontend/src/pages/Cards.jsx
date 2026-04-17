@@ -19,7 +19,7 @@ const Cards = () => {
       const data = await getCreditCards();
       setCards(data);
     } catch (e) {
-      setError('Falha ao carregar cartões');
+      setError('Falha ao carregar cartÃµes');
     } finally {
       setLoading(false);
     }
@@ -61,17 +61,17 @@ const Cards = () => {
       setModalOpen(false);
       await load();
     } catch {
-      setError('Erro ao salvar cartão');
+      setError('Erro ao salvar cartÃ£o');
     }
   };
 
   const onDelete = async (id) => {
-    if (!window.confirm('Tem certeza que deseja excluir este cartão?')) return;
+    if (!window.confirm('Tem certeza que deseja excluir este cartÃ£o?')) return;
     try {
       await deleteCreditCard(id);
       await load();
     } catch {
-      setError('Erro ao excluir cartão');
+      setError('Erro ao excluir cartÃ£o');
     }
   };
 
@@ -84,11 +84,11 @@ const Cards = () => {
               <ArrowLeft size={20} />
             </button>
             <h1 className="text-2xl font-bold flex items-center gap-2 px-3 py-1 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg">
-              <CreditCard size={24} /> Meus Cartões
+              <CreditCard size={24} /> Meus CartÃµes
             </h1>
           </div>
           <Button variant="primary" onClick={openCreate} className="shadow-lg shadow-emerald-500/20">
-            <Plus size={18} /> Novo Cartão
+            <Plus size={18} /> Novo CartÃ£o
           </Button>
         </div>
 
@@ -101,14 +101,14 @@ const Cards = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
-            <div className="col-span-full text-center py-20 text-slate-500">Buscando seus cartões...</div>
+            <div className="col-span-full text-center py-20 text-slate-500">Buscando seus cartÃµes...</div>
           ) : cards.length === 0 ? (
             <div className="col-span-full bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-800 rounded-3xl p-12 text-center">
                <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CreditCard className="text-slate-400" size={32} />
                </div>
-               <p className="text-slate-500 dark:text-slate-400">Nenhum cartão cadastrado ainda.</p>
-               <button onClick={openCreate} className="text-emerald-500 font-medium mt-2 hover:underline">Adicionar meu primeiro cartão</button>
+               <p className="text-slate-500 dark:text-slate-400">Nenhum cartÃ£o cadastrado ainda.</p>
+               <button onClick={openCreate} className="text-emerald-500 font-medium mt-2 hover:underline">Adicionar meu primeiro cartÃ£o</button>
             </div>
           ) : (
             cards.map(card => {
@@ -120,7 +120,7 @@ const Cards = () => {
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <h3 className="text-lg font-bold text-slate-800 dark:text-white uppercase tracking-tight">{card.name}</h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">Crédito</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">CrÃ©dito</p>
                     </div>
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button onClick={() => openEdit(card)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500"><Edit2 size={14} /></button>
@@ -168,11 +168,11 @@ const Cards = () => {
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 w-full max-w-md shadow-2xl">
               <h2 className="text-xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2">
                 <div className="p-2 bg-emerald-500 text-white rounded-lg"><Plus size={18} /></div>
-                {editing ? 'Editar Cartão' : 'Novo Cartão'}
+                {editing ? 'Editar CartÃ£o' : 'Novo CartÃ£o'}
               </h2>
               <form className="space-y-4" onSubmit={onSubmit}>
                 <div>
-                  <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">Nome do Cartão/Banco</label>
+                  <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">Nome do CartÃ£o/Banco</label>
                   <input className="w-full bg-slate-100 dark:bg-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none rounded-2xl p-4 transition-all" placeholder="Ex: Nubank, Inter" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
                 </div>
                 
@@ -195,7 +195,7 @@ const Cards = () => {
                 <div className="flex justify-end gap-3 pt-4">
                   <button type="button" className="px-6 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" onClick={() => setModalOpen(false)}>Cancelar</button>
                   <button type="submit" className="px-6 py-3 rounded-2xl bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all">
-                    {editing ? 'Salvar Alterações' : 'Criar Cartão'}
+                    {editing ? 'Salvar AlteraÃ§Ãµes' : 'Criar CartÃ£o'}
                   </button>
                 </div>
               </form>

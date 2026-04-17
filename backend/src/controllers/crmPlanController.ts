@@ -37,7 +37,7 @@ export const updatePlan = async (req: Request, res: Response): Promise<void> => 
 
     const plan = await CRMPlano.findByPk(id);
     if (!plan) {
-      res.status(404).json({ message: 'Plano não encontrado.' });
+      res.status(404).json({ message: 'Plano nÃ£o encontrado.' });
       return;
     }
 
@@ -58,7 +58,7 @@ export const deletePlan = async (req: Request, res: Response): Promise<void> => 
   try {
     const { id } = req.params;
     await CRMPlano.destroy({ where: { id } });
-    res.json({ success: true, message: 'Plano excluído com sucesso.' });
+    res.json({ success: true, message: 'Plano excluÃ­do com sucesso.' });
   } catch (error) {
     console.error('Erro ao excluir plano:', error);
     res.status(500).json({ message: 'Erro ao excluir plano.' });

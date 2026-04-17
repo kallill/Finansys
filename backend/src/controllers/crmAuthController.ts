@@ -8,21 +8,21 @@ export const loginAdmin = async (req: Request, res: Response): Promise<void> => 
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.status(400).json({ success: false, message: 'E-mail e senha são obrigatórios.' });
+      res.status(400).json({ success: false, message: 'E-mail e senha sÃ£o obrigatÃ³rios.' });
       return;
     }
 
     const admin = await CRMAdmin.findOne({ where: { email } });
 
     if (!admin) {
-      res.status(401).json({ success: false, message: 'Credenciais inválidas.' });
+      res.status(401).json({ success: false, message: 'Credenciais invÃ¡lidas.' });
       return;
     }
 
     const isMatch = await bcrypt.compare(password, admin.senha_hash);
 
     if (!isMatch) {
-      res.status(401).json({ success: false, message: 'Credenciais inválidas.' });
+      res.status(401).json({ success: false, message: 'Credenciais invÃ¡lidas.' });
       return;
     }
 
@@ -54,12 +54,12 @@ export const loginAdmin = async (req: Request, res: Response): Promise<void> => 
 };
 
 /**
- * Lista todos os administradores (Apenas para nível Admin)
+ * Lista todos os administradores (Apenas para nÃ­vel Admin)
  */
 export const getAdmins = async (req: Request, res: Response): Promise<void> => {
   try {
     if (req.admin?.nivel_acesso !== 'Admin') {
-      res.status(403).json({ message: 'Acesso negado. Apenas administradores podem gerenciar usuários.' });
+      res.status(403).json({ message: 'Acesso negado. Apenas administradores podem gerenciar usuÃ¡rios.' });
       return;
     }
 
@@ -88,7 +88,7 @@ export const createAdmin = async (req: Request, res: Response): Promise<void> =>
 
     const exists = await CRMAdmin.findOne({ where: { email } });
     if (exists) {
-      res.status(400).json({ message: 'Este e-mail já está em uso.' });
+      res.status(400).json({ message: 'Este e-mail jÃ¡ estÃ¡ em uso.' });
       return;
     }
 
@@ -128,7 +128,7 @@ export const deleteAdmin = async (req: Request, res: Response): Promise<void> =>
 
     // Impedir que o admin delete a si mesmo acidentalmente por aqui
     if (id === req.admin.id) {
-      res.status(400).json({ message: 'Você não pode deletar sua própria conta.' });
+      res.status(400).json({ message: 'VocÃª nÃ£o pode deletar sua prÃ³pria conta.' });
       return;
     }
 
@@ -149,13 +149,13 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
     const adminId = req.admin?.id;
 
     if (!adminId) {
-      res.status(401).json({ message: 'Não autorizado.' });
+      res.status(401).json({ message: 'NÃ£o autorizado.' });
       return;
     }
 
     const admin = await CRMAdmin.findByPk(adminId);
     if (!admin) {
-      res.status(404).json({ message: 'Administrador não encontrado.' });
+      res.status(404).json({ message: 'Administrador nÃ£o encontrado.' });
       return;
     }
 

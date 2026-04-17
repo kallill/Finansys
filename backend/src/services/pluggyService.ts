@@ -8,7 +8,7 @@ class PluggyService {
     const clientSecret = process.env.PLUGGY_CLIENT_SECRET || '';
 
     if (!clientId || !clientSecret) {
-      console.warn('⚠️ PLUGGY_CLIENT_ID ou PLUGGY_CLIENT_SECRET ausentes no arquivo .env');
+      console.warn('âš ï¸ PLUGGY_CLIENT_ID ou PLUGGY_CLIENT_SECRET ausentes no arquivo .env');
     }
 
     this.client = new PluggyClient({
@@ -18,8 +18,8 @@ class PluggyService {
   }
 
   /**
-   * Gera um Connect Token descartável, usado no Frontend para abrir o Widget de forma segura.
-   * Ele expira rápido pela segurança do Banco Central.
+   * Gera um Connect Token descartÃ¡vel, usado no Frontend para abrir o Widget de forma segura.
+   * Ele expira rÃ¡pido pela seguranÃ§a do Banco Central.
    */
   public async getConnectToken(userId: number): Promise<string> {
     try {
@@ -28,12 +28,12 @@ class PluggyService {
       });
       return tokenResponse.accessToken;
     } catch (error: any) {
-      console.error('Falha ao gerar Token de Conexão Pluggy:', error?.message);
-      throw new Error('Falha na comunicação segura com a API do Open Finance.');
+      console.error('Falha ao gerar Token de ConexÃ£o Pluggy:', error?.message);
+      throw new Error('Falha na comunicaÃ§Ã£o segura com a API do Open Finance.');
     }
   }
 
-  // Você pode expor o client se quiser para métodos customizados, mas é legal encapsular.
+  // VocÃª pode expor o client se quiser para mÃ©todos customizados, mas Ã© legal encapsular.
   public getClient(): PluggyClient {
     return this.client;
   }

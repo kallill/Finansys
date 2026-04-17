@@ -82,10 +82,10 @@ const AdminPlans = () => {
   };
 
   return (
-    <AdminLayout title="Planos e Serviços">
+    <AdminLayout title="Planos e ServiÃ§os">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h3 className="text-xl font-semibold text-white">Catálogo de Serviços</h3>
+          <h3 className="text-xl font-semibold text-white">CatÃ¡logo de ServiÃ§os</h3>
           <p className="text-gray-400 text-sm">Estruture seus planos recorrentes da Cerasus</p>
         </div>
         <button 
@@ -121,7 +121,7 @@ const AdminPlans = () => {
               <h4 className="text-xl font-bold text-white mb-1">{plan.nome}</h4>
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-black text-red-500">R$ {parseFloat(plan.valor).toLocaleString('pt-BR')}</span>
-                <span className="text-xs text-gray-500">/mês</span>
+                <span className="text-xs text-gray-500">/mÃªs</span>
               </div>
             </div>
             
@@ -143,7 +143,7 @@ const AdminPlans = () => {
 
         {loading && (
            <div className="col-span-full py-12 text-center text-gray-500 italic">
-             Buscando catálogo de planos...
+             Buscando catÃ¡logo de planos...
            </div>
         )}
         
@@ -155,19 +155,19 @@ const AdminPlans = () => {
               onClick={() => setShowModal(true)}
               className="mt-4 text-red-500 hover:underline font-semibold"
             >
-              Comece criando seu primeiro plano de serviço
+              Comece criando seu primeiro plano de serviÃ§o
             </button>
           </div>
         )}
       </div>
 
-      {/* Modal Cadastro/Edição */}
+      {/* Modal Cadastro/EdiÃ§Ã£o */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
           <div className="bg-gray-950 border border-gray-800 rounded-3xl w-full max-w-lg shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="flex justify-between items-center p-6 border-b border-gray-800">
               <h4 className="text-xl font-bold text-white">
-                {editingId ? 'Editar Plano' : 'Novo Plano de Serviço'}
+                {editingId ? 'Editar Plano' : 'Novo Plano de ServiÃ§o'}
               </h4>
               <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-white">
                 <X size={24} />
@@ -217,7 +217,7 @@ const AdminPlans = () => {
                   type="submit"
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-2xl transition-all shadow-xl shadow-red-600/20 active:scale-[0.98]"
                 >
-                  {editingId ? 'Salvar Alterações' : 'Criar Plano'}
+                  {editingId ? 'Salvar AlteraÃ§Ãµes' : 'Criar Plano'}
                 </button>
               </div>
             </form>

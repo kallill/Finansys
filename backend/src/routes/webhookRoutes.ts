@@ -3,7 +3,7 @@ import { webhookCreateTransaction, webhookAgent, pluggyWebhook } from '../contro
 
 const router = Router();
 
-// Endpoint webhook que n8n vai chamar para registrar transações do bot
+// Endpoint webhook que n8n vai chamar para registrar transaÃ§Ãµes do bot
 router.post('/transaction', webhookCreateTransaction);
 router.post('/agent', webhookAgent);
 

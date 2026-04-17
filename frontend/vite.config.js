@@ -5,13 +5,15 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    // Limita o paralelismo para evitar estouro de memória em VPS
+    // Configuração de "Sobrevivência" para VPS: processa um arquivo por vez
     rollupOptions: {
-      maxParallelFileOps: 2
+      maxParallelFileOps: 1,
+      output: {
+        manualChunks: undefined, // Desativa chunking complexo temporariamente
+      }
     },
-    // Desativa sourcemaps para reduzir carga de CPU
     sourcemap: false,
-    // Aumenta o limite de aviso de tamanho de chunk
-    chunkSizeWarningLimit: 1000
+    minify: 'esbuild', // Esbuild é mais rápido e usa menos RAM que Terser
+    chunkSizeWarningLimit: 2000
   }
 })

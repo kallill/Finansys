@@ -25,7 +25,7 @@ const Transactions = () => {
   const load = async () => {
     setLoading(true);
     try {
-      // Carrega cada um individualmente para que um erro em um não trave o outro
+      // Carrega cada um individualmente para que um erro em um nÃ£o trave o outro
       const [txResult, cardsResult] = await Promise.allSettled([
         getTransactions(),
         getCreditCards()
@@ -36,15 +36,15 @@ const Transactions = () => {
         const arr = Array.isArray(txData) ? txData : Array.isArray(txData?.transactions) ? txData.transactions : [];
         setTransactions(arr);
       } else {
-        console.error('Falha ao carregar transações:', txResult.reason);
-        setError('Não foi possível carregar o extrato. O banco de dados pode estar em manutenção.');
+        console.error('Falha ao carregar transaÃ§Ãµes:', txResult.reason);
+        setError('NÃ£o foi possÃ­vel carregar o extrato. O banco de dados pode estar em manutenÃ§Ã£o.');
       }
 
       if (cardsResult.status === 'fulfilled') {
         setCards(cardsResult.value || []);
       } else {
-        console.error('Falha ao carregar cartões:', cardsResult.reason);
-        // Não bloqueia a tela, apenas avisa se estiver no modal
+        console.error('Falha ao carregar cartÃµes:', cardsResult.reason);
+        // NÃ£o bloqueia a tela, apenas avisa se estiver no modal
       }
 
     } catch (e) {
@@ -100,17 +100,17 @@ const Transactions = () => {
       setModalOpen(false);
       await load();
     } catch {
-      setError('Erro ao salvar transação');
+      setError('Erro ao salvar transaÃ§Ã£o');
     }
   };
 
   const onDelete = async (id) => {
-    if (!window.confirm('Excluir transação?')) return;
+    if (!window.confirm('Excluir transaÃ§Ã£o?')) return;
     try {
       await deleteTransaction(id);
       await load();
     } catch {
-      setError('Erro ao excluir transação');
+      setError('Erro ao excluir transaÃ§Ã£o');
     }
   };
 
@@ -124,11 +124,11 @@ const Transactions = () => {
             </button>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <div className="p-2 bg-emerald-500/10 text-emerald-600 rounded-lg"><Filter size={20}/></div>
-              Transações
+              TransaÃ§Ãµes
             </h1>
           </div>
           <div className="flex gap-3">
-            <Button variant="primary" onClick={openCreate} className="shadow-lg shadow-emerald-500/20"><Plus size={18} /> Nova Transação</Button>
+            <Button variant="primary" onClick={openCreate} className="shadow-lg shadow-emerald-500/20"><Plus size={18} /> Nova TransaÃ§Ã£o</Button>
           </div>
         </div>
 
@@ -140,7 +140,7 @@ const Transactions = () => {
               <thead>
                 <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
                   <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Data</th>
-                  <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Descrição</th>
+                  <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">DescriÃ§Ã£o</th>
                   <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Categoria</th>
                   <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Origem</th>
                   <th className="p-4 font-semibold uppercase tracking-wider text-[10px]">Status</th>
@@ -171,7 +171,7 @@ const Transactions = () => {
                       <td className="p-4">
                         {tx.creditCardId ? (
                           <div className="flex items-center gap-1.5 text-indigo-500 text-[10px] font-bold">
-                             <CreditCard size={12} /> {cards.find(c => c.id === tx.creditCardId)?.name || 'Cartão'}
+                             <CreditCard size={12} /> {cards.find(c => c.id === tx.creditCardId)?.name || 'CartÃ£o'}
                           </div>
                         ) : (
                           <div className="flex items-center gap-1.5 text-emerald-500 text-[10px] font-bold">
@@ -217,8 +217,8 @@ const Transactions = () => {
               <form className="space-y-4" onSubmit={onSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-full">
-                    <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">O que você está registrando?</label>
-                    <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Ex: Mercado Atacadão" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required />
+                    <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">O que vocÃª estÃ¡ registrando?</label>
+                    <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Ex: Mercado AtacadÃ£o" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required />
                   </div>
                   
                   <div>
@@ -228,14 +228,14 @@ const Transactions = () => {
 
                   <div>
                     <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">Categoria</label>
-                    <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Ex: Alimentação" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} required />
+                    <input className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Ex: AlimentaÃ§Ã£o" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} required />
                   </div>
 
                   <div>
                     <label className="text-xs font-semibold text-slate-500 ml-2 mb-1 block">Tipo de Fluxo</label>
                     <select className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
-                      <option value="expense">📉 Despesa (Saída)</option>
-                      <option value="income">📈 Receita (Entrada)</option>
+                      <option value="expense">ðŸ“‰ Despesa (SaÃ­da)</option>
+                      <option value="income">ðŸ“ˆ Receita (Entrada)</option>
                     </select>
                   </div>
 
@@ -248,16 +248,16 @@ const Transactions = () => {
                      <label className="text-xs font-semibold text-slate-500 ml-2 mb-3 block">Forma de Pagamento / Destino</label>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                           <label className="text-[10px] text-slate-400 uppercase font-bold ml-1 mb-1 block">Status de Efetivação</label>
+                           <label className="text-[10px] text-slate-400 uppercase font-bold ml-1 mb-1 block">Status de EfetivaÃ§Ã£o</label>
                            <select className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" value={form.status} onChange={e => setForm({ ...form, status: e.target.value })}>
-                              <option value="paid">✅ Já Pago/Recebido</option>
-                              <option value="pending">⏳ Pendente/Agendado</option>
+                              <option value="paid">âœ… JÃ¡ Pago/Recebido</option>
+                              <option value="pending">â³ Pendente/Agendado</option>
                            </select>
                         </div>
                         <div>
-                           <label className="text-[10px] text-slate-400 uppercase font-bold ml-1 mb-1 block">Cartão de Crédito</label>
+                           <label className="text-[10px] text-slate-400 uppercase font-bold ml-1 mb-1 block">CartÃ£o de CrÃ©dito</label>
                            <select className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" value={form.creditCardId} onChange={e => setForm({ ...form, creditCardId: e.target.value })}>
-                              <option value="">Não usar Cartão</option>
+                              <option value="">NÃ£o usar CartÃ£o</option>
                               {cards.map(card => (
                                 <option key={card.id} value={card.id}>{card.name}</option>
                               ))}

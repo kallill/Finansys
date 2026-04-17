@@ -4,7 +4,7 @@ import { checkCrmAuth } from '../middlewares/crmAuthMiddleware';
 
 const router = express.Router();
 
-// Todas as rotas de Planos exigem autenticação de Admin
+// Todas as rotas de Planos exigem autenticaÃ§Ã£o de Admin
 router.get('/', checkCrmAuth, getPlans);
 router.post('/', checkCrmAuth, createPlan);
 router.put('/:id', checkCrmAuth, updatePlan);

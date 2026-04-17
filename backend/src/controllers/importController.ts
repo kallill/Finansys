@@ -9,7 +9,7 @@ export const importStatement = async (req: Request, res: Response) => {
         const userId = (req as any).user.id;
 
         if (!file) {
-            return res.status(400).json({ message: 'Arquivo não enviado.' });
+            return res.status(400).json({ message: 'Arquivo nÃ£o enviado.' });
         }
 
         const rawTransactions = await parseBankFile(file.buffer, file.originalname, bank || 'generic');
@@ -20,8 +20,8 @@ export const importStatement = async (req: Request, res: Response) => {
             transactions: enrichedTransactions 
         });
     } catch (error: any) {
-        console.error('Erro na importação:', error);
-        res.status(500).json({ message: 'Falha ao processar o extrato bancário.', error: error.message });
+        console.error('Erro na importaÃ§Ã£o:', error);
+        res.status(500).json({ message: 'Falha ao processar o extrato bancÃ¡rio.', error: error.message });
     }
 };
 
@@ -31,7 +31,7 @@ export const confirmImport = async (req: Request, res: Response) => {
         const userId = (req as any).user.id;
 
         if (!Array.isArray(transactions)) {
-            return res.status(400).json({ message: 'Formato de dados inválido.' });
+            return res.status(400).json({ message: 'Formato de dados invÃ¡lido.' });
         }
 
         const createdTransactions = await Promise.all(transactions.map(t => {
@@ -43,10 +43,10 @@ export const confirmImport = async (req: Request, res: Response) => {
         }));
 
         res.json({ 
-            message: `${createdTransactions.length} transações importadas com sucesso!`,
+            message: `${createdTransactions.length} transaÃ§Ãµes importadas com sucesso!`,
             count: createdTransactions.length 
         });
     } catch (error: any) {
-        res.status(500).json({ message: 'Erro ao salvar transações importadas.', error: error.message });
+        res.status(500).json({ message: 'Erro ao salvar transaÃ§Ãµes importadas.', error: error.message });
     }
 };

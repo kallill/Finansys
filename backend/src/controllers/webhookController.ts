@@ -12,30 +12,30 @@ export const pluggyWebhook = async (req: Request, res: Response) => {
     const { event, itemId } = req.body;
     console.log(`[Pluggy Webhook] Evento: ${event}, ItemId: ${itemId}`);
 
-    // Só nos interessa quando o item (banco) foi atualizado com novos dados
+    // SÃ³ nos interessa quando o item (banco) foi atualizado com novos dados
     if (event !== 'item/updated' && event !== 'item/created') {
        return res.status(200).json({ status: 'ignored' });
     }
 
-    // Busca o usuário dono dessa conexão
+    // Busca o usuÃ¡rio dono dessa conexÃ£o
     const user = await User.findOne({ where: { pluggyItemId: itemId } });
     if (!user) {
-       console.warn(`[Pluggy Webhook] Recebi evento para itemId ${itemId} mas não encontrei usuário vinculado.`);
+       console.warn(`[Pluggy Webhook] Recebi evento para itemId ${itemId} mas nÃ£o encontrei usuÃ¡rio vinculado.`);
        return res.status(200).json({ status: 'not_found' });
     }
 
-    // 1. Puxa as transações da Pluggy (últimos dias para garantir)
-    // Nota: Em um app real, salvaríamos a data da última sync. Aqui vamos simplificar.
+    // 1. Puxa as transaÃ§Ãµes da Pluggy (Ãºltimos dias para garantir)
+    // Nota: Em um app real, salvarÃ­amos a data da Ãºltima sync. Aqui vamos simplificar.
     const pluggyTransactions = await pluggyService.getClient().fetchTransactions(itemId);
     
     let syncedCount = 0;
 
     for (const pTx of pluggyTransactions.results) {
-       // Anti-duplicidade: Verifica se já importamos esse ID único da Pluggy
+       // Anti-duplicidade: Verifica se jÃ¡ importamos esse ID Ãºnico da Pluggy
        const exists = await Transaction.findOne({ where: { pluggyTransactionId: pTx.id } });
        if (exists) continue;
 
-       // 2. Mágica do Gemini: Categorização sob demanda
+       // 2. MÃ¡gica do Gemini: CategorizaÃ§Ã£o sob demanda
        const classification = await categorizeDescription(pTx.description);
 
        // 3. Salva no banco de dados do Finansys
@@ -45,14 +45,14 @@ export const pluggyWebhook = async (req: Request, res: Response) => {
           type: classification.type,
           category: classification.category,
           date: pTx.date,
-          status: 'paid', // Transações bancárias reais já são pagas
+          status: 'paid', // TransaÃ§Ãµes bancÃ¡rias reais jÃ¡ sÃ£o pagas
           userId: user.id,
           pluggyTransactionId: pTx.id
        });
        syncedCount++;
     }
 
-    console.log(`[Pluggy Webhook] Sincronização concluída para ${user.name}: ${syncedCount} novas transações.`);
+    console.log(`[Pluggy Webhook] SincronizaÃ§Ã£o concluÃ­da para ${user.name}: ${syncedCount} novas transaÃ§Ãµes.`);
     return res.status(200).json({ status: 'success', synced: syncedCount });
 
   } catch (error: any) {
@@ -63,8 +63,8 @@ export const pluggyWebhook = async (req: Request, res: Response) => {
 
 /**
  * POST /webhook/transaction
- * Rota pública autenticada por API Key estática (BOT_API_KEY).
- * Usada pelo n8n para criar transações via bot do WhatsApp.
+ * Rota pÃºblica autenticada por API Key estÃ¡tica (BOT_API_KEY).
+ * Usada pelo n8n para criar transaÃ§Ãµes via bot do WhatsApp.
  *
  * Body: { userEmail, description, amount, type, category, date? }
  * Header: x-api-key: <BOT_API_KEY>
@@ -76,34 +76,34 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
     const validKey = process.env.BOT_API_KEY;
 
     if (!validKey || apiKey !== validKey) {
-      return res.status(401).json({ message: 'API Key inválida.' });
+      return res.status(401).json({ message: 'API Key invÃ¡lida.' });
     }
 
     const { userEmail, phone, description, amount, type, category, date } = req.body;
 
-    // Validações básicas
+    // ValidaÃ§Ãµes bÃ¡sicas
     if ((!userEmail && !phone) || !description || !amount || !type) {
       return res.status(400).json({
-        message: 'Campos obrigatórios: (userEmail ou phone), description, amount, type.'
+        message: 'Campos obrigatÃ³rios: (userEmail ou phone), description, amount, type.'
       });
     }
 
     if (!['income', 'expense'].includes(type)) {
       return res.status(400).json({
-        message: 'Tipo inválido. Use "income" ou "expense".'
+        message: 'Tipo invÃ¡lido. Use "income" ou "expense".'
       });
     }
 
-    // Sanitiza o telefone removendo caracteres não-numéricos
+    // Sanitiza o telefone removendo caracteres nÃ£o-numÃ©ricos
     const cleanPhone = phone ? phone.replace(/\D/g, '') : undefined;
 
-    // Busca o usuário pelo email ou telefone
+    // Busca o usuÃ¡rio pelo email ou telefone
     let user;
     if (cleanPhone) {
       // 1. Tenta busca exata
       user = await User.findOne({ where: { phone: cleanPhone } });
       
-      // 2. Se não achou e é um número brasileiro (+55)
+      // 2. Se nÃ£o achou e Ã© um nÃºmero brasileiro (+55)
       if (!user && cleanPhone.startsWith('55')) {
         if (cleanPhone.length === 12) {
           // Cliente mandou SEM o 9, vamos pesquisar adicionando o 9
@@ -124,11 +124,11 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
 
     if (!user) {
       return res.status(404).json({
-        message: `Usuário não encontrado com o contato fornecido (${phone || userEmail}). Cadastre seu telefone no App.`
+        message: `UsuÃ¡rio nÃ£o encontrado com o contato fornecido (${phone || userEmail}). Cadastre seu telefone no App.`
       });
     }
 
-    // Cria a transação
+    // Cria a transaÃ§Ã£o
     const tx = await Transaction.create({
       description,
       amount: parseFloat(amount),
@@ -138,8 +138,8 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
       userId: (user as any).id
     });
 
-    // Resposta amigável para o n8n retornar ao WhatsApp (Legacy)
-    const emoji = type === 'income' ? '💰' : '💸';
+    // Resposta amigÃ¡vel para o n8n retornar ao WhatsApp (Legacy)
+    const emoji = type === 'income' ? 'ðŸ’°' : 'ðŸ’¸';
     const typeLabel = type === 'income' ? 'receita' : 'despesa';
     const amountFormatted = parseFloat(amount).toLocaleString('pt-BR', {
       style: 'currency',
@@ -148,11 +148,11 @@ export const webhookCreateTransaction = async (req: Request, res: Response) => {
 
     return res.status(201).json({
       transaction: tx,
-      message: `${emoji} *${typeLabel}* registrada com sucesso!\n📝 ${description}\n💵 ${amountFormatted}\n🏷️ ${category || 'Outros'}`
+      message: `${emoji} *${typeLabel}* registrada com sucesso!\nðŸ“ ${description}\nðŸ’µ ${amountFormatted}\nðŸ·ï¸ ${category || 'Outros'}`
     });
   } catch (error) {
-    console.error('[WebhookController] Erro ao criar transação:', error);
-    return res.status(500).json({ message: 'Erro interno ao registrar transação.' });
+    console.error('[WebhookController] Erro ao criar transaÃ§Ã£o:', error);
+    return res.status(500).json({ message: 'Erro interno ao registrar transaÃ§Ã£o.' });
   }
 };
 
@@ -160,7 +160,7 @@ import { processAIRequest } from '../services/aiAgent';
 
 /**
  * POST /webhook/agent
- * O "Cérebro" de IA - Processa o texto puro do N8N via Gemini Function Calling
+ * O "CÃ©rebro" de IA - Processa o texto puro do N8N via Gemini Function Calling
  *
  * Body: { phone, message }
  * Header: x-api-key: <BOT_API_KEY>
@@ -171,16 +171,16 @@ export const webhookAgent = async (req: Request, res: Response) => {
     const validKey = process.env.BOT_API_KEY;
 
     if (!validKey || apiKey !== validKey) {
-      return res.status(401).json({ message: 'API Key inválida.' });
+      return res.status(401).json({ message: 'API Key invÃ¡lida.' });
     }
 
     const { phone, message } = req.body;
 
     if (!phone || !message) {
-      return res.status(400).json({ message: 'Campos obrigatórios: phone, message.' });
+      return res.status(400).json({ message: 'Campos obrigatÃ³rios: phone, message.' });
     }
 
-    // Sanitiza e descobre o usuário pelo telefone igual ao legado
+    // Sanitiza e descobre o usuÃ¡rio pelo telefone igual ao legado
     const cleanPhone = phone.replace(/\D/g, '');
     let user;
 
@@ -197,7 +197,7 @@ export const webhookAgent = async (req: Request, res: Response) => {
 
     if (!user) {
       return res.status(200).json({
-        reply: `⚠️ O Google Gemini Assistant informa: Não encontrei seu número cadastrado no banco do Finansys. Entre no site e salve o telefone no seu Perfil!`
+        reply: `âš ï¸ O Google Gemini Assistant informa: NÃ£o encontrei seu nÃºmero cadastrado no banco do Finansys. Entre no site e salve o telefone no seu Perfil!`
       });
     }
 

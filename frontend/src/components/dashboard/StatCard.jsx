@@ -15,7 +15,7 @@ const StatCard = ({ title, value, change, isPositive, icon: Icon }) => (
     <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500 dark:text-rose-400'}`}>
       {isPositive ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
       <span className="font-medium">{change}</span>
-      <span className="text-slate-500 dark:text-slate-500 ml-1">vs. mês anterior</span>
+      <span className="text-slate-500 dark:text-slate-500 ml-1">vs. mÃªs anterior</span>
     </div>
   </div>
 );

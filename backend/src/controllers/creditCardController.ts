@@ -20,7 +20,7 @@ export const listCreditCards = async (req: AuthRequest, res: Response) => {
       }]
     });
 
-    // Calcula o saldo utilizado (fatura atual) para cada cartão
+    // Calcula o saldo utilizado (fatura atual) para cada cartÃ£o
     const cardsWithBalance = cards.map(card => {
       const usedLimit = (card as any).transactions?.reduce((acc: number, tx: any) => acc + Number(tx.amount), 0) || 0;
       return {

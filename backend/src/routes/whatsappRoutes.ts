@@ -9,7 +9,7 @@ router.get('/status', authMiddleware, whatsappController.getStatus);
 router.get('/connect', authMiddleware, whatsappController.connect);
 router.post('/logout', authMiddleware, whatsappController.logout);
 
-// Rota Pública (Webhook da Evolution API)
+// Rota PÃºblica (Webhook da Evolution API)
 // Essa rota deve ser configurada na Evolution para receber eventos de pairing
 router.post('/webhook/evolution', whatsappController.handleEvolutionWebhook);
 

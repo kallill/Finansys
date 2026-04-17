@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '', // Usa URL relativa em produção
+  baseURL: import.meta.env.VITE_API_URL || '', // Usa URL relativa em produÃ§Ã£o
 });
 
-// Interceptor para adicionar token em todas as requisições
+// Interceptor para adicionar token em todas as requisiÃ§Ãµes
 api.interceptors.request.use((config) => {
-  // Prioriza o crm_token se a rota for de CRM, caso contrário usa o token padrão
+  // Prioriza o crm_token se a rota for de CRM, caso contrÃ¡rio usa o token padrÃ£o
   const crmToken = localStorage.getItem('crm_token');
   const token = localStorage.getItem('token');
   
@@ -76,7 +76,7 @@ export const getTransactions = async () => {
         const response = await api.get('/transactions');
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar transações:", error);
+        console.error("Erro ao buscar transaÃ§Ãµes:", error);
         return [];
     }
 };
@@ -101,7 +101,7 @@ export const getDashboardStats = async () => {
         const response = await api.get('/dashboard/stats');
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar estatísticas:", error);
+        console.error("Erro ao buscar estatÃ­sticas:", error);
         return null;
     }
 };
@@ -111,7 +111,7 @@ export const getDashboardSeries = async () => {
         const response = await api.get('/dashboard/series');
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar séries:", error);
+        console.error("Erro ao buscar sÃ©ries:", error);
         return { series: [] };
     }
 };
@@ -131,7 +131,7 @@ export const getPluggyConnectToken = async () => {
     return response.data.accessToken;
 };
 
-// --- NOVAS ROTAS DE IMPORTAÇÃO ---
+// --- NOVAS ROTAS DE IMPORTAÃ‡ÃƒO ---
 export const importBankStatement = async (formData) => {
     const response = await api.post('/transactions/import', formData, {
         headers: {
@@ -151,7 +151,7 @@ export const savePluggyItemId = async (itemId) => {
         const response = await api.post('/pluggy/item', { itemId });
         return response.data;
     } catch (error) {
-        console.error("Erro ao salvar ID da conexão Pluggy", error);
+        console.error("Erro ao salvar ID da conexÃ£o Pluggy", error);
         throw error;
     }
 };

@@ -43,8 +43,8 @@ const AdminDashboard = () => {
   };
 
   return (
-    <AdminLayout title="Visão Geral">
-      {/* 🚀 Top Cards com Dados Reais */}
+    <AdminLayout title="VisÃ£o Geral">
+      {/* ðŸš€ Top Cards com Dados Reais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-sm">
           <div className="flex justify-between items-start">
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl"></div>
           <div className="flex justify-between items-start relative z-10">
             <div>
-              <p className="text-sm font-medium text-red-200 mb-1">Inadimplência</p>
+              <p className="text-sm font-medium text-red-200 mb-1">InadimplÃªncia</p>
               <h3 className="text-3xl font-bold text-white">R$ {stats.inadimplencia.toLocaleString('pt-BR')}</h3>
             </div>
             <div className="p-3 bg-red-500/20 text-red-400 rounded-lg">
@@ -100,23 +100,23 @@ const AdminDashboard = () => {
               <Briefcase size={24} />
             </div>
           </div>
-          <p className="text-sm text-yellow-500 mt-4">Aguardando execução</p>
+          <p className="text-sm text-yellow-500 mt-4">Aguardando execuÃ§Ã£o</p>
         </div>
       </div>
 
-      {/* 📊 Charts Section */}
+      {/* ðŸ“Š Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-          <h3 className="text-lg font-medium text-white mb-6">Projeção de Crescimento MRR</h3>
+          <h3 className="text-lg font-medium text-white mb-6">ProjeÃ§Ã£o de Crescimento MRR</h3>
           <div className="h-72 w-full flex items-center justify-center border border-gray-800 rounded-xl bg-gray-950/50">
-            <p className="text-gray-500 italic">Gráfico temporariamente desativado para teste de build...</p>
+            <p className="text-gray-500 italic">GrÃ¡fico temporariamente desativado para teste de build...</p>
           </div>
         </div>
         
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
              <TrendingUp className="text-red-600 mb-4" size={48} />
              <h4 className="text-xl font-bold mb-2">Monitoramento de Fluxo</h4>
-             <p className="text-gray-400 max-w-xs text-sm">Integração com dados de faturamento futuros e projeção de churn em desenvolvimento.</p>
+             <p className="text-gray-400 max-w-xs text-sm">IntegraÃ§Ã£o com dados de faturamento futuros e projeÃ§Ã£o de churn em desenvolvimento.</p>
         </div>
       </div>
     </AdminLayout>

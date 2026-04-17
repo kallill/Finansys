@@ -2,8 +2,8 @@ const testPhrases = [
     "gastei 50 no mercado",
     "paguei 120.50 de luz",
     "recebi 2500 de salario",
-    "almoço 35 no nubank",
-    "lançar 10 pizza"
+    "almoÃ§o 35 no nubank",
+    "lanÃ§ar 10 pizza"
 ];
 
 function extractLocal(phrase) {
@@ -12,10 +12,10 @@ function extractLocal(phrase) {
     const amountMatch = phrase.match(amountRegex);
     const amount = amountMatch ? parseFloat(amountMatch[0].replace(',', '.')) : null;
 
-    // Tentativa de pegar a descrição (o que sobrar tirando verbos e valores)
+    // Tentativa de pegar a descriÃ§Ã£o (o que sobrar tirando verbos e valores)
     let description = phrase
         .replace(amountRegex, '')
-        .replace(/gastei|paguei|recebi|lançar|fui|no|na|de|do|da|com|por/gi, '')
+        .replace(/gastei|paguei|recebi|lanÃ§ar|fui|no|na|de|do|da|com|por/gi, '')
         .trim();
 
     return { amount, description };

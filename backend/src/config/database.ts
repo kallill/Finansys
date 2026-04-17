@@ -40,13 +40,13 @@ if (dbDialect === 'sqlite') {
   });
 
 } else if (dbDialect === 'postgres') {
-  // Modo produção com PostgreSQL (Docker/VPS)
+  // Modo produÃ§Ã£o com PostgreSQL (Docker/VPS)
   sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
     dialect: 'postgres',
     port: Number(process.env.DB_PORT) || 5432,
     pool: { max: 5, min: 0, acquire: 60000, idle: 10000 },
-    dialectOptions: {},  // Sem opções MSSQL — pg não aceita o objeto "options"
+    dialectOptions: {},  // Sem opÃ§Ãµes MSSQL â€” pg nÃ£o aceita o objeto "options"
     logging: false,
     retry: { match: retryMatch, max: 3 }
   });
