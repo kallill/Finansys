@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Briefcase, UploadCloud, CheckCircle, Image as ImageIcon, FileText } from 'lucide-react';
-import { AdminLayout } from './AdminDashboard';
+import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../services/api';
 
 // Fake Data for visual representation currently. 

@@ -18,7 +18,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 // Admin CRM Imports
 import AdminProtectedRoute from './components/auth/AdminProtectedRoute';
 import AdminLogin from './pages/admin/AdminLogin';
-import { AdminDashboard } from './pages/admin/AdminDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminOS from './pages/admin/AdminOS';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminProfile from './pages/admin/AdminProfile';

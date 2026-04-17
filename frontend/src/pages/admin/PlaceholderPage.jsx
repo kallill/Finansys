@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminLayout } from './AdminDashboard';
+import AdminLayout from '../../components/admin/AdminLayout';
 import { Construction } from 'lucide-react';
 
 const PlaceholderPage = ({ title }) => {

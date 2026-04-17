@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AdminLayout } from './AdminDashboard';
+import AdminLayout from '../../components/admin/AdminLayout';
 import { User, Lock, Save, CheckCircle2, ShieldCheck } from 'lucide-react';
 import api from '../../services/api';
 

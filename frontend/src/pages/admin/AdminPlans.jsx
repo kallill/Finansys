@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AdminLayout } from './AdminDashboard';
+import AdminLayout from '../../components/admin/AdminLayout';
 import { Package, Plus, Trash2, Edit, Check, X, Tag, DollarSign, ListChecks } from 'lucide-react';
 import api from '../../services/api';
 
