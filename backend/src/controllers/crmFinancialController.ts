@@ -40,7 +40,7 @@ export const updateSubscription = async (req: Request, res: Response): Promise<v
   try {
     const { id } = req.params;
     const { status_pagamento, data_vencimento, plano_id } = req.body;
-    const assinatura = await CRMAssinatura.findByPk(id);
+    const assinatura = await CRMAssinatura.findByPk(id as string);
     if (!assinatura) { res.status(404).json({ message: 'Assinatura nao encontrada.' }); return; }
     await assinatura.update({ status_pagamento, data_vencimento, plano_id });
     res.json(assinatura);

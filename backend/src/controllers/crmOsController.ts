@@ -39,7 +39,7 @@ export const updateStatus = async (req: Request, res: Response): Promise<void> =
   try {
     const { id } = req.params;
     const { status } = req.body;
-    const os = await CRMOrdemServico.findByPk(id);
+    const os = await CRMOrdemServico.findByPk(id as string);
     if (!os) {
       res.status(404).json({ success: false, message: 'OS nao encontrada.' });
       return;
@@ -63,7 +63,7 @@ export const uploadAnexo = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    const os = await CRMOrdemServico.findByPk(id);
+    const os = await CRMOrdemServico.findByPk(id as string);
     if (!os) {
       res.status(404).json({ success: false, message: 'OS nao encontrada.' });
       return;

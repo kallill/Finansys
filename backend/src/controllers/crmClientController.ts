@@ -40,7 +40,7 @@ export const updateClient = async (req: Request, res: Response): Promise<void> =
   try {
     const { id } = req.params;
     const { nome, email, telefone, documento, tipo_pessoa } = req.body;
-    const client = await CRMCliente.findByPk(id);
+    const client = await CRMCliente.findByPk(id as string);
     if (!client) { res.status(404).json({ message: 'Cliente nao encontrado.' }); return; }
     await client.update({ nome, email, telefone, documento, tipo_pessoa });
     res.json(client);
