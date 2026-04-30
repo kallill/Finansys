@@ -34,7 +34,20 @@ CRMOrcamento.init({
     type: DataTypes.STRING,
     defaultValue: 'Cerasus',
   },
+  validade: {
+    type: DataTypes.STRING,
+    defaultValue: '15 dias',
+  },
+  condicoes_pagamento: {
+    type: DataTypes.STRING,
+    defaultValue: 'Boleto Bancário',
+  },
+  observacoes: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   total_tabela: {
+
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },

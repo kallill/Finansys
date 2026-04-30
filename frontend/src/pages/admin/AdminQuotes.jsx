@@ -20,7 +20,11 @@ const AdminQuotes = () => {
   const [empresaManual, setEmpresaManual] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
   const [consultor, setConsultor] = useState('Bruno Oliveira');
+  const [validade, setValidade] = useState('15 dias');
+  const [condicoesPagamento, setCondicoesPagamento] = useState('Boleto Bancário - 30 dias');
+  const [observacoes, setObservacoes] = useState('');
   const [isTemplate, setIsTemplate] = useState(false);
+
 
   useEffect(() => {
     fetchData();
@@ -78,12 +82,16 @@ const AdminQuotes = () => {
       cliente_id: selectedClient?.id || null,
       empresa_nome: selectedClient ? selectedClient.nome_fantasia : empresaManual,
       preparado_por: consultor,
+      validade: validade,
+      condicoes_pagamento: condicoesPagamento,
+      observacoes: observacoes,
       total_tabela: totals.tabela,
       total_ofertado: totals.ofertado,
       status: 'enviado',
       itens: selectedItems,
       is_template: isTemplate
     };
+
 
     try {
       await api.post('/api/crm/quotes', payload);
@@ -105,8 +113,9 @@ const AdminQuotes = () => {
 
   const exportToPDF = (data) => {
     const doc = new jsPDF();
-    const { empresa_nome, preparado_por, itens, total_ofertado } = data;
+    const { empresa_nome, preparado_por, itens, total_ofertado, validade, condicoes_pagamento, observacoes } = data;
     const dataAtual = new Date().toLocaleDateString('pt-BR');
+
 
     // Header
     doc.setFillColor(26, 26, 26);
@@ -124,11 +133,12 @@ const AdminQuotes = () => {
     doc.setTextColor(0, 0, 0);
     doc.autoTable({
       startY: 45,
-      head: [['PROPOSTO PARA', 'PREPARADO POR', 'DATA']],
-      body: [[empresa_nome, preparado_por, dataAtual]],
+      head: [['PROPOSTO PARA', 'PREPARADO POR', 'DATA', 'VALIDADE']],
+      body: [[empresa_nome, preparado_por, dataAtual, validade]],
       theme: 'grid',
       headStyles: { fillColor: [240, 240, 240], textColor: [180, 0, 0] }
     });
+
 
     // Items
     doc.autoTable({
@@ -148,7 +158,19 @@ const AdminQuotes = () => {
     doc.setFontSize(12);
     doc.text(`Investimento Mensal Total: R$ ${Number(total_ofertado).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 120, doc.lastAutoTable.finalY + 15);
 
+    if (condicoesPagamento || observacoes) {
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text('CONDIÇÕES E OBSERVAÇÕES:', 20, doc.lastAutoTable.finalY + 30);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Pagamento: ${condicoesPagamento}`, 20, doc.lastAutoTable.finalY + 37);
+      if (observacoes) {
+        doc.text(`Obs: ${observacoes}`, 20, doc.lastAutoTable.finalY + 44);
+      }
+    }
+
     doc.save(`Proposta_Cerasus_${empresa_nome.replace(/\s+/g, '_')}.pdf`);
+
   };
 
   return (
@@ -284,6 +306,44 @@ const AdminQuotes = () => {
                     </div>
                   )}
                 </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                   <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Consultor</label>
+                    <input 
+                      className="w-full bg-gray-950 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-red-500"
+                      value={consultor}
+                      onChange={(e) => setConsultor(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Validade</label>
+                    <input 
+                      className="w-full bg-gray-950 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-red-500"
+                      value={validade}
+                      onChange={(e) => setValidade(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Pagamento</label>
+                    <input 
+                      className="w-full bg-gray-950 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-red-500"
+                      value={condicoesPagamento}
+                      onChange={(e) => setCondicoesPagamento(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Observações da Proposta (Escopo)</label>
+                  <textarea 
+                    className="w-full bg-gray-950 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-red-500 min-h-[80px]"
+                    value={observacoes}
+                    onChange={(e) => setObservacoes(e.target.value)}
+                    placeholder="Descreva observações técnicas ou escopo personalizado aqui..."
+                  />
+                </div>
+
 
                 <div className="space-y-4">
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-widest block">Adicionar Itens do Catálogo</label>
