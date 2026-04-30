@@ -25,6 +25,8 @@ import crmPlanRoutes from './routes/crmPlanRoutes';
 import crmClientRoutes from './routes/crmClientRoutes';
 import crmFinancialRoutes from './routes/crmFinancialRoutes';
 import crmOsRoutes from './routes/crmOsRoutes';
+import crmQuoteRoutes from './routes/crmQuoteRoutes';
+
 
 // dotenv config removed from here (moved to top)
 
@@ -72,6 +74,8 @@ app.use('/api/crm/plans', crmPlanRoutes);
 app.use('/api/crm/clients', crmClientRoutes);
 app.use('/api/crm/financial', crmFinancialRoutes);
 app.use('/api/crm/os', crmOsRoutes);
+app.use('/api/crm/quotes', crmQuoteRoutes);
+
 
 // Serve static files from the React frontend app
 const frontendPath = path.join(__dirname, '../../frontend/dist');

@@ -9,6 +9,8 @@ import CRMPlano from './CRMPlano';
 import CRMAssinatura from './CRMAssinatura';
 import CRMOrdemServico from './CRMOrdemServico';
 import CRMAnexoOS from './CRMAnexoOS';
+import CRMOrcamento from './CRMOrcamento';
+
 
 // NOTA: Relacionamentos User/Transaction/CreditCard/LearnedPattern ja definidos
 // dentro dos proprios arquivos de Model (Transaction.ts, CreditCard.ts, etc.).
@@ -32,7 +34,13 @@ CRMOrdemServico.belongsTo(CRMCliente, { foreignKey: 'cliente_id', as: 'cliente' 
 CRMOrdemServico.hasMany(CRMAnexoOS, { foreignKey: 'os_id', as: 'anexos' });
 CRMAnexoOS.belongsTo(CRMOrdemServico, { foreignKey: 'os_id', as: 'ordem_servico' });
 
+// Cliente -> Orcamentos (1:N)
+CRMCliente.hasMany(CRMOrcamento, { foreignKey: 'cliente_id', as: 'orcamentos' });
+CRMOrcamento.belongsTo(CRMCliente, { foreignKey: 'cliente_id', as: 'cliente' });
+
+
 export { 
   User, Transaction, LearnedPattern, CreditCard,
-  CRMAdmin, CRMCliente, CRMPlano, CRMAssinatura, CRMOrdemServico, CRMAnexoOS
+  CRMAdmin, CRMCliente, CRMPlano, CRMAssinatura, CRMOrdemServico, CRMAnexoOS, CRMOrcamento
+
 };

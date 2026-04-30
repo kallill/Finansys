@@ -10,6 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -780,7 +784,116 @@
                 max-width: 100%;
             }
         }
+
+        /* Simulador de Orçamento Styles */
+        .orcamento-container {
+            background: #3a3a3a;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            margin-top: -2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .stepper::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #444;
+            z-index: 1;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            background: #272727;
+            border: 2px solid #444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: #ee2c2a;
+            border-color: #ee2c2a;
+            box-shadow: 0 0 15px rgba(238, 44, 42, 0.5);
+        }
+
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .option-card {
+            background: #272727;
+            border: 2px solid transparent;
+            padding: 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .option-card:hover {
+            border-color: rgba(238, 44, 42, 0.5);
+        }
+
+        .option-card.selected {
+            border-color: #ee2c2a;
+            background: rgba(238, 44, 42, 0.05);
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ee2c2a;
+            margin: 1rem 0;
+        }
+
+        .btn-nav {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev {
+            background: #444;
+            color: white;
+        }
+
+        .btn-next {
+            background: #ee2c2a;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
+
 </head>
 <body>
     <!-- Header -->
@@ -1012,7 +1125,83 @@
         </div>
     </section>
 
+    </section>
+
+    <!-- Simulador de Orçamento -->
+    <section id="simulador" class="simulador" style="background: #272727; padding-bottom: 10rem;">
+        <div class="container">
+            <h2 class="section-title">Gerador de Proposta Técnica</h2>
+            <p class="section-subtitle">Simule seu investimento e gere uma proposta em PDF baseada nos nossos planos MSP e DRaaS.</p>
+            
+            <div class="orcamento-container fade-in">
+                <div class="stepper">
+                    <div class="step active" data-step="1">1</div>
+                    <div class="step" data-step="2">2</div>
+                    <div class="step" data-step="3">3</div>
+                </div>
+
+                <form id="formOrcamento">
+                    <!-- Passo 1: Dados -->
+                    <div class="step-content active" id="step1">
+                        <h3 style="margin-bottom: 1.5rem;">Dados do Cliente</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label>Empresa / Cliente</label>
+                                <input type="text" id="pdf_empresa" placeholder="Ex: Corimpress" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Consultor Responsável</label>
+                                <input type="text" id="pdf_consultor" value="Bruno Oliveira">
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 2rem;">
+                            <button type="button" class="btn-nav btn-next" onclick="nextStep(2)">Próximo Passo <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Passo 2: Serviços -->
+                    <div class="step-content" id="step2">
+                        <h3 style="margin-bottom: 1.5rem;">Selecione os Planos</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="option-card selected" onclick="toggleOption(this, 'msp')">
+                                <input type="checkbox" id="plan_msp" checked style="display: none;">
+                                <h4><i class="fas fa-server"></i> Plano Básico MSP</h4>
+                                <p style="font-size: 0.85rem; color: #ccc; margin-top: 0.5rem;">Suporte técnico remoto, monitoramento e SLA de 4h.</p>
+                                <div class="price-tag">R$ 749,00/mês</div>
+                            </div>
+                            <div class="option-card" onclick="toggleOption(this, 'draas')">
+                                <input type="checkbox" id="plan_draas" style="display: none;">
+                                <h4><i class="fas fa-cloud-upload-alt"></i> DRaaS (Backup em Nuvem)</h4>
+                                <p style="font-size: 0.85rem; color: #ccc; margin-top: 0.5rem;">Disaster Recovery as a Service com até 1,5GB inclusos.</p>
+                                <div class="price-tag">R$ 148,90/mês</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                            <button type="button" class="btn-nav btn-prev" onclick="prevStep(1)">Voltar</button>
+                            <button type="button" class="btn-nav btn-next" onclick="nextStep(3)">Último Passo <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Passo 3: Finalização -->
+                    <div class="step-content" id="step3">
+                        <h3 style="margin-bottom: 1.5rem;">Resumo da Proposta</h3>
+                        <div id="resumoFinal" style="background: #272727; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                            <!-- Dinâmico via JS -->
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <button type="button" class="btn-nav btn-prev" onclick="prevStep(2)">Voltar</button>
+                            <button type="button" class="btn-nav btn-next" onclick="gerarPropostaPDF()" style="background: #27c444;">
+                                <i class="fas fa-file-pdf"></i> Gerar Proposta PDF
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <!-- Contato -->
+
     <section id="contato" class="contato">
         <div class="container">
             <h2 class="section-title">A Escolha Certa - Entre em contato!</h2>
@@ -1146,6 +1335,170 @@
             e.preventDefault();
             alert('Obrigado pelo seu interesse! Entraremos em contato em breve para agendar sua consultoria gratuita.');
         });
+
+        // Simulador de Orçamento Logic
+        function nextStep(step) {
+            if (step === 2 && !document.getElementById('pdf_empresa').value) {
+                alert('Por favor, informe o nome da empresa.');
+                return;
+            }
+            if (step === 3) atualizarResumo();
+            
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            
+            document.querySelectorAll('.step').forEach(el => {
+                if(parseInt(el.dataset.step) <= step) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+        }
+
+        function prevStep(step) {
+            nextStep(step);
+        }
+
+        function toggleOption(card, plan) {
+            const checkbox = document.getElementById('plan_' + plan);
+            checkbox.checked = !checkbox.checked;
+            card.classList.toggle('selected');
+            if (document.getElementById('step3').classList.contains('active')) atualizarResumo();
+        }
+
+        function atualizarResumo() {
+            const empresa = document.getElementById('pdf_empresa').value;
+            const msp = document.getElementById('plan_msp').checked;
+            const draas = document.getElementById('plan_draas').checked;
+            let total = 0;
+            let html = `<p><strong>Empresa:</strong> ${empresa}</p><hr style="margin: 1rem 0; border-color: #444;">`;
+            
+            if(msp) {
+                html += `<p>• Plano Básico MSP: R$ 749,00</p>`;
+                total += 749;
+            }
+            if(draas) {
+                html += `<p>• DRaaS: R$ 148,90</p>`;
+                total += 148.90;
+            }
+            
+            html += `<h4 style="margin-top: 1rem; color: #ee2c2a;">Investimento Mensal Total: R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</h4>`;
+            document.getElementById('resumoFinal').innerHTML = html;
+        }
+
+        async function gerarPropostaPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const empresa = document.getElementById('pdf_empresa').value || 'Cliente';
+            const consultor = document.getElementById('pdf_consultor').value || 'Cerasus';
+            const msp = document.getElementById('plan_msp').checked;
+            const draas = document.getElementById('plan_draas').checked;
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+
+            // --- HEADER ESCURO ---
+            doc.setFillColor(26, 26, 26);
+            doc.rect(0, 0, 210, 40, 'F');
+            
+            // Texto Header
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(22);
+            doc.text('CERASUS', 20, 22);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('PROPOSTA COMERCIAL', 150, 18);
+            doc.text('Contrato de Suporte Técnico', 150, 24);
+
+            // --- INFO BOX ---
+            doc.setTextColor(0, 0, 0);
+            doc.autoTable({
+                startY: 45,
+                head: [['PROPOSTO PARA', 'PREPARADO POR', 'VALIDADE']],
+                body: [[empresa, consultor, '30 dias']],
+                theme: 'grid',
+                headStyles: { fillColor: [240, 240, 240], textColor: [180, 0, 0], fontSize: 8 },
+                bodyStyles: { fontSize: 10 }
+            });
+
+            // --- ESCOPO ---
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(180, 0, 0);
+            doc.text('■ ESCOPO DO CONTRATO', 15, doc.lastAutoTable.finalY + 10);
+            
+            doc.autoTable({
+                startY: doc.lastAutoTable.finalY + 15,
+                head: [['Servidores', 'Firewall', 'Redes', 'Cibersegurança']],
+                body: [['Suporte N1/N2/N3', 'Gestão Proativa', 'Otimização', 'SOC 24x7']],
+                theme: 'grid',
+                headStyles: { fillColor: [26, 26, 26], textColor: [255, 255, 255], halign: 'center' },
+                bodyStyles: { halign: 'center' }
+            });
+
+            // --- PLANOS ---
+            if (msp) {
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(180, 0, 0);
+                doc.text('■ PLANO BÁSICO MSP', 15, doc.lastAutoTable.finalY + 10);
+                
+                doc.autoTable({
+                    startY: doc.lastAutoTable.finalY + 15,
+                    head: [['DETALHES DO PLANO', 'VALOR ESTIMADO']],
+                    body: [
+                        ['Horas mensais: 4 horas de suporte remoto', 'R$ 749,00/mês'],
+                        ['Acúmulo de horas: Não cumulativas', ''],
+                        ['Canal de atendimento: Portal, e-mail ou WhatsApp', ''],
+                        ['SLA – Remoto: 4 horas', ''],
+                        ['SLA – Presencial: 8 horas (horário comercial)', '']
+                    ],
+                    theme: 'striped',
+                    headStyles: { fillColor: [26, 26, 26], textColor: [255, 255, 255] }
+                });
+            }
+
+            if (draas) {
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(180, 0, 0);
+                doc.text('■ DISASTER RECOVERY AS A SERVICE (DRaaS)', 15, doc.lastAutoTable.finalY + 10);
+                
+                doc.autoTable({
+                    startY: doc.lastAutoTable.finalY + 15,
+                    head: [['DETALHES DRaaS', 'VALOR ESTIMADO']],
+                    body: [
+                        ['Armazenamento incluso: Até 1,5 GB', 'R$ 148,90/mês'],
+                        ['GB adicional: R$ 4,80/GB além dos 1,5 GB', ''],
+                        ['Hospedagem pós-incidente: 30 dias inclusos em nuvem', ''],
+                        ['Após 30 dias: R$ 88,42/100 GB/mês', ''],
+                        ['Acionamento: Restore + VM em nuvem', '']
+                    ],
+                    theme: 'striped',
+                    headStyles: { fillColor: [26, 26, 26], textColor: [255, 255, 255] }
+                });
+            }
+
+            // --- CONDIÇÕES GERAIS ---
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(180, 0, 0);
+            doc.text('■ CONDIÇÕES GERAIS', 15, doc.lastAutoTable.finalY + 10);
+            
+            doc.autoTable({
+                startY: doc.lastAutoTable.finalY + 15,
+                body: [
+                    ['Vigência', '12 meses, renovação automática'],
+                    ['Cancelamento', 'Aviso prévio de 30 dias.'],
+                    ['Horas excedentes', 'Faturadas à parte'],
+                    ['Reajuste anual', 'IPCA']
+                ],
+                theme: 'grid',
+                columnStyles: { 0: { fontStyle: 'bold', fillColor: [240, 240, 240], width: 50 } }
+            });
+
+            // FOOTER
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text(`Cerasus | Emitido em ${dataAtual} | Válido por 30 dias`, 15, 285);
+            doc.text(`cerasus.com.br`, 180, 285);
+
+            doc.save(`Proposta_Cerasus_${empresa.replace(/\s+/g, '_')}.pdf`);
+        }
     </script>
+
 </body>
 </html>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { 
-  TrendingUp, Users, Package, Briefcase, DollarSign, UserCog, LogOut, Settings, LayoutDashboard
+  TrendingUp, Users, Package, Briefcase, DollarSign, UserCog, LogOut, Settings, LayoutDashboard, FileText
+
 } from 'lucide-react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 
@@ -47,7 +48,9 @@ const AdminLayout = ({ children, title }) => {
             <NavLink to="/admin/dashboard" icon={LayoutDashboard}>Dashboard</NavLink>
             <NavLink to="/admin/clients" icon={Users}>Clientes & Prospects</NavLink>
             <NavLink to="/admin/plans" icon={Package}>Planos e Contratos</NavLink>
+            <NavLink to="/admin/quotes" icon={FileText}>Orcamentos</NavLink>
             <NavLink to="/admin/os" icon={Briefcase}>Ordens de Servico</NavLink>
+
             <NavLink to="/admin/financial" icon={DollarSign}>Financeiro</NavLink>
             
             {/* Somente visivel para Admin */}

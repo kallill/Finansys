@@ -25,7 +25,9 @@ import AdminProfile from './pages/admin/AdminProfile';
 import AdminPlans from './pages/admin/AdminPlans';
 import AdminClients from './pages/admin/AdminClients';
 import AdminFinancial from './pages/admin/AdminFinancial';
+import AdminQuotes from './pages/admin/AdminQuotes';
 import PlaceholderPage from './pages/admin/PlaceholderPage';
+
 
 function App() {
   return (
@@ -58,7 +60,9 @@ function App() {
         {/* Modulos Ativos */}
         <Route path="/admin/clients" element={<AdminProtectedRoute><AdminClients /></AdminProtectedRoute>} />
         <Route path="/admin/plans" element={<AdminProtectedRoute><AdminPlans /></AdminProtectedRoute>} />
+        <Route path="/admin/quotes" element={<AdminProtectedRoute><AdminQuotes /></AdminProtectedRoute>} />
         <Route path="/admin/financial" element={<AdminProtectedRoute><AdminFinancial /></AdminProtectedRoute>} />
+
       </Routes>
     </BrowserRouter>
   );
