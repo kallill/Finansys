@@ -33,12 +33,16 @@ const AdminQuotes = () => {
         api.get('/api/crm/clients'),
         api.get('/api/crm/plans')
       ]);
-      setQuotes(quotesRes.data);
-      setClients(clientsRes.data);
-      setPlans(plansRes.data);
+      setQuotes(Array.isArray(quotesRes.data) ? quotesRes.data : []);
+      setClients(Array.isArray(clientsRes.data) ? clientsRes.data : []);
+      setPlans(Array.isArray(plansRes.data) ? plansRes.data : []);
     } catch (err) {
       console.error('Erro ao buscar dados:', err);
+      setQuotes([]);
+      setClients([]);
+      setPlans([]);
     } finally {
+
       setLoading(false);
     }
   };
