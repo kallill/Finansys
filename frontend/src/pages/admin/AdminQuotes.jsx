@@ -80,8 +80,9 @@ const AdminQuotes = () => {
     const totals = calculateTotals();
     const payload = {
       cliente_id: selectedClient?.id || null,
-      empresa_nome: selectedClient ? selectedClient.nome_fantasia : empresaManual,
+      empresa_nome: selectedClient ? selectedClient.nome_razao_social : empresaManual,
       preparado_por: consultor,
+
       validade: validade,
       condicoes_pagamento: condicoesPagamento,
       observacoes: observacoes,
@@ -287,12 +288,13 @@ const AdminQuotes = () => {
                       onChange={(e) => {
                         const client = clients.find(c => c.id == e.target.value);
                         setSelectedClient(client);
-                        if (client) setEmpresaManual(client.nome_fantasia);
+                        if (client) setEmpresaManual(client.nome_razao_social);
                       }}
                     >
                       <option value="">Cliente Avulso (Manual)</option>
-                      {clients.map(c => <option key={c.id} value={c.id}>{c.nome_fantasia}</option>)}
+                      {clients.map(c => <option key={c.id} value={c.id}>{c.nome_razao_social}</option>)}
                     </select>
+
                   </div>
                   {!selectedClient && (
                     <div className="space-y-2">
