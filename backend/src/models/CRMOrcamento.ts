@@ -22,10 +22,11 @@ CRMOrcamento.init({
     primaryKey: true,
   },
   cliente_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: true,
   },
   empresa_nome: {
+
     type: DataTypes.STRING,
     allowNull: false,
   },
