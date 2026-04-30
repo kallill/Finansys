@@ -43,10 +43,11 @@ CRMOrcamento.init({
     allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM('rascunho', 'enviado', 'aprovado', 'rejeitado'),
+    type: DataTypes.STRING,
     defaultValue: 'rascunho',
   },
   itens: {
+
     type: DataTypes.JSON,
     allowNull: false,
   },
