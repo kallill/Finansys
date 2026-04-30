@@ -34,9 +34,12 @@ CRMOrdemServico.belongsTo(CRMCliente, { foreignKey: 'cliente_id', as: 'cliente' 
 CRMOrdemServico.hasMany(CRMAnexoOS, { foreignKey: 'os_id', as: 'anexos' });
 CRMAnexoOS.belongsTo(CRMOrdemServico, { foreignKey: 'os_id', as: 'ordem_servico' });
 
+/* 
 // Cliente -> Orcamentos (1:N)
 CRMCliente.hasMany(CRMOrcamento, { foreignKey: 'cliente_id', as: 'orcamentos' });
 CRMOrcamento.belongsTo(CRMCliente, { foreignKey: 'cliente_id', as: 'cliente' });
+*/
+
 
 
 export { 

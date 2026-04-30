@@ -10,12 +10,12 @@ const AdminClients = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
-    telefone: '',
-    documento: '',
-    tipo_pessoa: 'Fisica'
+    nome_razao_social: '',
+    contato: '',
+    cnpj_cpf: '',
+    status: 'Prospect'
   });
+
   const [error, setError] = useState('');
 
   const fetchClients = async () => {
@@ -45,7 +45,8 @@ const AdminClients = () => {
         await api.post('/api/crm/clients', formData);
       }
 
-      setFormData({ nome: '', email: '', telefone: '', documento: '', tipo_pessoa: 'Fisica' });
+      setFormData({ nome_razao_social: '', contato: '', cnpj_cpf: '', status: 'Prospect' });
+
       setShowModal(false);
       setEditingId(null);
       fetchClients();
@@ -56,12 +57,12 @@ const AdminClients = () => {
 
   const handleEdit = (client) => {
     setFormData({
-      nome: client.nome,
-      email: client.email,
-      telefone: client.telefone,
-      documento: client.documento,
-      tipo_pessoa: client.tipo_pessoa
+      nome_razao_social: client.nome_razao_social,
+      contato: client.contato,
+      cnpj_cpf: client.cnpj_cpf,
+      status: client.status
     });
+
     setEditingId(client.id);
     setShowModal(true);
   };
@@ -77,9 +78,10 @@ const AdminClients = () => {
   };
 
   const filteredClients = clients.filter(c => 
-    c.nome.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    c.documento.includes(searchTerm)
+    c.nome_razao_social.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    c.cnpj_cpf.includes(searchTerm)
   );
+
 
   return (
     <AdminLayout title="Clientes & Prospects">
@@ -102,7 +104,8 @@ const AdminClients = () => {
           </div>
           <button 
             onClick={() => {
-              setFormData({ nome: '', email: '', telefone: '', documento: '', tipo_pessoa: 'Fisica' });
+              setFormData({ nome_razao_social: '', contato: '', cnpj_cpf: '', status: 'Prospect' });
+
               setEditingId(null);
               setShowModal(true);
             }}
@@ -126,10 +129,11 @@ const AdminClients = () => {
                     <User size={24} />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-white group-hover:text-red-500 transition-colors">{client.nome}</h4>
+                    <h4 className="text-lg font-bold text-white group-hover:text-red-500 transition-colors">{client.nome_razao_social}</h4>
                     <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-800 text-gray-400 mt-1">
-                      Pessoa {client.tipo_pessoa}
+                      {client.status}
                     </span>
+
                   </div>
                 </div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
@@ -149,12 +153,13 @@ const AdminClients = () => {
                 </div>
                 <div className="flex items-center gap-3 text-sm text-gray-400">
                   <Phone size={16} className="text-gray-600" />
-                  <span>{client.telefone}</span>
+                  <span>{client.contato}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-gray-400">
                   <FileText size={16} className="text-gray-600" />
-                  <span>{client.documento}</span>
+                  <span>{client.cnpj_cpf}</span>
                 </div>
+
               </div>
 
               {client.assinaturas && client.assinaturas.length > 0 && (
@@ -198,20 +203,21 @@ const AdminClients = () => {
                   <input 
                     type="text" required
                     className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-all"
-                    value={formData.nome}
-                    onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                    value={formData.nome_razao_social}
+                    onChange={(e) => setFormData({...formData, nome_razao_social: e.target.value})}
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs text-gray-500 ml-1 font-bold uppercase tracking-wider">Tipo</label>
+                  <label className="text-xs text-gray-500 ml-1 font-bold uppercase tracking-wider">Status</label>
                   <select 
                     className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-all appearance-none"
-                    value={formData.tipo_pessoa}
-                    onChange={(e) => setFormData({...formData, tipo_pessoa: e.target.value})}
+                    value={formData.status}
+                    onChange={(e) => setFormData({...formData, status: e.target.value})}
                   >
-                    <option value="Fisica">Pessoa Fisica</option>
-                    <option value="Juridica">Pessoa Juridica</option>
+                    <option value="Prospect">Prospect</option>
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inativo">Inativo</option>
                   </select>
                 </div>
 
@@ -220,30 +226,21 @@ const AdminClients = () => {
                   <input 
                     type="text" required
                     className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-all"
-                    value={formData.documento}
-                    onChange={(e) => setFormData({...formData, documento: e.target.value})}
+                    value={formData.cnpj_cpf}
+                    onChange={(e) => setFormData({...formData, cnpj_cpf: e.target.value})}
                   />
                 </div>
 
-                <div className="space-y-1 col-span-2 md:col-span-1">
-                  <label className="text-xs text-gray-500 ml-1 font-bold uppercase tracking-wider">E-mail</label>
-                  <input 
-                    type="email" required
-                    className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-all"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  />
-                </div>
-
-                <div className="space-y-1 col-span-2 md:col-span-1">
-                  <label className="text-xs text-gray-500 ml-1 font-bold uppercase tracking-wider">Telefone</label>
+                <div className="space-y-1 col-span-2">
+                  <label className="text-xs text-gray-500 ml-1 font-bold uppercase tracking-wider">Contato (Telefone/Email)</label>
                   <input 
                     type="text" required
                     className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-all"
-                    value={formData.telefone}
-                    onChange={(e) => setFormData({...formData, telefone: e.target.value})}
+                    value={formData.contato}
+                    onChange={(e) => setFormData({...formData, contato: e.target.value})}
                   />
                 </div>
+
               </div>
 
               <div className="pt-4">
